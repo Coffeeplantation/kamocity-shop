@@ -1,25 +1,50 @@
 import Link from 'next/link';
 
+// フッターのリンクは、サイト内に実在するページ・セクションだけを並べる
 const DIRECTORY = [
   {
     title: '製品を見る',
-    links: ['Phone', 'Book', 'Pad', 'Watch', 'Vision', 'Buds', 'アクセサリ'],
-  },
-  {
-    title: 'アカウント',
-    links: ['Lumina IDの管理', 'ストアのアカウント', 'Lumina Cloud'],
+    links: [
+      { label: 'Phone', href: '/#phone' },
+      { label: 'Book', href: '/#book' },
+      { label: 'Pad', href: '/#pad' },
+      { label: 'Watch', href: '/#watch' },
+      { label: 'Vision', href: '/#vision' },
+      { label: 'Buds', href: '/#buds' },
+    ],
   },
   {
     title: 'ストア',
-    links: ['ストアを探す', 'Lumina下取りプログラム', '分割払い', '注文状況', 'ショッピングヘルプ'],
+    links: [
+      { label: 'すべての商品', href: '/store' },
+      { label: '在庫ありの商品', href: '/store?stock=1' },
+      { label: '出品する', href: '/furimas/new' },
+    ],
   },
   {
-    title: 'ビジネス・教育',
-    links: ['Luminaとビジネス', 'Luminaと教育', '学生・教職員向けストア'],
+    title: 'Lumina 湊町',
+    links: [
+      { label: '営業案内', href: '/stores#hours' },
+      { label: '施設案内', href: '/stores#facilities' },
+      { label: 'イベントカレンダー', href: '/stores#events' },
+      { label: 'お知らせ', href: '/stores#news' },
+      { label: 'アクセス', href: '/stores#access' },
+      { label: '周辺情報', href: '/stores#nearby' },
+    ],
   },
   {
-    title: 'Luminaの価値観',
-    links: ['アクセシビリティ', '環境への取り組み', 'プライバシー', 'サプライチェーン'],
+    title: 'アカウント',
+    links: [
+      { label: 'サインイン', href: '/auth/login' },
+      { label: 'Lumina IDを作成', href: '/auth/signup' },
+    ],
+  },
+  {
+    title: 'サポート',
+    links: [
+      { label: 'よくある質問', href: '/stores#faq' },
+      { label: '修理・点検（Lumina Care）', href: '/stores#facilities' },
+    ],
   },
 ];
 
@@ -43,10 +68,10 @@ export default function Footer() {
                 <h3 className="mb-2 font-semibold text-ink">{col.title}</h3>
                 <ul className="space-y-2">
                   {col.links.map((l) => (
-                    <li key={l}>
-                      <a href="#" className="hover:text-ink hover:underline">
-                        {l}
-                      </a>
+                    <li key={l.href}>
+                      <Link href={l.href} className="hover:text-ink hover:underline">
+                        {l.label}
+                      </Link>
                     </li>
                   ))}
                 </ul>
@@ -63,8 +88,8 @@ export default function Footer() {
                 </summary>
                 <ul className="space-y-2 pb-3 pl-2.5 text-[14px]">
                   {col.links.map((l) => (
-                    <li key={l}>
-                      <a href="#">{l}</a>
+                    <li key={l.href}>
+                      <Link href={l.href}>{l.label}</Link>
                     </li>
                   ))}
                 </ul>
@@ -77,21 +102,17 @@ export default function Footer() {
           <p className="mb-3">
             その他の購入方法：
             <Link href="/store" className="text-accent-link hover:underline">
-              ストア
+              オンラインストア
             </Link>
-            をご利用いただくか、お近くの販売店をお探しください。
+            をご利用いただくか、
+            <Link href="/stores" className="text-accent-link hover:underline">
+              Lumina 湊町
+            </Link>
+            にお越しください。
           </p>
           <div className="flex flex-col gap-2 border-t border-black/10 pt-3 lg:flex-row lg:items-center lg:justify-between">
             <p>Copyright © 2026 Lumina Inc.（架空） All rights reserved.</p>
-            <ul className="flex flex-wrap gap-x-3 gap-y-1">
-              {['プライバシーポリシー', 'サイトの使用条件', '販売条件', '法的情報', 'サイトマップ'].map((l, i) => (
-                <li key={l} className={i > 0 ? 'border-l border-black/20 pl-3' : ''}>
-                  <a href="#" className="hover:underline">
-                    {l}
-                  </a>
-                </li>
-              ))}
-            </ul>
+            <p>架空ブランドによるデザインデモです。</p>
             <p>日本</p>
           </div>
         </div>

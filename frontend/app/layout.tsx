@@ -11,7 +11,7 @@ import Footer from '@/components/Footer';
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap' });
 
 export const metadata: Metadata = {
-  title: 'Lumina（日本）',
+  title: { default: 'Lumina（日本）', template: '%s - Lumina（日本）' },
   description: 'Lumina Phone、Lumina Book、Lumina Pad、Lumina Watch などの架空製品を紹介するデザインデモ。',
 };
 
@@ -29,9 +29,17 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
       <body className="min-h-screen flex flex-col bg-white">
+        <a
+          href="#main"
+          className="sr-only z-[60] rounded-full bg-accent px-4 py-2 text-[14px] text-white focus:not-sr-only focus:fixed focus:left-4 focus:top-2"
+        >
+          本文へ移動
+        </a>
         <AuthProvider>
           <Header />
-          <main className="flex-1">{children}</main>
+          <main id="main" className="flex-1">
+            {children}
+          </main>
           <Footer />
         </AuthProvider>
       </body>

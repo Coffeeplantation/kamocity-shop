@@ -8,13 +8,14 @@ import { LogoMark } from '@/components/Devices';
 
 export const NAV_ITEMS = [
   { label: 'ストア', href: '/store' },
+  { label: '店舗', href: '/stores' },
   { label: 'Phone', href: '/#phone' },
   { label: 'Book', href: '/#book' },
   { label: 'Pad', href: '/#pad' },
   { label: 'Watch', href: '/#watch' },
   { label: 'Vision', href: '/#vision' },
   { label: 'Buds', href: '/#buds' },
-  { label: 'サポート', href: '/#support' },
+  { label: 'サポート', href: '/stores#faq' },
 ];
 
 function SearchIcon() {
@@ -51,6 +52,7 @@ export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [accountOpen, setAccountOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
+  const [query, setQuery] = useState('');
   const accountRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -186,16 +188,25 @@ export default function Header() {
               onSubmit={(e) => {
                 e.preventDefault();
                 setSearchOpen(false);
-                router.push('/store');
+                const q = query.trim();
+                router.push(q ? `/store?q=${encodeURIComponent(q)}` : '/store');
               }}
             >
               <span className="text-ink-tertiary">
                 <SearchIcon />
               </span>
+              <label htmlFor="site-search" className="sr-only">
+                ストアの商品を検索
+              </label>
               <input
+                id="site-search"
+                type="search"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                onKeyDown={(e) => e.key === 'Escape' && setSearchOpen(false)}
                 autoFocus
                 className="flex-1 bg-transparent text-[24px] font-semibold text-ink outline-none placeholder:text-ink-tertiary"
-                placeholder="lumina.example を検索"
+                placeholder="ストアの商品を検索"
               />
             </form>
           </div>

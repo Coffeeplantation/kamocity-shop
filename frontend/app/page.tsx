@@ -5,6 +5,7 @@ import PlayScene from '@/components/PlayScene';
 import Phone3DLazy from '@/components/Phone3DLazy';
 import PhoneHighlights from '@/components/PhoneHighlights';
 import StoreRow from '@/components/StoreRow';
+import TodayAtStore from '@/components/store/TodayAtStore';
 import { Buds, Card, Headset, Laptop, LogoMark, PhonePair, Tablet, Watch } from '@/components/Devices';
 
 type Theme = 'light' | 'gray' | 'dark';
@@ -193,6 +194,21 @@ export default function HomePage() {
           </div>
         </Tile>
       </div>
+
+      {/* 店舗の今日 */}
+      <section className="bg-canvas-gray pt-16 md:pt-24">
+        <div className="mx-auto max-w-content px-4 md:px-10 xl:px-16">
+          <Reveal className="mb-8 flex flex-col items-start justify-between gap-2 md:flex-row md:items-end">
+            <h2 className="text-[32px] font-semibold leading-[1.125] md:text-[48px] md:leading-[1.08]">
+              店舗で、会いましょう。<span className="text-ink-secondary">今日の Lumina 湊町。</span>
+            </h2>
+            <Link href="/stores" className="link-chevron shrink-0 text-[17px]">
+              店舗情報 ›
+            </Link>
+          </Reveal>
+          <TodayAtStore />
+        </div>
+      </section>
 
       {/* ストア新着: 既存のフリマ出品データ */}
       <section className="bg-canvas-gray py-16 md:py-24">
