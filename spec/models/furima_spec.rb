@@ -22,7 +22,7 @@ RSpec.describe Furima, type: :model do
       it '商品画像を1枚つけることが必須であること' do
         @furima.image= nil
         @furima.valid?
-        expect(@furima.errors.full_messages).to include{"Image can't be blank"}
+        expect(@furima.errors.full_messages).to include("Image can't be blank")
       end
 
       it '商品名が必須であること' do

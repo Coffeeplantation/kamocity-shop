@@ -3,7 +3,7 @@ RSpec.describe User, type: :model do
   before do
     @user = FactoryBot.build(:user)
   end
-  describe 'ユーザー新規登録' 
+  describe 'ユーザー新規登録' do
   context 'ユーザー登録ができる時' do
     it "全て入力されている" do
       expect(@user).to be_valid
@@ -121,5 +121,6 @@ RSpec.describe User, type: :model do
         @user.valid?
         expect(@user.errors.full_messages).to include("Password is invalid")
     end
+  end
   end
 end
