@@ -4,6 +4,7 @@ import './globals.css';
 import { AuthProvider } from '@/contexts/AuthContext';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import BackToTop from '@/components/BackToTop';
 
 // SF Pro（Apple 専用で Web 利用不可）に最も近い Inter を自己ホストし、日本語はヒラギノ角ゴに近い Noto Sans JP を使う。
 // Noto Sans JP は next/font での取得に不具合があるため、Google Fonts の CSS を直接読み込む。
@@ -41,6 +42,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             {children}
           </main>
           <Footer />
+          <BackToTop />
         </AuthProvider>
       </body>
     </html>

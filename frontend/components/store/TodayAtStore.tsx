@@ -1,44 +1,47 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
-import OpenBadge from '@/components/store/OpenBadge';
-import { tokyoNow } from '@/lib/openStatus';
-import { EVENT_CATEGORIES, eventsOn, NEWS, StoreEvent, STORE } from '@/lib/storeInfo';
+import Photo from '@/components/Photo';
+import { StatusSkeleton, StatusText } from '@/components/store/OpenBadge';
+import { useTokyoNow } from '@/components/store/useTokyoNow';
+import { ARRIVAL_UPDATE, arrivalsFor } from '@/lib/arrivals';
+import { crowdAt, crowdLevel } from '@/lib/crowd';
+import { eventsOn } from '@/lib/events';
+import { fmt, stationStatus } from '@/lib/hours';
+import { addDays, toMinutes } from '@/lib/jpCalendar';
+import { nextDepartures, routeById } from '@/lib/shuttle';
+import { EVENT_CATEGORIES, STORE } from '@/lib/storeInfo';
 
-// トップページ用：店舗の「今日」のまとめ（営業状況・今日のイベント・最新のお知らせ）
+// トップページ用：道の駅の「今日」のまとめ
 export default function TodayAtStore() {
-  const [events, setEvents] = useState<StoreEvent[] | null>(null);
-  useEffect(() => {
-    const n = tokyoNow();
-    setEvents(eventsOn(n.y, n.m, n.d));
-  }, []);
+  const now = useTokyoNow();
+
+  const status = now ? stationStatus(now) : null;
+  const events = now ? eventsOn(now.date) : null;
+  const crowd = now ? crowdAt(now) : null;
+  const level = crowd && status?.open ? crowdLevel(crowd.value) : null;
+  const bus = now ? nextDepartures(routeById('from-station'), now, 1)[0] : undefined;
+  const arrivalsDate = now ? (now.minutes < toMinutes(ARRIVAL_UPDATE) ? addDays(now.date, -1) : now.date) : null;
+  const highlights = arrivalsDate
+    ? (arrivalsFor(arrivalsDate) ?? []).flatMap((g) => g.items.filter((i) => i.tag === 'おすすめ' || i.tag === '初入荷').map((i) => i.name)).slice(0, 5)
+    : null;
 
   return (
-    <div className="grid gap-5 lg:grid-cols-3">
-      <Link
-        href="/stores"
-        className="group flex min-h-[260px] flex-col justify-between rounded-[18px] bg-studio-dark p-7 text-[#f5f5f7] transition-transform duration-500 hover:scale-[1.01]"
-      >
-        <div>
-          <p className="text-[14px] font-semibold text-[#a1a1a6]">道の駅併設ストア</p>
-          <p className="mt-1 text-[32px] font-semibold leading-[1.1]">{STORE.name}</p>
-          <p className="mt-2 text-[15px] text-[#d2d2d7]">{STORE.catchcopy}</p>
-        </div>
-        <div className="mt-6 space-y-3">
-          <OpenBadge tone="dark" />
-          <p className="text-[14px] text-accent-linkdark group-hover:underline">店舗情報を見る ›</p>
-        </div>
+    <div className="grid grid-cols-1 gap-5 lg:grid-cols-3">
+      <Link href="/stores" className="group relative isolate flex min-h-[360px] flex-col justify-end overflow-hidden rounded-[22px] bg-black p-7 text-white lg:row-span-2">
+        <Photo name="lighthouseDusk" sizes="(min-width: 1024px) 33vw, 100vw" className="!absolute inset-0 -z-10" imgClassName="transition-transform duration-700 group-hover:scale-105" />
+        <div className="absolute inset-0 -z-10 bg-gradient-to-t from-black/80 via-black/20 to-transparent" aria-hidden />
+        <p className="text-[14px] font-semibold text-white/75">道の駅・Lumina Store 併設</p>
+        <p className="mt-1 text-[36px] font-semibold leading-[1.05]">{STORE.name}</p>
+        <p className="mt-2 text-[15px] text-white/85">{STORE.catchcopy}</p>
+        <div className="mt-5">{status ? <StatusText status={status} tone="dark" /> : <StatusSkeleton tone="dark" />}</div>
+        <p className="mt-4 text-[14px] text-accent-linkdark group-hover:underline">店舗情報を見る ›</p>
       </Link>
 
-      <div className="rounded-[18px] bg-white p-7">
+      <div className="rounded-[22px] bg-white p-7">
         <p className="text-[14px] font-semibold text-ink-secondary">今日のイベント</p>
-        {events === null ? (
-          <div className="mt-4 space-y-3">
-            {[0, 1].map((i) => (
-              <div key={i} className="h-14 animate-pulse rounded-xl bg-canvas-gray" />
-            ))}
-          </div>
+        {!events ? (
+          <div className="mt-4 space-y-3">{[0, 1].map((i) => <div key={i} className="h-12 animate-pulse rounded-xl bg-canvas-gray" />)}</div>
         ) : events.length === 0 ? (
           <p className="mt-4 text-[17px] text-ink">今日予定されているイベントはありません。</p>
         ) : (
@@ -49,7 +52,7 @@ export default function TodayAtStore() {
                 <div>
                   <p className="text-[17px] font-semibold leading-[1.3] text-ink">{e.title}</p>
                   <p className="text-[14px] text-ink-secondary">
-                    {e.start}〜{e.end}・{e.place}
+                    {fmt(e.start)}〜{fmt(e.end)}・{e.place}
                   </p>
                 </div>
               </li>
@@ -61,20 +64,40 @@ export default function TodayAtStore() {
         </Link>
       </div>
 
-      <div className="rounded-[18px] bg-white p-7">
-        <p className="text-[14px] font-semibold text-ink-secondary">お知らせ</p>
-        <ul className="mt-4 divide-y divide-black/10">
-          {NEWS.slice(0, 3).map((n) => (
-            <li key={n.title} className="py-3 first:pt-0">
-              <time dateTime={n.date} className="text-[12px] tabular-nums text-ink-secondary">
-                {n.date.replaceAll('-', '.')}・{n.category}
-              </time>
-              <p className="mt-0.5 text-[15px] leading-[1.4] text-ink">{n.title}</p>
-            </li>
-          ))}
-        </ul>
-        <Link href="/stores#news" className="link-chevron mt-3 text-[14px]">
-          すべてのお知らせ ›
+      <div className="rounded-[22px] bg-white p-7">
+        <p className="text-[14px] font-semibold text-ink-secondary">本日のおすすめ入荷</p>
+        {!highlights ? (
+          <div className="mt-4 h-20 animate-pulse rounded-xl bg-canvas-gray" />
+        ) : highlights.length ? (
+          <ul className="mt-4 flex flex-wrap gap-2">
+            {highlights.map((n) => (
+              <li key={n} className="rounded-full bg-canvas-gray px-3.5 py-1.5 text-[15px] text-ink">
+                {n}
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className="mt-4 text-[17px] text-ink">本日は全館休業日です。</p>
+        )}
+        <Link href="/stores#arrivals" className="link-chevron mt-5 text-[14px]">
+          入荷状況をすべて見る ›
+        </Link>
+      </div>
+
+      <div className="grid grid-cols-2 gap-5 lg:col-span-2">
+        <Link href="/stores#crowd" className="rounded-[22px] bg-white p-7 transition-colors hover:bg-white/80">
+          <p className="text-[14px] font-semibold text-ink-secondary">いまの混雑（予想）</p>
+          <p className="mt-3 flex items-center gap-2 text-[24px] font-semibold text-ink">
+            {level && <span className="h-3 w-3 rounded-full" style={{ background: level.color }} aria-hidden />}
+            {now ? (level ? level.label : '営業時間外') : '—'}
+          </p>
+        </Link>
+        <Link href="/stores#shuttle" className="rounded-[22px] bg-white p-7 transition-colors hover:bg-white/80">
+          <p className="text-[14px] font-semibold text-ink-secondary">次のシャトル（湊町駅発）</p>
+          <p className="mt-3 text-[24px] font-semibold tabular-nums text-ink">
+            {now ? (bus ? bus.time : '本日の運行終了') : '—'}
+            {bus && <span className="ml-2 text-[15px] font-normal text-ink-secondary">{bus.inMinutes === 0 ? 'まもなく発車' : `あと${bus.inMinutes}分`}</span>}
+          </p>
         </Link>
       </div>
     </div>

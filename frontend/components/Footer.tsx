@@ -22,14 +22,16 @@ const DIRECTORY = [
     ],
   },
   {
-    title: 'Lumina 湊町',
+    title: 'Lumina 湊町（道の駅）',
     links: [
-      { label: '営業案内', href: '/stores#hours' },
-      { label: '施設案内', href: '/stores#facilities' },
+      { label: '本日の入荷状況', href: '/stores#arrivals' },
+      { label: '旬カレンダー', href: '/stores#season' },
+      { label: '買う・食べる・遊ぶ', href: '/stores#shops' },
+      { label: '営業時間', href: '/stores#hours' },
+      { label: '園内マップ', href: '/stores#map' },
+      { label: '混雑予想・シャトルバス', href: '/stores#crowd' },
       { label: 'イベントカレンダー', href: '/stores#events' },
-      { label: 'お知らせ', href: '/stores#news' },
       { label: 'アクセス', href: '/stores#access' },
-      { label: '周辺情報', href: '/stores#nearby' },
     ],
   },
   {
@@ -43,7 +45,8 @@ const DIRECTORY = [
     title: 'サポート',
     links: [
       { label: 'よくある質問', href: '/stores#faq' },
-      { label: '修理・点検（Lumina Care）', href: '/stores#facilities' },
+      { label: 'お問い合わせ', href: '/stores#contact' },
+      { label: '修理・点検（Lumina Care）', href: '/stores#service' },
     ],
   },
 ];

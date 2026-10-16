@@ -1,41 +1,48 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { OpenStatus, openStatus } from '@/lib/openStatus';
-import { FACILITIES } from '@/lib/storeInfo';
+import { shopStatus, stationStatus, type Status } from '@/lib/hours';
+import { SHOPS } from '@/lib/storeInfo';
+import { useTokyoNow } from '@/components/store/useTokyoNow';
 
-// 現在の営業状況（1分ごとに更新）。サーバー描画とのずれを避けるため、表示はマウント後に行う。
-export function useOpenStatus(facilityKey?: string) {
-  const [status, setStatus] = useState<OpenStatus | null>(null);
-  useEffect(() => {
-    const f = facilityKey ? FACILITIES.find((x) => x.key === facilityKey) ?? 'store' : 'store';
-    const update = () => setStatus(openStatus(f));
-    update();
-    const t = window.setInterval(update, 60_000);
-    return () => window.clearInterval(t);
-  }, [facilityKey]);
-  return status;
-}
+const COLORS: Record<Status['state'], { dot: string; light: string; dark: string }> = {
+  open: { dot: 'bg-[#30d158]', light: 'text-[#1a7f37]', dark: 'text-[#30d158]' },
+  '24h': { dot: 'bg-[#30d158]', light: 'text-[#1a7f37]', dark: 'text-[#30d158]' },
+  closing: { dot: 'bg-[#ff9f0a]', light: 'text-[#b25000]', dark: 'text-[#ffb340]' },
+  before: { dot: 'bg-[#ff9f0a]', light: 'text-[#b25000]', dark: 'text-[#ffb340]' },
+  after: { dot: 'bg-[#ff453a]', light: 'text-[#d70015]', dark: 'text-[#ff6961]' },
+  closed: { dot: 'bg-[#ff453a]', light: 'text-[#d70015]', dark: 'text-[#ff6961]' },
+};
 
-export default function OpenBadge({
-  facility,
+export function StatusText({
+  status,
   tone = 'light',
   size = 'md',
+  showDetail = true,
 }: {
-  facility?: string;
+  status: Status;
   tone?: 'light' | 'dark';
   size?: 'sm' | 'md';
+  showDetail?: boolean;
 }) {
-  const s = useOpenStatus(facility);
-  const text = size === 'sm' ? 'text-[12px]' : 'text-[14px]';
-  if (!s) return <span className={`inline-block h-5 w-28 animate-pulse rounded-full ${tone === 'dark' ? 'bg-white/10' : 'bg-black/5'}`} />;
-  const color = s.open ? (s.label === 'まもなく終了' ? 'text-[#b64400]' : 'text-[#1a7f37]') : 'text-[#d70015]';
-  const darkColor = s.open ? 'text-[#30d158]' : 'text-[#ff6961]';
+  const c = COLORS[status.state];
   return (
-    <span className={`inline-flex items-center gap-1.5 ${text}`} role="status">
-      <span className={`h-2 w-2 rounded-full ${s.open ? 'bg-[#30d158]' : 'bg-[#ff453a]'}`} aria-hidden />
-      <span className={`font-semibold ${tone === 'dark' ? darkColor : color}`}>{s.label}</span>
-      {s.detail && <span className={tone === 'dark' ? 'text-[#a1a1a6]' : 'text-ink-secondary'}>・{s.detail}</span>}
+    <span className={`inline-flex flex-wrap items-center gap-x-1.5 ${size === 'sm' ? 'text-[12px]' : 'text-[14px]'}`} role="status">
+      <span className={`h-2 w-2 shrink-0 rounded-full ${c.dot} ${status.open ? 'shadow-[0_0_0_3px_rgba(48,209,88,0.18)]' : ''}`} aria-hidden />
+      <span className={`font-semibold ${tone === 'dark' ? c.dark : c.light}`}>{status.label}</span>
+      {showDetail && status.detail && <span className={tone === 'dark' ? 'text-white/70' : 'text-ink-secondary'}>・{status.detail}</span>}
     </span>
   );
+}
+
+export function StatusSkeleton({ tone = 'light' }: { tone?: 'light' | 'dark' }) {
+  return <span className={`inline-block h-4 w-32 animate-pulse rounded-full ${tone === 'dark' ? 'bg-white/15' : 'bg-black/[0.06]'}`} />;
+}
+
+// shop を省略すると道の駅全体の営業状況
+export default function OpenBadge({ shop, tone = 'light', size = 'md', showDetail = true }: { shop?: string; tone?: 'light' | 'dark'; size?: 'sm' | 'md'; showDetail?: boolean }) {
+  const now = useTokyoNow();
+  if (!now) return <StatusSkeleton tone={tone} />;
+  const target = shop ? SHOPS.find((s) => s.id === shop) : undefined;
+  const status = target ? shopStatus(target, now) : stationStatus(now);
+  return <StatusText status={status} tone={tone} size={size} showDetail={showDetail} />;
 }

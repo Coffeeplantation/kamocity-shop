@@ -132,6 +132,15 @@ h1, h2, h3 {
   transform: none;
 }
 
+/* ヒーロー写真のゆっくりしたズーム */
+@keyframes hero-zoom {
+  from { transform: scale(1.08); }
+  to { transform: scale(1); }
+}
+.animate-hero-zoom {
+  animation: hero-zoom 18s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
 @keyframes float {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-10px); }
@@ -145,4 +154,5 @@ h1, h2, h3 {
   .reveal { opacity: 1; transform: none; transition: none; }
   .reveal-zoom { transform: none; transition: none; }
   .animate-float { animation: none; }
+  .animate-hero-zoom { animation: none; }
 }

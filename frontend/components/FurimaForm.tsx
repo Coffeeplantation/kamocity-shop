@@ -170,14 +170,14 @@ export default function FurimaForm({ initialData, furimaId, mode }: Props) {
             rows={6}
           />
         </div>
-        <div className="grid gap-5 sm:grid-cols-2">
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
           {select('カテゴリー', 'category_id', masterData.categories)}
           {select('商品の状態', 'condition_id', masterData.conditions)}
         </div>
       </Section>
 
       <Section title="配送について">
-        <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3">
           {select('配送料の負担', 'fee_id', masterData.fees)}
           {select('発送元の地域', 'prefecture_id', masterData.prefectures)}
           {select('発送までの日数', 'scheduled_delivery_id', masterData.scheduled_deliveries)}
