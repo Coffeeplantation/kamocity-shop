@@ -5,16 +5,20 @@ import { useEffect, useRef, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import { LogoMark } from '@/components/Devices';
+import ThemeSwitch from '@/components/ThemeSwitch';
 
 export const NAV_ITEMS = [
   { label: 'ストア', href: '/store' },
   { label: '店舗', href: '/stores' },
+  { label: '加茂', href: '/kamo' },
   { label: 'Phone', href: '/#phone' },
   { label: 'Book', href: '/#book' },
   { label: 'Pad', href: '/#pad' },
   { label: 'Watch', href: '/#watch' },
   { label: 'Vision', href: '/#vision' },
   { label: 'Buds', href: '/#buds' },
+  { label: 'イベント', href: '/stores#events' },
+  { label: 'アクセス', href: '/stores#access' },
   { label: 'サポート', href: '/stores#faq' },
 ];
 
@@ -103,16 +107,16 @@ export default function Header() {
 
   return (
     <>
-      <header className="sticky top-0 z-50 h-11 bg-[rgba(250,250,252,0.8)] backdrop-blur-xl backdrop-saturate-[1.8]">
+      <header className="sticky top-0 z-50 h-11 bg-[rgb(var(--header)/0.8)] backdrop-blur-xl backdrop-saturate-[1.8]">
         <nav className="mx-auto flex h-full max-w-content items-center justify-between px-4 text-[12px] md:px-5 lg:px-10 xl:px-16">
           <Link href="/" className={iconBtn} aria-label="Lumina ホーム">
             <LogoMark className="h-[18px] w-[18px]" />
           </Link>
 
-          <ul className="hidden min-w-0 flex-1 items-center justify-center gap-1 px-2 md:flex lg:gap-6 lg:px-6 xl:gap-12">
+          <ul className="hidden min-w-0 flex-1 items-center justify-center gap-1 px-2 md:flex lg:gap-3 lg:px-4 xl:gap-6 2xl:gap-10">
             {NAV_ITEMS.map((item) => (
               <li key={item.href}>
-                <Link href={item.href} className="whitespace-nowrap px-1.5 text-ink/80 transition-colors hover:text-ink lg:px-2">
+                <Link href={item.href} className="nav-link whitespace-nowrap px-1.5 text-ink/80 transition-colors hover:text-ink lg:px-2">
                   {item.label}
                 </Link>
               </li>
@@ -120,6 +124,7 @@ export default function Header() {
           </ul>
 
           <div className="flex items-center">
+            <ThemeSwitch className="mr-2 hidden 2xl:flex" />
             <button type="button" className={iconBtn} aria-label="検索" onClick={() => setSearchOpen((v) => !v)}>
               <SearchIcon />
             </button>
@@ -137,7 +142,7 @@ export default function Header() {
                 <PersonIcon />
               </button>
               {accountOpen && (
-                <div className="absolute right-0 top-11 w-60 rounded-2xl bg-white/95 p-5 shadow-[0_10px_40px_rgba(0,0,0,0.14)] backdrop-blur-xl">
+                <div className="absolute right-0 top-11 w-60 rounded-chip bg-surface/95 p-5 shadow-[0_10px_40px_rgba(0,0,0,0.14)] backdrop-blur-xl">
                   <p className="mb-3 text-[12px] text-ink-secondary">{user ? 'アカウント' : 'ようこそ'}</p>
                   <ul className="space-y-2.5 text-[14px] font-semibold">
                     {accountLinks.map((l) => (
@@ -182,7 +187,7 @@ export default function Header() {
         </nav>
 
         {searchOpen && (
-          <div className="border-t border-black/5 bg-[rgba(250,250,252,0.97)] backdrop-blur-xl">
+          <div className="border-t border-line/5 bg-[rgb(var(--header)/0.97)] backdrop-blur-xl">
             <form
               className="mx-auto flex max-w-[680px] items-center gap-3 px-6 py-6"
               onSubmit={(e) => {
@@ -215,7 +220,7 @@ export default function Header() {
 
       {/* モバイル全画面メニュー */}
       <div
-        className={`fixed inset-x-0 bottom-0 top-11 z-40 overflow-y-auto bg-[#fafafc] px-12 pb-16 pt-6 transition-opacity duration-300 md:hidden ${
+        className={`fixed inset-x-0 bottom-0 top-11 z-40 overflow-y-auto bg-[rgb(var(--header))] px-12 pb-16 pt-6 transition-opacity duration-300 md:hidden ${
           menuOpen ? 'opacity-100' : 'pointer-events-none opacity-0'
         }`}
       >
@@ -228,7 +233,8 @@ export default function Header() {
             </li>
           ))}
         </ul>
-        <ul className="mt-8 space-y-3 border-t border-black/10 pt-6 text-[17px] text-ink-secondary">
+        <ThemeSwitch className="mt-8 w-fit text-[13px]" />
+        <ul className="mt-8 space-y-3 border-t border-line/10 pt-6 text-[17px] text-ink-secondary">
           {accountLinks.map((l) => (
             <li key={l.href}>
               <Link href={l.href} onClick={() => setMenuOpen(false)}>

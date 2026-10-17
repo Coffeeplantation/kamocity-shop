@@ -9,17 +9,17 @@ import { StatusText } from '@/components/store/OpenBadge';
 import { useTokyoNow } from '@/components/store/useTokyoNow';
 
 // ヒーロー上の「いま」の情報（営業状況・混雑予想・次のシャトル・今日のイベント）
-export default function LiveChips() {
+export default function LiveChips({ base = '' }: { base?: string }) {
   const now = useTokyoNow();
   const chip =
-    'group flex min-h-[76px] flex-col justify-between rounded-2xl border border-white/15 bg-white/10 px-4 py-3 text-left backdrop-blur-xl transition-colors hover:bg-white/20';
+    'group flex min-h-[76px] flex-col justify-between rounded-chip border border-white/15 bg-white/10 px-4 py-3 text-left backdrop-blur-xl transition-colors hover:bg-white/20';
   const label = 'text-[12px] font-semibold text-white/70';
 
   if (!now) {
     return (
       <div className="grid grid-cols-2 gap-2.5 lg:grid-cols-4">
         {[0, 1, 2, 3].map((i) => (
-          <div key={i} className="h-[76px] animate-pulse rounded-2xl bg-white/10" />
+          <div key={i} className="h-[76px] animate-pulse rounded-chip bg-white/10" />
         ))}
       </div>
     );
@@ -34,11 +34,11 @@ export default function LiveChips() {
 
   return (
     <div className="grid grid-cols-2 gap-2.5 lg:grid-cols-4">
-      <a href="#hours" className={chip}>
+      <a href={`${base}#hours`} className={chip}>
         <span className={label}>営業状況</span>
         <StatusText status={status} tone="dark" />
       </a>
-      <a href="#crowd" className={chip}>
+      <a href={`${base}#crowd`} className={chip}>
         <span className={label}>いまの混雑（予想）</span>
         {level ? (
           <span className="flex items-center gap-1.5 text-[14px] font-semibold text-white">
@@ -49,7 +49,7 @@ export default function LiveChips() {
           <span className="text-[14px] text-white/80">営業時間外</span>
         )}
       </a>
-      <a href="#crowd" className={chip}>
+      <a href={`${base}#crowd`} className={chip}>
         <span className={label}>次のシャトル（湊町駅発）</span>
         {bus ? (
           <span className="text-[14px] text-white">
@@ -60,7 +60,7 @@ export default function LiveChips() {
           <span className="text-[14px] text-white/80">本日の運行は終了</span>
         )}
       </a>
-      <a href="#events" className={chip}>
+      <a href={`${base}#events`} className={chip}>
         <span className={label}>今日のイベント</span>
         <span className="line-clamp-1 text-[14px] text-white">
           {events.length === 0 ? (

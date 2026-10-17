@@ -28,7 +28,7 @@ export default function TodayAtStore() {
 
   return (
     <div className="grid grid-cols-1 gap-5 lg:grid-cols-3">
-      <Link href="/stores" className="group relative isolate flex min-h-[360px] flex-col justify-end overflow-hidden rounded-[22px] bg-black p-7 text-white lg:row-span-2">
+      <Link href="/stores" className="group relative isolate flex min-h-[360px] flex-col justify-end overflow-hidden rounded-card bg-black p-7 text-white lg:row-span-2">
         <Photo name="lighthouseDusk" sizes="(min-width: 1024px) 33vw, 100vw" className="!absolute inset-0 -z-10" imgClassName="transition-transform duration-700 group-hover:scale-105" />
         <div className="absolute inset-0 -z-10 bg-gradient-to-t from-black/80 via-black/20 to-transparent" aria-hidden />
         <p className="text-[14px] font-semibold text-white/75">道の駅・Lumina Store 併設</p>
@@ -38,10 +38,10 @@ export default function TodayAtStore() {
         <p className="mt-4 text-[14px] text-accent-linkdark group-hover:underline">店舗情報を見る ›</p>
       </Link>
 
-      <div className="rounded-[22px] bg-white p-7">
+      <div className="rounded-card bg-surface p-7">
         <p className="text-[14px] font-semibold text-ink-secondary">今日のイベント</p>
         {!events ? (
-          <div className="mt-4 space-y-3">{[0, 1].map((i) => <div key={i} className="h-12 animate-pulse rounded-xl bg-canvas-gray" />)}</div>
+          <div className="mt-4 space-y-3">{[0, 1].map((i) => <div key={i} className="h-12 animate-pulse rounded-ctl bg-canvas-gray" />)}</div>
         ) : events.length === 0 ? (
           <p className="mt-4 text-[17px] text-ink">今日予定されているイベントはありません。</p>
         ) : (
@@ -64,10 +64,10 @@ export default function TodayAtStore() {
         </Link>
       </div>
 
-      <div className="rounded-[22px] bg-white p-7">
+      <div className="rounded-card bg-surface p-7">
         <p className="text-[14px] font-semibold text-ink-secondary">本日のおすすめ入荷</p>
         {!highlights ? (
-          <div className="mt-4 h-20 animate-pulse rounded-xl bg-canvas-gray" />
+          <div className="mt-4 h-20 animate-pulse rounded-ctl bg-canvas-gray" />
         ) : highlights.length ? (
           <ul className="mt-4 flex flex-wrap gap-2">
             {highlights.map((n) => (
@@ -85,14 +85,14 @@ export default function TodayAtStore() {
       </div>
 
       <div className="grid grid-cols-2 gap-5 lg:col-span-2">
-        <Link href="/stores#crowd" className="rounded-[22px] bg-white p-7 transition-colors hover:bg-white/80">
+        <Link href="/stores#crowd" className="rounded-card bg-surface p-7 transition-colors hover:bg-surface/80">
           <p className="text-[14px] font-semibold text-ink-secondary">いまの混雑（予想）</p>
           <p className="mt-3 flex items-center gap-2 text-[24px] font-semibold text-ink">
             {level && <span className="h-3 w-3 rounded-full" style={{ background: level.color }} aria-hidden />}
             {now ? (level ? level.label : '営業時間外') : '—'}
           </p>
         </Link>
-        <Link href="/stores#shuttle" className="rounded-[22px] bg-white p-7 transition-colors hover:bg-white/80">
+        <Link href="/stores#shuttle" className="rounded-card bg-surface p-7 transition-colors hover:bg-surface/80">
           <p className="text-[14px] font-semibold text-ink-secondary">次のシャトル（湊町駅発）</p>
           <p className="mt-3 text-[24px] font-semibold tabular-nums text-ink">
             {now ? (bus ? bus.time : '本日の運行終了') : '—'}

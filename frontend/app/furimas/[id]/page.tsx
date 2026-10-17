@@ -40,9 +40,9 @@ export default function FurimaShowPage() {
   ];
 
   return (
-    <div className="bg-white">
+    <div className="bg-surface">
       {/* サブナビ */}
-      <div className="sticky top-11 z-30 border-b border-black/10 bg-white/80 backdrop-blur-xl">
+      <div className="sticky top-11 z-30 border-b border-line/10 bg-surface/80 backdrop-blur-xl">
         <div className="mx-auto flex h-[52px] max-w-content items-center justify-between px-4 md:px-10 xl:px-16">
           <p className="truncate pr-4 text-[17px] font-semibold text-ink md:text-[21px]">{furima.item}</p>
           {!furima.sold_out && !isOwner && (
@@ -65,7 +65,7 @@ export default function FurimaShowPage() {
 
         <div className="mt-10 grid gap-10 lg:grid-cols-[minmax(0,1.5fr)_minmax(380px,1fr)] lg:gap-16 xl:gap-24">
           <div className="lg:sticky lg:top-[120px] lg:self-start">
-            <div className="relative aspect-square overflow-hidden rounded-[18px] bg-canvas-gray">
+            <div className="relative aspect-square overflow-hidden rounded-tile bg-canvas-gray">
               {furima.image_url ? (
                 <Image
                   src={furima.image_url}
@@ -78,7 +78,7 @@ export default function FurimaShowPage() {
                 <div className="flex h-full w-full items-center justify-center text-[17px] text-ink-tertiary">画像なし</div>
               )}
               {furima.sold_out && (
-                <span className="absolute left-5 top-5 rounded-full bg-ink px-3 py-1 text-[12px] font-semibold text-white">
+                <span className="absolute left-5 top-5 rounded-full bg-ink px-3 py-1 text-[12px] font-semibold text-on-ink">
                   SOLD OUT
                 </span>
               )}
@@ -91,7 +91,7 @@ export default function FurimaShowPage() {
             </h2>
             <p className="mt-4 whitespace-pre-wrap text-[17px] leading-[1.47] text-ink">{furima.item_text}</p>
 
-            <div className="mt-8 rounded-[18px] border border-[#d2d2d7] p-6">
+            <div className="mt-8 rounded-tile border border-hairline p-6">
               <p className="text-[24px] font-semibold text-ink">¥{furima.price.toLocaleString()}</p>
               <p className="mt-1 text-[14px] text-ink-secondary">{furima.fee.name}</p>
               <p className="mt-1 text-[14px] text-ink-secondary">
@@ -125,7 +125,7 @@ export default function FurimaShowPage() {
             </div>
 
             <h2 className="mt-12 text-[24px] font-semibold tracking-[-0.01em] text-ink">詳細情報</h2>
-            <dl className="mt-4 divide-y divide-black/10 border-y border-black/10">
+            <dl className="mt-4 divide-y divide-line/10 border-y border-line/10">
               {specs.map(([label, value]) => (
                 <div key={label} className="grid grid-cols-[120px_1fr] gap-4 py-4 text-[14px]">
                   <dt className="text-ink-secondary">{label}</dt>

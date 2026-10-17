@@ -19,7 +19,7 @@ export default function StoreRow() {
     return (
       <div className="no-scrollbar mt-8 flex gap-5 overflow-x-hidden px-4 md:px-10 xl:px-16">
         {Array.from({ length: 4 }).map((_, i) => (
-          <div key={i} className="h-[420px] w-[280px] shrink-0 animate-pulse rounded-[18px] bg-white" />
+          <div key={i} className="h-[420px] w-[280px] shrink-0 animate-pulse rounded-tile bg-surface" />
         ))}
       </div>
     );

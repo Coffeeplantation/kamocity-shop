@@ -6,6 +6,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import api from '@/lib/api';
 import { FurimaListItem } from '@/types';
 import FurimaCard from '@/components/FurimaCard';
+import ProductStrip from '@/components/ProductStrip';
 import { useAuth } from '@/contexts/AuthContext';
 
 type Sort = 'new' | 'price-asc' | 'price-desc';
@@ -63,6 +64,7 @@ function StoreContent() {
 
   return (
     <div className="min-h-[70vh] bg-canvas-gray pb-24">
+      <ProductStrip />
       <div className="mx-auto max-w-content px-4 pt-12 md:px-10 md:pt-20 xl:px-16">
         <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
           <h1 className="text-[40px] font-semibold leading-[1.1] md:text-[56px] md:leading-[1.07]">
@@ -132,8 +134,8 @@ function StoreContent() {
               type="button"
               aria-pressed={inStock}
               onClick={() => update({ stock: inStock ? null : '1' })}
-              className={`shrink-0 rounded-xl border px-4 text-[15px] transition-colors ${
-                inStock ? 'border-ink bg-ink text-white' : 'border-[#d2d2d7] bg-white text-ink hover:border-ink'
+              className={`shrink-0 rounded-ctl border px-4 text-[15px] transition-colors ${
+                inStock ? 'border-ink bg-ink text-on-ink' : 'border-hairline bg-surface text-ink hover:border-ink'
               }`}
             >
               在庫ありのみ
@@ -163,11 +165,11 @@ function StoreContent() {
         {loading ? (
           <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
             {Array.from({ length: 8 }).map((_, i) => (
-              <div key={i} className="h-[420px] animate-pulse rounded-[18px] bg-white" />
+              <div key={i} className="h-[420px] animate-pulse rounded-tile bg-surface" />
             ))}
           </div>
         ) : results.length === 0 ? (
-          <div className="rounded-[18px] bg-white px-6 py-16 text-center">
+          <div className="rounded-tile bg-surface px-6 py-16 text-center">
             <p className="text-[21px] font-semibold text-ink">
               {filtered ? '条件に合う商品が見つかりませんでした。' : '現在、ストアに並んでいる商品はありません。'}
             </p>

@@ -41,7 +41,7 @@ export default function EventCalendar() {
     return out;
   }, [month]);
 
-  if (!now || !month || !selected) return <div className="h-[560px] animate-pulse rounded-[18px] bg-white" />;
+  if (!now || !month || !selected) return <div className="h-[560px] animate-pulse rounded-tile bg-surface" />;
 
   const today = now.date;
   const shift = (n: number) => {
@@ -57,7 +57,7 @@ export default function EventCalendar() {
 
   return (
     <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)]">
-      <div className="rounded-[18px] bg-white p-4 sm:p-6">
+      <div className="rounded-tile bg-surface p-4 sm:p-6">
         <div className="no-scrollbar -mx-1 mb-5 flex gap-2 overflow-x-auto px-1" role="group" aria-label="カテゴリで絞り込む">
           {(['all', ...Object.keys(EVENT_CATEGORIES)] as (EventCategory | 'all')[]).map((c) => {
             const on = filter === c;
@@ -68,7 +68,7 @@ export default function EventCalendar() {
                 aria-pressed={on}
                 onClick={() => setFilter(c)}
                 className={`flex shrink-0 items-center gap-1.5 rounded-full border px-3.5 py-1.5 text-[14px] transition-colors ${
-                  on ? 'border-ink bg-ink text-white' : 'border-[#d2d2d7] text-ink hover:border-ink'
+                  on ? 'border-ink bg-ink text-on-ink' : 'border-hairline text-ink hover:border-ink'
                 }`}
               >
                 {c !== 'all' && <span className="h-2 w-2 rounded-full" style={{ background: EVENT_CATEGORIES[c].color }} />}
@@ -139,8 +139,8 @@ export default function EventCalendar() {
                 onClick={() => setSelected(c)}
                 aria-pressed={isSel}
                 aria-label={`${c.m}月${c.d}日${hol ? `（${hol}）` : ''} ${closed ? '休業日' : `イベント${evs.length}件`}`}
-                className={`flex min-h-[48px] flex-col items-center justify-start rounded-xl pt-1 text-[14px] transition-colors sm:min-h-[60px] sm:pt-2 sm:text-[15px] xl:min-h-[68px] ${
-                  isSel ? 'bg-ink text-white' : isPast(c) ? 'text-ink-tertiary opacity-60 hover:bg-canvas-gray' : 'text-ink hover:bg-canvas-gray'
+                className={`flex min-h-[48px] flex-col items-center justify-start rounded-ctl pt-1 text-[14px] transition-colors sm:min-h-[60px] sm:pt-2 sm:text-[15px] xl:min-h-[68px] ${
+                  isSel ? 'bg-ink text-on-ink' : isPast(c) ? 'text-ink-tertiary opacity-60 hover:bg-canvas-gray' : 'text-ink hover:bg-canvas-gray'
                 }`}
               >
                 <span className={`flex h-7 w-7 items-center justify-center rounded-full ${isToday && !isSel ? 'bg-accent font-semibold text-white' : numColor}`}>{c.d}</span>
@@ -160,7 +160,7 @@ export default function EventCalendar() {
       </div>
 
       {/* 選択日のイベント */}
-      <div className="rounded-[18px] bg-white p-6">
+      <div className="rounded-tile bg-surface p-6">
         <p className="text-[14px] text-ink-secondary">
           {sameDay(selected, today) ? '今日・' : ''}
           {formatMD(selected)}
@@ -172,7 +172,7 @@ export default function EventCalendar() {
         {selectedClosed && <p className="mt-3 text-[14px] text-ink-secondary">トイレ・EV 充電・駐車場は 24 時間ご利用いただけます。</p>}
         <ul className="mt-5 space-y-3">
           {selectedEvents.map((e) => (
-            <li key={e.title} className="rounded-2xl bg-canvas-gray p-4">
+            <li key={e.title} className="rounded-chip bg-canvas-gray p-4">
               <div className="flex flex-wrap items-center gap-2 text-[12px] font-semibold" style={{ color: EVENT_CATEGORIES[e.category].color }}>
                 <span className="h-2 w-2 rounded-full" style={{ background: EVENT_CATEGORIES[e.category].color }} />
                 {EVENT_CATEGORIES[e.category].label}

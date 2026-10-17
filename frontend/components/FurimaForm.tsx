@@ -25,7 +25,7 @@ type Props = {
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <section className="border-t border-black/10 pt-8 first:border-0 first:pt-0 lg:grid lg:grid-cols-[minmax(200px,1fr)_3fr] lg:gap-12 xl:gap-20">
+    <section className="border-t border-line/10 pt-8 first:border-0 first:pt-0 lg:grid lg:grid-cols-[minmax(200px,1fr)_3fr] lg:gap-12 xl:gap-20">
       <h2 className="mb-5 text-[21px] font-semibold text-ink lg:mb-0">{title}</h2>
       <div className="space-y-5">{children}</div>
     </section>
@@ -122,13 +122,13 @@ export default function FurimaForm({ initialData, furimaId, mode }: Props) {
       )}
 
       <Section title="商品画像">
-        <label className="group flex aspect-[4/3] w-full cursor-pointer items-center justify-center overflow-hidden rounded-[18px] border border-dashed border-[#d2d2d7] bg-canvas-gray transition-colors hover:border-accent sm:w-96">
+        <label className="group flex aspect-[4/3] w-full cursor-pointer items-center justify-center overflow-hidden rounded-tile border border-dashed border-hairline bg-canvas-gray transition-colors hover:border-accent sm:w-96">
           {imagePreview ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img src={imagePreview} alt="選択した画像のプレビュー" className="h-full w-full object-contain p-4" />
           ) : (
             <span className="flex flex-col items-center gap-2 text-[14px] text-ink-secondary">
-              <span className="flex h-11 w-11 items-center justify-center rounded-full bg-white text-[22px] text-accent shadow-sm transition-transform group-hover:scale-110">
+              <span className="flex h-11 w-11 items-center justify-center rounded-full bg-surface text-[22px] text-accent shadow-sm transition-transform group-hover:scale-110">
                 ＋
               </span>
               画像を追加
@@ -205,7 +205,7 @@ export default function FurimaForm({ initialData, furimaId, mode }: Props) {
             />
           </div>
         </div>
-        <dl className="divide-y divide-black/10 rounded-xl bg-canvas-gray px-5 text-[14px]">
+        <dl className="divide-y divide-line/10 rounded-ctl bg-canvas-gray px-5 text-[14px]">
           <div className="flex justify-between py-3">
             <dt className="text-ink-secondary">販売手数料（10%）</dt>
             <dd className="text-ink">{price >= 300 ? `¥${Math.floor(price * 0.1).toLocaleString()}` : '—'}</dd>
@@ -217,7 +217,7 @@ export default function FurimaForm({ initialData, furimaId, mode }: Props) {
         </dl>
       </Section>
 
-      <div className="flex flex-col-reverse gap-3 border-t border-black/10 pt-8 sm:flex-row lg:ml-auto lg:w-1/2">
+      <div className="flex flex-col-reverse gap-3 border-t border-line/10 pt-8 sm:flex-row lg:ml-auto lg:w-1/2">
         <button type="button" onClick={() => router.back()} className="btn-block-secondary">
           もどる
         </button>

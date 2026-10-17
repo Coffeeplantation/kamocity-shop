@@ -44,7 +44,7 @@ export default function SectionNav({ title, items }: { title: string; items: Ite
   }, [active]);
 
   return (
-    <nav aria-label="ページ内リンク" className="sticky top-11 z-30 border-b border-black/10 bg-[rgba(250,250,252,0.85)] backdrop-blur-xl backdrop-saturate-150">
+    <nav aria-label="ページ内リンク" className="sticky top-11 z-30 border-b border-line/10 bg-[rgb(var(--header)/0.85)] backdrop-blur-xl backdrop-saturate-150">
       <div className="mx-auto flex h-[52px] max-w-content items-center gap-6 px-4 md:px-10 xl:px-16">
         <span className="hidden shrink-0 text-[17px] font-semibold text-ink md:inline">{title}</span>
         <ul ref={listRef} className="no-scrollbar flex h-full flex-1 items-center gap-5 overflow-x-auto text-[13px] md:justify-end md:gap-6">
@@ -60,7 +60,7 @@ export default function SectionNav({ title, items }: { title: string; items: Ite
                 >
                   {i.label}
                 </a>
-                <span className={`absolute inset-x-0 bottom-0 h-[2px] rounded-full bg-ink transition-opacity ${on ? 'opacity-100' : 'opacity-0'}`} aria-hidden />
+                <span className={`absolute inset-x-0 bottom-0 h-[2px] rounded-full bg-ink transition-opacity [[data-theme=nv]_&]:bg-accent ${on ? 'opacity-100' : 'opacity-0'}`} aria-hidden />
               </li>
             );
           })}

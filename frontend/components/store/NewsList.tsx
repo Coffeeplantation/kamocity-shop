@@ -34,7 +34,7 @@ export default function NewsList({ limit }: { limit?: number }) {
             aria-pressed={cat === c}
             onClick={() => setCat(c)}
             className={`shrink-0 rounded-full border px-3.5 py-1.5 text-[14px] transition-colors ${
-              cat === c ? 'border-ink bg-ink text-white' : 'border-[#d2d2d7] text-ink hover:border-ink'
+              cat === c ? 'border-ink bg-ink text-on-ink' : 'border-hairline text-ink hover:border-ink'
             }`}
           >
             {c}
@@ -42,7 +42,7 @@ export default function NewsList({ limit }: { limit?: number }) {
         ))}
       </div>
 
-      <ul className="divide-y divide-black/10 border-y border-black/10">
+      <ul className="divide-y divide-line/10 border-y border-line/10">
         {shown.map((n) => {
           const isNew = newSince !== null && n.date > newSince && n.date <= ymd(now!.date);
           return (

@@ -1,7 +1,7 @@
 // 店舗周辺の案内図（イメージ）。架空の地名なので実在の地図ではなくイラストで表現する。
 export default function StoreMap() {
   return (
-    <figure className="overflow-hidden rounded-[18px] bg-[#eef3ee]">
+    <figure className="overflow-hidden rounded-tile bg-[#eef3ee]">
       <svg viewBox="0 0 800 520" className="h-auto w-full" role="img" aria-labelledby="map-title map-desc">
         <title id="map-title">Lumina 湊町 周辺案内図</title>
         <desc id="map-desc">湊町駅から港通りを海方向へ進み、灯台交差点の先に店舗と駐車場があります。</desc>

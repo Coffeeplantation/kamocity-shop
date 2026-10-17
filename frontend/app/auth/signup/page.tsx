@@ -78,10 +78,10 @@ export default function SignupPage() {
   );
 
   return (
-    <div className="grid min-h-[calc(100svh-44px)] bg-white lg:grid-cols-[1fr_minmax(560px,1fr)]">
+    <div className="grid min-h-[calc(100svh-44px)] bg-surface lg:grid-cols-[1fr_minmax(560px,1fr)]">
       <aside className="relative hidden flex-col items-center justify-center overflow-hidden bg-black px-10 text-center lg:sticky lg:top-11 lg:flex lg:h-[calc(100svh-44px)] lg:self-start">
         <h2 className="text-balance text-[32px] font-semibold leading-[1.1] tracking-[-0.015em] text-[#f5f5f7] xl:text-[48px] 2xl:text-[64px]">ひとつのIDで、すべてを。</h2>
-        <p className="mt-3 text-[21px] text-[#86868b]">出品も、購入も、Luminaで。</p>
+        <p className="mt-3 text-[21px] text-ink-tertiary">出品も、購入も、Luminaで。</p>
         <div className="mt-12 w-full max-w-[680px]">
           <Laptop id="signup-book" className="mx-auto w-full max-h-[45svh]" />
         </div>
@@ -118,7 +118,7 @@ export default function SignupPage() {
             {field('生年月日', 'birth_date', { type: 'date', autoComplete: 'bday' })}
           </fieldset>
 
-          <fieldset className="space-y-4 border-t border-black/10 pt-10">
+          <fieldset className="space-y-4 border-t border-line/10 pt-10">
             <legend className="sr-only">アカウント情報</legend>
             <p className="text-[21px] font-semibold text-ink">アカウント情報</p>
             {field('メールアドレス', 'email', { type: 'email', placeholder: 'name@example.com', autoComplete: 'email' })}

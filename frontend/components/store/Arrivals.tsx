@@ -16,7 +16,7 @@ const TAG_STYLE: Record<ArrivalTag, string> = {
 // 本日の入荷状況（むなかた等の道の駅サイトにならい、売場ごとに掲載）
 export default function Arrivals() {
   const now = useTokyoNow();
-  if (!now) return <div className="grid grid-cols-1 gap-5 lg:grid-cols-3">{[0, 1, 2].map((i) => <div key={i} className="h-[460px] animate-pulse rounded-[22px] bg-white" />)}</div>;
+  if (!now) return <div className="grid grid-cols-1 gap-5 lg:grid-cols-3">{[0, 1, 2].map((i) => <div key={i} className="h-[460px] animate-pulse rounded-card bg-surface" />)}</div>;
 
   // 更新前（8:30 まで）は前日の入荷を参考として表示
   const beforeUpdate = now.minutes < toMinutes(ARRIVAL_UPDATE);
@@ -38,11 +38,11 @@ export default function Arrivals() {
       </div>
 
       {!groups ? (
-        <p className="rounded-[22px] bg-white px-6 py-12 text-center text-[17px] text-ink-secondary">全館休業日のため、入荷はありません。</p>
+        <p className="rounded-card bg-surface px-6 py-12 text-center text-[17px] text-ink-secondary">全館休業日のため、入荷はありません。</p>
       ) : (
         <div className="grid grid-cols-1 gap-5 lg:grid-cols-3">
           {groups.map((g) => (
-            <article key={g.id} className="flex flex-col overflow-hidden rounded-[22px] bg-white">
+            <article key={g.id} className="flex flex-col overflow-hidden rounded-card bg-surface">
               <div className="relative">
                 <Photo name={g.photo} sizes="(min-width: 1024px) 33vw, 100vw" className="aspect-[16/9]" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/0 to-black/0" aria-hidden />

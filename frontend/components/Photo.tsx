@@ -6,7 +6,7 @@ import { PHOTOS, type PhotoKey } from '@/lib/photos';
 
 // Unsplash の画像 CDN（imgix）に幅と画質を指定して、画面に合ったサイズだけを読み込む
 const unsplashLoader = ({ src, width, quality }: ImageLoaderProps) =>
-  `${src}?auto=format&fit=max&w=${width}&q=${quality ?? 72}`;
+  `${src}?auto=format&fit=max&w=${width}&q=${quality ?? 82}`;
 
 type Props = {
   name: PhotoKey;
@@ -22,7 +22,7 @@ export default function Photo({ name, sizes, className = '', imgClassName = '', 
   const p = PHOTOS[name];
   const [loaded, setLoaded] = useState(false);
   return (
-    <div className={`relative overflow-hidden bg-[#e8e8ed] ${className}`}>
+    <div className={`relative overflow-hidden bg-canvas-deep ${className}`}>
       <Image
         loader={unsplashLoader}
         src={`https://images.unsplash.com/photo-${p.id}`}

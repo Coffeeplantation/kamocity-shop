@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import ThemeSwitch from '@/components/ThemeSwitch';
 
 // フッターのリンクは、サイト内に実在するページ・セクションだけを並べる
 const DIRECTORY = [
@@ -35,6 +36,16 @@ const DIRECTORY = [
     ],
   },
   {
+    title: '加茂ローカル（新潟県加茂市）',
+    links: [
+      { label: 'いまの加茂（天気）', href: '/kamo#now' },
+      { label: '美人の湯行きバス', href: '/kamo#bus' },
+      { label: '今月の行事', href: '/kamo#events' },
+      { label: '見どころ', href: '/kamo#spots' },
+      { label: '名物・おみやげ', href: '/kamo#meibutsu' },
+    ],
+  },
+  {
     title: 'アカウント',
     links: [
       { label: 'サインイン', href: '/auth/login' },
@@ -55,7 +66,7 @@ export default function Footer() {
   return (
     <footer id="support" className="bg-canvas-gray text-[12px] leading-[1.33] text-ink-secondary">
       <div className="mx-auto max-w-content px-4 md:px-10 xl:px-16">
-        <div className="space-y-2 border-b border-black/10 py-[17px]">
+        <div className="space-y-2 border-b border-line/10 py-[17px]">
           <p>1. 下取り価格は対象デバイスの状態と機種によって異なります。表示価格は架空のものです。</p>
           <p>2. バッテリー駆動時間は使用状況や設定によって異なります。</p>
           <p>
@@ -63,9 +74,9 @@ export default function Footer() {
           </p>
         </div>
 
-        <nav aria-label="サイトディレクトリ" className="border-b border-black/10 py-5">
+        <nav aria-label="サイトディレクトリ" className="border-b border-line/10 py-5">
           {/* デスクトップ */}
-          <div className="hidden grid-cols-5 gap-5 md:grid">
+          <div className="hidden grid-cols-6 gap-5 md:grid">
             {DIRECTORY.map((col) => (
               <div key={col.title}>
                 <h3 className="mb-2 font-semibold text-ink">{col.title}</h3>
@@ -84,7 +95,7 @@ export default function Footer() {
           {/* モバイル: アコーディオン */}
           <div className="md:hidden">
             {DIRECTORY.map((col) => (
-              <details key={col.title} className="group border-b border-black/10 last:border-0">
+              <details key={col.title} className="group border-b border-line/10 last:border-0">
                 <summary className="flex cursor-pointer list-none items-center justify-between py-2.5 text-[14px] text-ink [&::-webkit-details-marker]:hidden">
                   {col.title}
                   <span className="text-ink-tertiary transition-transform group-open:rotate-45">＋</span>
@@ -113,10 +124,14 @@ export default function Footer() {
             </Link>
             にお越しください。
           </p>
-          <div className="flex flex-col gap-2 border-t border-black/10 pt-3 lg:flex-row lg:items-center lg:justify-between">
+          <div className="flex flex-col gap-2 border-t border-line/10 pt-3 lg:flex-row lg:items-center lg:justify-between">
             <p>Copyright © 2026 Lumina Inc.（架空） All rights reserved.</p>
             <p>架空ブランドによるデザインデモです。</p>
-            <p>日本</p>
+            <div className="flex items-center gap-3">
+              <span>表示スタイル</span>
+              <ThemeSwitch />
+              <span>日本</span>
+            </div>
           </div>
         </div>
       </div>

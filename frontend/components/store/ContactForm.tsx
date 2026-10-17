@@ -39,7 +39,7 @@ export default function ContactForm() {
   const set = (k: keyof typeof form) => (e: { target: { value: string } }) => setForm({ ...form, [k]: e.target.value });
 
   return (
-    <form onSubmit={submit} noValidate className="rounded-[22px] bg-white p-6 sm:p-8">
+    <form onSubmit={submit} noValidate className="rounded-card bg-surface p-6 sm:p-8">
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
         <div>
           <label htmlFor="contact-name" className="field-label">
@@ -82,7 +82,7 @@ export default function ContactForm() {
         </button>
       </div>
       {opened && (
-        <p className="mt-4 rounded-xl bg-[#e9f7ee] px-4 py-3 text-[14px] text-[#1a7f37]" role="status">
+        <p className="mt-4 rounded-ctl bg-[#e9f7ee] px-4 py-3 text-[14px] text-[#1a7f37]" role="status">
           メールアプリで送信を完了してください。起動しない場合は {STORE.email} 宛にお送りください。
         </p>
       )}

@@ -30,7 +30,7 @@ export default function PhoneHighlights() {
       duration={5200}
       threshold={0.55}
       delay={250}
-      className="relative mb-3 flex min-h-[calc(100svh-44px)] items-center overflow-hidden bg-studio-dark py-12"
+      className="relative mb-3 flex min-h-[600px] md:min-h-[680px] items-center overflow-hidden bg-studio-dark py-12"
       aria-label="Lumina Phone 17 Pro の特長"
     >
       {/* 背景の光 */}
@@ -45,7 +45,7 @@ export default function PhoneHighlights() {
 
       <div className="relative mx-auto grid w-full max-w-content items-center gap-6 px-4 md:px-10 lg:grid-cols-[1.25fr_1fr] lg:gap-12 xl:px-16">
         <div>
-          <p className="text-[clamp(18px,min(5.6vw,3.6svh),30px)] font-semibold leading-[1.25] tracking-[-0.01em] text-[#f5f5f7] md:text-[clamp(24px,min(4.6vw,4.4svh),44px)] lg:text-[clamp(26px,min(3.2vw,5svh),68px)]">
+          <p className="text-[clamp(18px,min(5.6vw,3.6svh),30px)] font-semibold leading-[1.25] tracking-[-0.01em] text-[#f5f5f7] md:text-[clamp(24px,min(4.6vw,4.4svh),44px)] lg:text-[clamp(26px,min(2.8vw,4.4svh),48px)]">
             {LINES.map((line, i) => (
               <span
                 key={line}
@@ -71,7 +71,7 @@ export default function PhoneHighlights() {
                   <span className="block whitespace-nowrap bg-gradient-to-r from-[#ff8a3d] to-[#c43dff] bg-clip-text text-[clamp(20px,min(6.4vw,4svh),40px)] font-semibold text-transparent">
                     {s.value}
                   </span>
-                  <span className="text-[12px] text-[#86868b] md:text-[14px]">{s.label}</span>
+                  <span className="text-[12px] text-ink-tertiary md:text-[14px]">{s.label}</span>
                 </dd>
               </div>
             ))}
@@ -81,7 +81,7 @@ export default function PhoneHighlights() {
         <Phone3DLazy
           mode="scrub"
           shadow={false}
-          className="mx-auto aspect-[4/5] h-[clamp(300px,min(50svh,110vw),780px)] lg:h-[clamp(420px,72svh,820px)]"
+          className="mx-auto aspect-[4/5] h-[clamp(300px,min(46svh,100vw),520px)] lg:h-[clamp(380px,56svh,580px)]"
         />
       </div>
     </PlayScene>

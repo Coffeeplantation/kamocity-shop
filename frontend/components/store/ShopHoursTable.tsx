@@ -12,12 +12,12 @@ export default function ShopHoursTable() {
   const type = now ? dayType(now.date) : null;
   const holiday = now ? holidayName(now.date) : null;
 
-  const todayBadge = <span className="ml-1.5 rounded-full bg-ink px-2 py-0.5 text-[11px] font-semibold text-white">今日</span>;
+  const todayBadge = <span className="ml-1.5 rounded-full bg-ink px-2 py-0.5 text-[11px] font-semibold text-on-ink">今日</span>;
 
   return (
-    <div className="overflow-hidden rounded-[22px] bg-white">
+    <div className="overflow-hidden rounded-card bg-surface">
       {now && (
-        <p className="border-b border-black/10 px-6 py-4 text-[14px] text-ink-secondary">
+        <p className="border-b border-line/10 px-6 py-4 text-[14px] text-ink-secondary">
           {STORE.closedDates.includes(ymd(now.date)) ? (
             <span className="font-semibold text-[#d70015]">今日は全館休業日です。</span>
           ) : (
@@ -32,7 +32,7 @@ export default function ShopHoursTable() {
       {/* デスクトップ：表 */}
       <table className="hidden w-full text-left text-[14px] md:table">
         <thead className="text-[12px] text-ink-secondary">
-          <tr className="border-b border-black/10">
+          <tr className="border-b border-line/10">
             <th scope="col" className="py-3 pl-6 font-normal">店舗・施設</th>
             <th scope="col" className="py-3 font-normal">平日{type === 'weekday' && todayBadge}</th>
             <th scope="col" className="py-3 font-normal">土日祝{type === 'holiday' && todayBadge}</th>
@@ -40,7 +40,7 @@ export default function ShopHoursTable() {
             <th scope="col" className="py-3 pr-6 font-normal">いま</th>
           </tr>
         </thead>
-        <tbody className="divide-y divide-black/[0.06]">
+        <tbody className="divide-y divide-line/[0.06]">
           {SHOPS.map((s) => {
             const sch = s.schedule === '24h' ? null : s.schedule;
             return (
@@ -64,7 +64,7 @@ export default function ShopHoursTable() {
       </table>
 
       {/* モバイル：リスト */}
-      <ul className="divide-y divide-black/[0.06] md:hidden">
+      <ul className="divide-y divide-line/[0.06] md:hidden">
         {SHOPS.map((s) => {
           const sch = s.schedule === '24h' ? null : s.schedule;
           return (
@@ -88,7 +88,7 @@ export default function ShopHoursTable() {
         })}
       </ul>
 
-      <div className="space-y-1 border-t border-black/10 px-6 py-4 text-[12px] leading-[1.6] text-ink-secondary">
+      <div className="space-y-1 border-t border-line/10 px-6 py-4 text-[12px] leading-[1.6] text-ink-secondary">
         <p>全館休業日：{STORE.closedDates.map((d) => d.replaceAll('-', '/')).join('、')}（トイレ・駐車場・EV 充電は 24 時間利用可）</p>
         <p>
           短縮営業：

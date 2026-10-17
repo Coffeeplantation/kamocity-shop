@@ -35,11 +35,11 @@ export default function SeasonCalendar() {
       <div>
         <h3 className="mb-4 text-[21px] font-semibold text-ink">{month ? `${month}月、今が旬。` : '今が旬。'}</h3>
         {!month ? (
-          <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">{[0, 1, 2, 3].map((i) => <div key={i} className="aspect-[4/5] animate-pulse rounded-[22px] bg-white" />)}</div>
+          <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">{[0, 1, 2, 3].map((i) => <div key={i} className="aspect-[4/5] animate-pulse rounded-card bg-surface" />)}</div>
         ) : (
           <ul className="no-scrollbar -mx-4 flex snap-x gap-4 overflow-x-auto px-4 pb-2 md:mx-0 md:grid md:grid-cols-3 md:px-0 xl:grid-cols-4">
             {inSeason.map((p) => (
-              <li key={p.name} className="relative w-[70vw] max-w-[300px] shrink-0 snap-start overflow-hidden rounded-[22px] bg-black md:w-auto md:max-w-none">
+              <li key={p.name} className="relative w-[70vw] max-w-[300px] shrink-0 snap-start overflow-hidden rounded-card bg-black md:w-auto md:max-w-none">
                 <Photo name={p.photo!} sizes="(min-width: 1280px) 25vw, (min-width: 768px) 33vw, 70vw" className="aspect-[4/5]" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/10 to-transparent" aria-hidden />
                 <div className="absolute inset-x-0 bottom-0 p-5 text-white">
@@ -59,7 +59,7 @@ export default function SeasonCalendar() {
       </div>
 
       {/* 一年の出回り時期 */}
-      <div className="rounded-[22px] bg-white p-4 sm:p-6">
+      <div className="rounded-card bg-surface p-4 sm:p-6">
         <div className="mb-5 flex flex-col justify-between gap-3 md:flex-row md:items-center">
           <h3 className="text-[21px] font-semibold text-ink">一年の旬カレンダー</h3>
           <div className="no-scrollbar -mx-1 flex gap-2 overflow-x-auto px-1" role="group" aria-label="種類で絞り込む">
@@ -70,7 +70,7 @@ export default function SeasonCalendar() {
                 aria-pressed={cat === c}
                 onClick={() => setCat(c)}
                 className={`flex shrink-0 items-center gap-1.5 rounded-full border px-3.5 py-1.5 text-[14px] transition-colors ${
-                  cat === c ? 'border-ink bg-ink text-white' : 'border-[#d2d2d7] text-ink hover:border-ink'
+                  cat === c ? 'border-ink bg-ink text-on-ink' : 'border-hairline text-ink hover:border-ink'
                 }`}
               >
                 {c !== 'すべて' && <span className="h-2 w-2 rounded-full" style={{ background: CAT_COLOR[c].strong }} />}
@@ -85,12 +85,12 @@ export default function SeasonCalendar() {
             <caption className="sr-only">産品ごとの出回り時期（濃い色が最盛期）</caption>
             <thead>
               <tr>
-                <th scope="col" className="sticky left-0 z-10 w-[168px] bg-white pb-2 text-left font-normal text-ink-secondary">
+                <th scope="col" className="sticky left-0 z-10 w-[168px] bg-surface pb-2 text-left font-normal text-ink-secondary">
                   産品
                 </th>
                 {MONTHS.map((m) => (
                   <th key={m} scope="col" className={`pb-2 text-center font-normal ${m === month ? 'font-semibold text-ink' : 'text-ink-secondary'}`}>
-                    <span className={`inline-flex h-7 min-w-7 items-center justify-center rounded-full px-1 ${m === month ? 'bg-ink text-white' : ''}`}>{m}月</span>
+                    <span className={`inline-flex h-7 min-w-7 items-center justify-center rounded-full px-1 ${m === month ? 'bg-ink text-on-ink' : ''}`}>{m}月</span>
                   </th>
                 ))}
               </tr>
@@ -100,7 +100,7 @@ export default function SeasonCalendar() {
                 const color = CAT_COLOR[p.category];
                 return (
                   <tr key={p.name}>
-                    <th scope="row" className="sticky left-0 z-10 bg-white pr-3 text-left font-normal">
+                    <th scope="row" className="sticky left-0 z-10 bg-surface pr-3 text-left font-normal">
                       <span className="flex items-center gap-2 text-[14px] text-ink">
                         <span className="h-2 w-2 shrink-0 rounded-full" style={{ background: color.strong }} aria-hidden />
                         {p.name}

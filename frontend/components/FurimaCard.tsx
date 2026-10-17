@@ -6,7 +6,7 @@ export default function FurimaCard({ furima }: { furima: FurimaListItem }) {
   return (
     <Link
       href={`/furimas/${furima.id}`}
-      className="group flex h-full flex-col overflow-hidden rounded-[18px] bg-white shadow-[2px_4px_12px_rgba(0,0,0,0.08)] transition-[transform,box-shadow] duration-300 hover:scale-[1.015] hover:shadow-[2px_4px_16px_rgba(0,0,0,0.16)]"
+      className="group flex h-full flex-col overflow-hidden rounded-tile bg-surface shadow-[2px_4px_12px_rgba(0,0,0,0.08)] transition-[transform,box-shadow] duration-300 hover:scale-[1.015] hover:shadow-[2px_4px_16px_rgba(0,0,0,0.16)]"
     >
       <div className="px-6 pt-6">
         {furima.sold_out ? (
@@ -26,7 +26,7 @@ export default function FurimaCard({ furima }: { furima: FurimaListItem }) {
             className={`object-contain transition-transform duration-500 group-hover:scale-105 ${furima.sold_out ? 'opacity-50' : ''}`}
           />
         ) : (
-          <div className="flex h-full w-full items-center justify-center rounded-xl bg-canvas-gray text-[14px] text-ink-tertiary">
+          <div className="flex h-full w-full items-center justify-center rounded-ctl bg-canvas-gray text-[14px] text-ink-tertiary">
             画像なし
           </div>
         )}

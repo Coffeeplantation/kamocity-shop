@@ -91,7 +91,7 @@ export default function OrderPage() {
   ];
 
   return (
-    <div className="bg-white px-4 md:px-10 xl:px-16 pb-24 pt-12 md:pt-20">
+    <div className="bg-surface px-4 md:px-10 xl:px-16 pb-24 pt-12 md:pt-20">
       <div className="mx-auto max-w-content">
         <h1 className="page-title">ご注文手続き。</h1>
         <p className="mt-3 text-[17px] text-ink-secondary">お届け先とお支払い方法を入力してください。</p>
@@ -127,7 +127,7 @@ export default function OrderPage() {
               </div>
             </section>
 
-            <section className="border-t border-black/10 pt-10">
+            <section className="border-t border-line/10 pt-10">
               <h2 className="mb-5 text-[24px] font-semibold tracking-[-0.01em] text-ink">お支払い方法</h2>
               <label className="field-label" htmlFor="number-form">クレジットカード番号</label>
               <div id="number-form" className="field h-[50px]" />
@@ -139,10 +139,10 @@ export default function OrderPage() {
           </form>
 
           <aside className="order-1 lg:order-2">
-            <div className="rounded-[18px] bg-canvas-gray p-6 lg:sticky lg:top-[68px]">
+            <div className="rounded-tile bg-canvas-gray p-6 lg:sticky lg:top-[68px]">
               <h2 className="text-[17px] font-semibold text-ink">注文内容</h2>
               <div className="mt-5 flex gap-4">
-                <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-xl bg-white">
+                <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-ctl bg-surface">
                   {furima.image_url && <Image src={furima.image_url} alt={furima.item} fill sizes="80px" className="object-contain p-1.5" />}
                 </div>
                 <div className="min-w-0">
@@ -150,7 +150,7 @@ export default function OrderPage() {
                   <p className="mt-1 text-[12px] text-ink-secondary">{furima.fee.name}</p>
                 </div>
               </div>
-              <dl className="mt-6 space-y-2 border-t border-black/10 pt-4 text-[14px]">
+              <dl className="mt-6 space-y-2 border-t border-line/10 pt-4 text-[14px]">
                 <div className="flex justify-between">
                   <dt className="text-ink-secondary">小計</dt>
                   <dd className="text-ink">¥{furima.price.toLocaleString()}</dd>
@@ -159,7 +159,7 @@ export default function OrderPage() {
                   <dt className="text-ink-secondary">配送料</dt>
                   <dd className="text-ink">{furima.fee.name}</dd>
                 </div>
-                <div className="flex justify-between border-t border-black/10 pt-3 text-[17px] font-semibold">
+                <div className="flex justify-between border-t border-line/10 pt-3 text-[17px] font-semibold">
                   <dt className="text-ink">合計</dt>
                   <dd className="text-ink">¥{furima.price.toLocaleString()}</dd>
                 </div>

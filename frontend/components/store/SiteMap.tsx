@@ -68,7 +68,7 @@ export default function SiteMap() {
 
   return (
     <div className="grid grid-cols-1 gap-5 lg:grid-cols-[minmax(0,1.6fr)_minmax(320px,1fr)]">
-      <div className="overflow-hidden rounded-[22px] bg-white">
+      <div className="overflow-hidden rounded-card bg-surface">
         <div className="no-scrollbar flex gap-2 overflow-x-auto px-4 pt-4 sm:px-5" role="group" aria-label="地図の表示を絞り込む">
           {(['all', 'buy', 'eat', 'play', 'service'] as Filter[]).map((k) => (
             <button
@@ -77,7 +77,7 @@ export default function SiteMap() {
               aria-pressed={filter === k}
               onClick={() => setFilter(k)}
               className={`flex shrink-0 items-center gap-1.5 rounded-full border px-3.5 py-1.5 text-[14px] transition-colors ${
-                filter === k ? 'border-ink bg-ink text-white' : 'border-[#d2d2d7] text-ink hover:border-ink'
+                filter === k ? 'border-ink bg-ink text-on-ink' : 'border-hairline text-ink hover:border-ink'
               }`}
             >
               {k !== 'all' && <span className="h-2 w-2 rounded-full" style={{ background: KINDS[k].color }} />}
@@ -215,7 +215,7 @@ export default function SiteMap() {
       {/* 詳細と一覧 */}
       <div className="flex flex-col gap-5">
         {shop ? (
-          <article className="overflow-hidden rounded-[22px] bg-white">
+          <article className="overflow-hidden rounded-card bg-surface">
             {shop.photo ? (
               <Photo name={shop.photo} sizes="(min-width: 1024px) 33vw, 100vw" className="aspect-[16/9]" />
             ) : (
@@ -251,26 +251,26 @@ export default function SiteMap() {
             </div>
           </article>
         ) : (
-          <div className="rounded-[22px] bg-white p-6">
+          <div className="rounded-card bg-surface p-6">
             <p className="text-[21px] font-semibold text-ink">番号を選んでください。</p>
             <p className="mt-1.5 text-[15px] leading-[1.55] text-ink-secondary">地図や下の一覧から選ぶと、営業時間といまの状況を表示します。</p>
           </div>
         )}
 
-        <ol className="grid grid-cols-1 gap-1 rounded-[22px] bg-white p-2 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
+        <ol className="grid grid-cols-1 gap-1 rounded-card bg-surface p-2 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
           {SHOPS.filter((s) => visible(s.kind)).map((s) => (
             <li key={s.id}>
               <button
                 type="button"
                 onClick={() => select(s.id)}
                 aria-pressed={selected === s.id}
-                className={`flex w-full items-center gap-2.5 rounded-xl px-3 py-2 text-left text-[14px] transition-colors ${selected === s.id ? 'bg-canvas-gray font-semibold' : 'hover:bg-canvas-gray'}`}
+                className={`flex w-full items-center gap-2.5 rounded-ctl px-3 py-2 text-left text-[14px] transition-colors ${selected === s.id ? 'bg-canvas-gray font-semibold' : 'hover:bg-canvas-gray'}`}
               >
                 <span className="flex h-6 min-w-6 items-center justify-center rounded-full text-[12px] font-semibold text-white" style={{ background: KINDS[s.kind].color }}>
                   {s.no}
                 </span>
                 <span className="truncate text-ink">{s.name}</span>
-                {now && <span className={`ml-auto h-2 w-2 shrink-0 rounded-full ${shopStatus(s, now).open ? 'bg-[#30d158]' : 'bg-[#d2d2d7]'}`} aria-hidden />}
+                {now && <span className={`ml-auto h-2 w-2 shrink-0 rounded-full ${shopStatus(s, now).open ? 'bg-[#30d158]' : 'bg-hairline'}`} aria-hidden />}
               </button>
             </li>
           ))}

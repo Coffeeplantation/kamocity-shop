@@ -51,7 +51,7 @@ export default function ShopExplorer() {
 
   return (
     <div>
-      <div role="tablist" aria-label="施設の種類" className="mx-auto mb-8 grid grid-cols-4 gap-1 rounded-full bg-white p-1 shadow-[0_1px_3px_rgba(0,0,0,0.06)] sm:flex sm:w-fit">
+      <div role="tablist" aria-label="施設の種類" className="mx-auto mb-8 grid grid-cols-4 gap-1 rounded-full bg-surface p-1 shadow-[0_1px_3px_rgba(0,0,0,0.06)] sm:flex sm:w-fit">
         {TABS.map((k) => (
           <button
             key={k}
@@ -60,7 +60,7 @@ export default function ShopExplorer() {
             aria-selected={tab === k}
             aria-controls="shop-panel"
             onClick={() => setTab(k)}
-            className={`whitespace-nowrap rounded-full px-1 py-2 text-[13px] transition-colors sm:px-7 sm:text-[15px] ${tab === k ? 'bg-ink font-semibold text-white' : 'text-ink hover:bg-canvas-gray'}`}
+            className={`whitespace-nowrap rounded-full px-1 py-2 text-[13px] transition-colors sm:px-7 sm:text-[15px] ${tab === k ? 'bg-ink font-semibold text-on-ink' : 'text-ink hover:bg-canvas-gray'}`}
           >
             {KINDS[k].label}
             <span className={`ml-1.5 hidden text-[12px] sm:inline ${tab === k ? 'text-white/60' : 'text-ink-tertiary'}`}>{SHOPS.filter((s) => s.kind === k).length}</span>
@@ -73,7 +73,7 @@ export default function ShopExplorer() {
           const today = now ? hoursOn(s, now.date) : null;
           const seasonMonth = now?.date.m;
           return (
-            <li key={s.id} id={`shop-${s.id}`} className="flex scroll-mt-32 flex-col overflow-hidden rounded-[22px] bg-white">
+            <li key={s.id} id={`shop-${s.id}`} className="flex scroll-mt-32 flex-col overflow-hidden rounded-card bg-surface">
               <div className="relative">
                 <ShopArt shop={s} />
                 <span
@@ -92,7 +92,7 @@ export default function ShopExplorer() {
                 <p className="mt-1.5 text-[14px] leading-[1.55] text-ink-secondary">{s.desc}</p>
 
                 {s.menu && (
-                  <ul className="mt-4 divide-y divide-black/[0.06] rounded-2xl bg-canvas-gray px-4 text-[14px]">
+                  <ul className="mt-4 divide-y divide-line/[0.06] rounded-chip bg-canvas-gray px-4 text-[14px]">
                     {s.menu.map((m) => {
                       const off = m.months && seasonMonth !== undefined && !m.months.includes(seasonMonth);
                       return (
@@ -109,7 +109,7 @@ export default function ShopExplorer() {
                   </ul>
                 )}
 
-                <dl className="mt-5 space-y-1.5 border-t border-black/10 pt-4 text-[13px]">
+                <dl className="mt-5 space-y-1.5 border-t border-line/10 pt-4 text-[13px]">
                   <div className="flex items-center justify-between gap-3">
                     <dt className="sr-only">いまの状況</dt>
                     <dd>{now ? <StatusText status={shopStatus(s, now)} size="sm" /> : <StatusSkeleton />}</dd>
