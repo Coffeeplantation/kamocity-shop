@@ -51,9 +51,17 @@ export default function FurimaForm({ initialData, furimaId, mode }: Props) {
     ...initialData,
   });
 
+  const [loadFailed, setLoadFailed] = useState(false);
+  const [reload, setReload] = useState(0);
+
+  // API に接続できないとき（Rails 未起動など）は、未処理のエラーにせず再読み込みボタンを出す
   useEffect(() => {
-    api.get('/master_data').then((res) => setMasterData(res.data));
-  }, []);
+    setLoadFailed(false);
+    api
+      .get('/master_data')
+      .then((res) => setMasterData(res.data))
+      .catch(() => setLoadFailed(true));
+  }, [reload]);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -92,6 +100,16 @@ export default function FurimaForm({ initialData, furimaId, mode }: Props) {
     }
   };
 
+  if (loadFailed)
+    return (
+      <div className="py-8 text-center">
+        <p className="text-[17px] text-ink">出品フォームの項目を読み込めませんでした。</p>
+        <p className="mt-1 text-[14px] text-ink-secondary">サーバーに接続できません。しばらくしてからもう一度お試しください。</p>
+        <button type="button" onClick={() => setReload((n) => n + 1)} className="btn-secondary mt-5">
+          再読み込み
+        </button>
+      </div>
+    );
   if (!masterData) return <p className="py-8 text-center text-[17px] text-ink-secondary">読み込み中…</p>;
 
   const select = (label: string, name: keyof FormData, options: { id: number; name: string }[]) => (

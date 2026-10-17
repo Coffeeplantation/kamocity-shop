@@ -21,6 +21,7 @@ export default function OrderPage() {
   const { user, loading } = useAuth();
   const router = useRouter();
   const [furima, setFurima] = useState<FurimaDetail | null>(null);
+  const [loadFailed, setLoadFailed] = useState(false);
   const [errors, setErrors] = useState<string[]>([]);
   const [submitting, setSubmitting] = useState(false);
   const [form, setForm] = useState({
@@ -44,7 +45,7 @@ export default function OrderPage() {
         router.push('/');
       }
       setFurima(f);
-    });
+    }).catch(() => setLoadFailed(true));
   }, [id, user, router]);
 
   useEffect(() => {
@@ -80,6 +81,7 @@ export default function OrderPage() {
     }
   };
 
+  if (loadFailed) return <div className="state-message">商品情報を読み込めませんでした。時間をおいて再度お試しください。</div>;
   if (loading || !furima) return <div className="state-message">読み込み中…</div>;
 
   const fields = [

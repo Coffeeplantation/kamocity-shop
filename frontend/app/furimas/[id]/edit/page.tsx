@@ -12,6 +12,7 @@ export default function FurimaEditPage() {
   const { user, loading } = useAuth();
   const router = useRouter();
   const [furima, setFurima] = useState<FurimaDetail | null>(null);
+  const [loadFailed, setLoadFailed] = useState(false);
 
   useEffect(() => {
     if (!loading && !user) router.push('/auth/login');
@@ -22,9 +23,10 @@ export default function FurimaEditPage() {
       const f = res.data as FurimaDetail;
       if (user && user.id !== f.user.id) router.push('/');
       setFurima(f);
-    });
+    }).catch(() => setLoadFailed(true));
   }, [id, user, router]);
 
+  if (loadFailed) return <div className="state-message">商品情報を読み込めませんでした。時間をおいて再度お試しください。</div>;
   if (loading || !furima) return <div className="state-message">読み込み中…</div>;
 
   return (
