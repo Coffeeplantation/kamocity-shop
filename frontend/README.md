@@ -49,6 +49,18 @@ npm run dev
 
 URL に `?now=2026-10-24T11:30` を付けると、その日時（日本時間）として営業状況・バス・イベントを表示します。
 
+## Slack 連携（テスト中）
+
+「今日の加茂」（天気・美人の湯行きバス・美人の湯の定休日・今月の行事）を Slack に送れます。
+
+```bash
+npm run slack:kamo            # 送る内容を表示するだけ（送信しない）
+npm run slack:kamo -- --send  # .env.local の設定で Slack に送る
+```
+
+`.env.local` に `SLACK_WEBHOOK_URL`（または `SLACK_BOT_TOKEN` と `SLACK_CHANNEL_ID`）を入れると実際に送信されます。設定がなければ送信しません。
+サーバー起動中は `GET /api/slack/kamo` で送る内容を確認、`POST /api/slack/kamo` で送信できます。設定項目は `.env.example` を参照してください。
+
 ## API・環境変数（任意）
 
 ストア・ログイン・購入は Rails 側の API を使います。フロントの見た目だけ確認する場合は不要です。
