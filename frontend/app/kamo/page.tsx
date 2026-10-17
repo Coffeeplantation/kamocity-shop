@@ -5,7 +5,12 @@ import SectionNav from '@/components/store/SectionNav';
 import KamoNow from '@/components/kamo/KamoNow';
 import BijinBus from '@/components/kamo/BijinBus';
 import KamoEvents from '@/components/kamo/KamoEvents';
-import { KAMO, KAMO_MEIBUTSU, KAMO_SPOTS, KAMO_TRIVIA, SOURCES } from '@/lib/kamo';
+import KamoHero from '@/components/kamo/KamoHero';
+import KamoWeek from '@/components/kamo/KamoWeek';
+import KamoTimeline from '@/components/kamo/KamoTimeline';
+import BijinStatus from '@/components/kamo/BijinStatus';
+import Photo from '@/components/Photo';
+import { KAMO, KAMO_MEIBUTSU, KAMO_SPOTS, KAMO_TRIVIA, mapUrl, SOURCES } from '@/lib/kamo';
 
 export const metadata: Metadata = {
   title: '加茂ローカル',
@@ -15,7 +20,8 @@ export const metadata: Metadata = {
 const NAV = [
   { id: 'now', label: 'いまの加茂' },
   { id: 'bus', label: '美人の湯バス' },
-  { id: 'events', label: '今月の行事' },
+  { id: 'season', label: 'これからの加茂' },
+  { id: 'events', label: '行事カレンダー' },
   { id: 'spots', label: '見どころ' },
   { id: 'meibutsu', label: '名物' },
   { id: 'trivia', label: '豆知識' },
@@ -23,6 +29,8 @@ const NAV = [
 ];
 
 const wrap = 'mx-auto max-w-content px-4 md:px-10 xl:px-16';
+
+const SPOT_ICON: Record<string, string> = { 日帰り温泉: '♨️', 神社: '⛩️', '甘味・茶屋': '🍵' };
 
 function SectionTitle({ eyebrow, title, sub }: { eyebrow: string; title: string; sub?: string }) {
   return (
@@ -43,21 +51,7 @@ function SectionTitle({ eyebrow, title, sub }: { eyebrow: string; title: string;
 export default function KamoPage() {
   return (
     <div className="bg-canvas-gray">
-      {/* ヒーロー */}
-      <section className="bg-studio-dark relative overflow-hidden text-[#f5f5f7]">
-        <div className={`${wrap} pb-14 pt-20 md:pb-20 md:pt-28`}>
-          <Reveal>
-            <p className="eyebrow mb-3 text-[17px] font-semibold text-white/70 md:text-[21px]">
-              {KAMO.pref}・地元のローカル情報
-            </p>
-            <h1 className="text-[56px] font-semibold leading-[1] md:text-[96px]">加茂のこと。</h1>
-            <p className="mt-5 max-w-[820px] text-[19px] leading-[1.5] text-white/85 md:text-[24px]">
-              <Phrases text="桐たんすと雪椿のまち。今日の天気、美人の湯へのバス、今月の行事まで、" />
-              <Phrases text="お出かけ前に知りたいことを、ひとつのページに。" />
-            </p>
-          </Reveal>
-        </div>
-      </section>
+      <KamoHero />
 
       <SectionNav title="加茂ローカル" items={NAV} />
 
@@ -65,6 +59,9 @@ export default function KamoPage() {
         <div className={wrap}>
           <SectionTitle eyebrow="いまの加茂" title="今日の加茂市。" sub="天気も、バスも、行事も。" />
           <KamoNow />
+          <h3 className="mb-4 mt-10 text-[21px] font-semibold text-ink md:text-[24px]">7日間の天気（加茂市）</h3>
+          <KamoWeek />
+          <p className="mt-3 text-[12px] text-ink-secondary">予報：Open-Meteo（気象モデルによる自動予報）。</p>
         </div>
       </section>
 
@@ -72,6 +69,13 @@ export default function KamoPage() {
         <div className={wrap}>
           <SectionTitle eyebrow="美人の湯へのバス" title="加茂駅から、温泉まで 17 分。" sub="かもんバス 七谷線。" />
           <BijinBus />
+        </div>
+      </section>
+
+      <section id="season" className="scroll-mt-28 overflow-hidden pb-14 md:pb-20">
+        <div className={wrap}>
+          <SectionTitle eyebrow="これからの加茂" title="この先半年、" sub="加茂で見られるもの。" />
+          <KamoTimeline />
         </div>
       </section>
 
@@ -87,9 +91,28 @@ export default function KamoPage() {
           <SectionTitle eyebrow="見どころ" title="歩いて、浸かって、" sub="ひと休み。" />
           <ul className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
             {KAMO_SPOTS.map((s) => (
-              <li key={s.name} className="flex flex-col rounded-card bg-surface p-6">
+              <li key={s.name} className="group flex flex-col overflow-hidden rounded-card bg-surface">
+                {s.photo ? (
+                  <div className="overflow-hidden">
+                    <Photo name={s.photo} sizes="(min-width: 1280px) 33vw, (min-width: 768px) 50vw, 100vw" className="aspect-[16/9]" imgClassName="transition-transform duration-700 group-hover:scale-105" />
+                  </div>
+                ) : (
+                  // 写真がない場所は、種類のアイコンで見出しをつくる
+                  <div className="bg-studio-dark flex aspect-[16/9] flex-col items-center justify-center gap-2 text-white">
+                    <span className="text-[56px] leading-none transition-transform duration-700 group-hover:scale-110" aria-hidden>
+                      {SPOT_ICON[s.kind] ?? '📍'}
+                    </span>
+                    <span className="text-[15px] font-semibold text-white/80">{s.name}</span>
+                  </div>
+                )}
+                <div className="flex flex-1 flex-col p-6">
                 <p className="text-[12px] text-ink-secondary">{s.kind}</p>
                 <h3 className="mt-1 text-[22px] font-semibold text-ink">{s.name}</h3>
+                {s.name.includes('美人の湯') && (
+                  <p className="mt-1.5">
+                    <BijinStatus />
+                  </p>
+                )}
                 <p className="mt-2 text-[15px] leading-[1.65] text-ink-secondary">{s.desc}</p>
                 <ul className="mt-3 space-y-1 text-[14px] text-ink">
                   {s.points.map((p) => (
@@ -102,9 +125,15 @@ export default function KamoPage() {
                   ))}
                 </ul>
                 {s.access && <p className="mt-3 text-[13px] text-ink-secondary">アクセス：{s.access}</p>}
-                <a href={s.source} target="_blank" rel="noopener noreferrer" className="link-chevron mt-auto pt-4 text-[13px]">
-                  くわしい情報 ›
-                </a>
+                <div className="mt-auto flex flex-wrap gap-x-5 gap-y-1 pt-4 text-[13px]">
+                  <a href={mapUrl(s.map)} target="_blank" rel="noopener noreferrer" className="link-chevron">
+                    地図で見る ›
+                  </a>
+                  <a href={s.source} target="_blank" rel="noopener noreferrer" className="link-chevron">
+                    くわしい情報 ›
+                  </a>
+                </div>
+                </div>
               </li>
             ))}
           </ul>
@@ -184,7 +213,7 @@ export default function KamoPage() {
             </ul>
           </div>
           <p className="text-[12px] leading-[1.7] text-ink-secondary lg:col-span-2">
-            このページは、加茂市公式サイト・にいがた観光ナビ・新潟県の公開情報をもとに 2026年10月時点でまとめたものです。バスの時刻は加茂市公共交通時刻表（令和8年6月1日改正）によります。日程・時刻・料金は変わることがあるため、お出かけ前に各公式情報をご確認ください。天気は Open-Meteo の予報データです。
+            このページは、加茂市公式サイト・にいがた観光ナビ・新潟県の公開情報をもとに 2026年10月時点でまとめたものです。バスの時刻は加茂市公共交通時刻表（令和8年6月1日改正）によります。日程・時刻・料金は変わることがあるため、お出かけ前に各公式情報をご確認ください。天気は Open-Meteo の予報データです。写真はイメージで、加茂市内で撮影したものではありません。
           </p>
         </div>
       </section>

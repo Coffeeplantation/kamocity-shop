@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Photo from '@/components/Photo';
 import { useTokyoNow } from '@/components/store/useTokyoNow';
 import { ymd } from '@/lib/jpCalendar';
 import { KAMO_EVENTS } from '@/lib/kamo';
@@ -47,7 +48,13 @@ export default function KamoEvents() {
             const d = e.date2026;
             const state = d ? (today > d.end ? '終了' : today >= d.start ? '開催中' : '予定') : null;
             return (
-              <li key={e.title} className="flex flex-col rounded-card bg-surface p-6">
+              <li key={e.title} className="group flex flex-col overflow-hidden rounded-card bg-surface">
+                {e.photo && (
+                  <div className="overflow-hidden">
+                    <Photo name={e.photo} sizes="(min-width: 1280px) 33vw, (min-width: 768px) 50vw, 100vw" className="aspect-[16/9]" imgClassName="transition-transform duration-700 group-hover:scale-105" />
+                  </div>
+                )}
+                <div className="flex flex-1 flex-col p-6">
                 <div className="flex flex-wrap items-center gap-2 text-[12px]">
                   <span className="text-ink-secondary">{e.when}</span>
                   {state === '開催中' && <span className="rounded-full bg-[#e3004f] px-2 py-px font-semibold text-white">開催中</span>}
@@ -64,12 +71,13 @@ export default function KamoEvents() {
                 <a href={e.source} target="_blank" rel="noopener noreferrer" className="link-chevron mt-auto pt-4 text-[13px]">
                   くわしい情報 ›
                 </a>
+                </div>
               </li>
             );
           })}
         </ul>
       )}
-      <p className="mt-4 text-[12px] text-ink-secondary">日程は年によって変わります。お出かけ前に各公式情報をご確認ください。</p>
+      <p className="mt-4 text-[12px] text-ink-secondary">日程は年によって変わります。お出かけ前に各公式情報をご確認ください。写真はイメージです。</p>
     </div>
   );
 }

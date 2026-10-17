@@ -1,7 +1,8 @@
 // 新潟県加茂市の実在のローカル情報。2026年10月時点で、加茂市公式サイト・にいがた観光ナビなど公的な情報をもとにまとめた。
 // 日程・時刻・営業情報は変わることがあるため、画面では必ず出典（公式ページ）へのリンクを添える。
 
-import { holidayName, weekday, ymd, type YMD } from '@/lib/jpCalendar';
+import { holidayName, nthOfMonth, weekday, ymd, type YMD } from '@/lib/jpCalendar';
+import type { PhotoKey } from '@/lib/photos';
 
 export const KAMO = {
   name: '加茂市',
@@ -102,11 +103,13 @@ export type KamoEvent = {
   desc: string;
   date2026?: { start: string; end: string }; // 2026 年の公表日程（分かっているもののみ）
   source: string;
+  photo?: PhotoKey; // イメージ写真
 };
 
 export const KAMO_EVENTS: KamoEvent[] = [
   {
     title: '雪椿まつり',
+    photo: 'camellia',
     months: [4],
     when: '例年 4月上旬〜中旬',
     place: '加茂山公園ほか',
@@ -116,6 +119,7 @@ export const KAMO_EVENTS: KamoEvent[] = [
   },
   {
     title: '加茂川を泳ぐ鯉のぼり',
+    photo: 'koinobori',
     months: [4, 5],
     when: '例年 4月〜5月',
     place: '加茂川',
@@ -133,6 +137,7 @@ export const KAMO_EVENTS: KamoEvent[] = [
   },
   {
     title: '越後加茂川夏祭り 大花火大会',
+    photo: 'fireworksWater',
     months: [8],
     when: '例年 8月中旬',
     place: '加茂川河川敷',
@@ -151,6 +156,7 @@ export const KAMO_EVENTS: KamoEvent[] = [
   },
   {
     title: '加茂山公園の紅葉',
+    photo: 'mapleLeaves',
     months: [10, 11],
     when: '例年 10月下旬〜11月',
     place: '加茂山公園（モミジ谷・彫刻の森）',
@@ -159,6 +165,7 @@ export const KAMO_EVENTS: KamoEvent[] = [
   },
   {
     title: '加茂山リス園・甘味処「椿の家」',
+    photo: 'chipmunk',
     months: [4, 5, 6, 7, 8, 9, 10, 11],
     when: '例年 4月〜11月',
     place: '加茂山公園',
@@ -167,6 +174,7 @@ export const KAMO_EVENTS: KamoEvent[] = [
   },
   {
     title: '冬鳥越スキーガーデン',
+    photo: 'snowRoad',
     months: [12, 1, 2, 3],
     when: '冬季（積雪状況による）',
     place: '冬鳥越',
@@ -177,11 +185,13 @@ export const KAMO_EVENTS: KamoEvent[] = [
 
 // ---------- 見どころ ----------
 
-export type KamoSpot = { name: string; kind: string; desc: string; points: string[]; access?: string; source: string };
+export type KamoSpot = { name: string; kind: string; desc: string; points: string[]; access?: string; source: string; photo?: PhotoKey; map: string };
 
 export const KAMO_SPOTS: KamoSpot[] = [
   {
     name: '加茂山公園',
+    map: '加茂山公園 新潟県加茂市',
+    photo: 'autumnHouse',
     kind: '公園',
     desc: '市街地にありながら、噴水の音と野鳥の声だけが聞こえる静かな公園。',
     points: ['加茂山リス園（シマリス）', 'モミジ谷・彫刻の森（16 点の彫刻）', '小林幸子「雪椿」の歌碑', '加茂市民俗資料館'],
@@ -190,6 +200,7 @@ export const KAMO_SPOTS: KamoSpot[] = [
   },
   {
     name: '加茂七谷温泉 美人の湯',
+    map: '加茂七谷温泉 美人の湯',
     kind: '日帰り温泉',
     desc: '粟ヶ岳のふもとの日帰り温泉。地元の野菜を使った食事処もある。2021年4月にリニューアル。',
     points: ['定休日：毎月 第2・第4 水曜', 'かもんバス 七谷線「美人の湯前」下車すぐ', '料金・営業時間は公式サイトで確認'],
@@ -198,6 +209,7 @@ export const KAMO_SPOTS: KamoSpot[] = [
   },
   {
     name: '青海神社',
+    map: '青海神社 新潟県加茂市',
     kind: '神社',
     desc: '加茂山公園のそばにある神社。春の加茂まつりと、秋の例大祭の舞台。',
     points: ['春季祭礼（5月21日中心）', '秋季例大祭・奉納花火（8月末〜9月初め）'],
@@ -206,6 +218,8 @@ export const KAMO_SPOTS: KamoSpot[] = [
   },
   {
     name: '加茂川',
+    map: '加茂川 新潟県加茂市',
+    photo: 'koinobori',
     kind: '景観',
     desc: '町の真ん中を流れる川。春は鯉のぼり、夏は大花火大会の会場になる。',
     points: ['鯉のぼり 約 500 匹（春）', '大花火大会・大ナイアガラ（夏）'],
@@ -213,6 +227,7 @@ export const KAMO_SPOTS: KamoSpot[] = [
   },
   {
     name: '善作茶屋',
+    map: '善作茶屋 新潟県加茂市',
     kind: '甘味・茶屋',
     desc: '明治初期創業、加茂市黒水の茶屋。清水で冷やした「ところてん」を酢醤油で。',
     points: ['看板はところてん', '駄菓子・ラムネも'],
@@ -221,6 +236,8 @@ export const KAMO_SPOTS: KamoSpot[] = [
   },
   {
     name: '冬鳥越スキーガーデン',
+    map: '冬鳥越スキーガーデン',
+    photo: 'snowRoad',
     kind: 'スキー・そり',
     desc: '県央地域で唯一のスキー場。市指定文化財の木造電車「モハ1」も見どころ。',
     points: ['ファミリーゲレンデ', 'そり専用コース 50m', '県内最古の木造電車「モハ1」'],
@@ -246,3 +263,20 @@ export const KAMO_TRIVIA: { title: string; body: string }[] = [
   { title: '桐たんすのまち', body: '加茂は日本有数の桐たんすの産地。加茂桐箪笥は国の伝統的工芸品です。' },
   { title: '「雪椿」の歌碑', body: '加茂山公園には、雪椿の群生地にちなんで小林幸子さんの「雪椿」の歌碑があります。' },
 ];
+
+// Google マップで場所を検索するリンク（座標を持たずに、正しい場所へ案内する）
+export const mapUrl = (query: string) => `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;
+
+// ---------- 美人の湯の定休日（毎月 第2・第4 水曜） ----------
+// 祝日などで変わる場合があるため、画面では「公式サイトで確認」を添える
+export const isBijinClosed = (date: YMD) => weekday(date) === 3 && [2, 4].includes(nthOfMonth(date));
+
+// ---------- 季節ごとのヒーロー ----------
+export type Season = { id: 'spring' | 'summer' | 'autumn' | 'winter'; label: string; photo: PhotoKey; lead: string };
+
+export function seasonOf(month: number): Season {
+  if (month >= 3 && month <= 5) return { id: 'spring', label: '春の加茂', photo: 'koinobori', lead: '雪椿が咲き、加茂川の空を鯉のぼりが泳ぐ季節。' };
+  if (month >= 6 && month <= 8) return { id: 'summer', label: '夏の加茂', photo: 'fireworksWater', lead: '加茂川の夜空に、二尺玉と大ナイアガラ。' };
+  if (month >= 9 && month <= 11) return { id: 'autumn', label: '秋の加茂', photo: 'autumnHouse', lead: '加茂山公園のモミジ谷が、赤く染まる季節。' };
+  return { id: 'winter', label: '冬の加茂', photo: 'snowRoad', lead: '雪の冬鳥越でそり遊び。あたたまるなら美人の湯へ。' };
+}

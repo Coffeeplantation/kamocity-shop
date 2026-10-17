@@ -18,7 +18,7 @@ import EventCalendar from '@/components/store/EventCalendar';
 import NewsList from '@/components/store/NewsList';
 import StoreMap from '@/components/store/StoreMap';
 import ContactForm from '@/components/store/ContactForm';
-import { PHOTOS, type PhotoKey } from '@/lib/photos';
+import { PHOTOS, photoPage, type PhotoKey } from '@/lib/photos';
 import { ACCESS, AMENITIES, DRIVE_TIMES, FAQ, NEARBY, STATION_FUNCTIONS, STORE } from '@/lib/storeInfo';
 
 export const metadata: Metadata = {
@@ -352,7 +352,7 @@ export default function StoresPage() {
             {Object.values(PHOTOS).map((p, i) => (
               <span key={p.id}>
                 {i > 0 && '、'}
-                <a href={`https://unsplash.com/photos/${p.slug}`} target="_blank" rel="noopener noreferrer" className="hover:underline">
+                <a href={photoPage(p)} target="_blank" rel="noopener noreferrer" className="hover:underline">
                   {p.alt}（{p.by}）
                 </a>
               </span>

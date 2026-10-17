@@ -8,14 +8,14 @@ export type KamoWeather = {
   temp: number;
   code: number;
   snowDepthCm: number;
-  days: { date: string; code: number; max: number; min: number; rain: number }[];
+  days: { date: string; code: number; max: number; min: number; rain: number; snow: number }[];
 };
 
 const URL =
   `https://api.open-meteo.com/v1/forecast?latitude=${KAMO.lat}&longitude=${KAMO.lon}` +
   '&current=temperature_2m,weather_code,snow_depth' +
-  '&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max' +
-  '&timezone=Asia%2FTokyo&forecast_days=3';
+  '&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,snowfall_sum' +
+  '&timezone=Asia%2FTokyo&forecast_days=7';
 
 // WMO 天気コード → 日本語
 export function weatherLabel(code: number) {
@@ -40,29 +40,41 @@ export function weatherIcon(code: number) {
   return '⛈️';
 }
 
+// 同じページの複数の部品から呼ばれても、取得は 1 回にまとめる（10 分間は使い回す）
+let cache: { at: number; promise: Promise<KamoWeather> } | null = null;
+
+function loadWeather(): Promise<KamoWeather> {
+  if (cache && Date.now() - cache.at < 10 * 60_000) return cache.promise;
+  const promise = fetch(URL)
+    .then((r) => (r.ok ? r.json() : Promise.reject(r.status)))
+    .then((j) => ({
+      temp: j.current.temperature_2m,
+      code: j.current.weather_code,
+      snowDepthCm: Math.round((j.current.snow_depth ?? 0) * 100),
+      days: j.daily.time.map((date: string, i: number) => ({
+        date,
+        code: j.daily.weather_code[i],
+        max: j.daily.temperature_2m_max[i],
+        min: j.daily.temperature_2m_min[i],
+        rain: j.daily.precipitation_probability_max[i] ?? 0,
+        snow: Math.round(j.daily.snowfall_sum?.[i] ?? 0),
+      })),
+    }));
+  cache = { at: Date.now(), promise };
+  promise.catch(() => {
+    cache = null; // 失敗したら次回は取り直す
+  });
+  return promise;
+}
+
 export function useKamoWeather() {
   const [data, setData] = useState<KamoWeather | null>(null);
   const [failed, setFailed] = useState(false);
 
   useEffect(() => {
     let alive = true;
-    fetch(URL)
-      .then((r) => (r.ok ? r.json() : Promise.reject(r.status)))
-      .then((j) => {
-        if (!alive) return;
-        setData({
-          temp: j.current.temperature_2m,
-          code: j.current.weather_code,
-          snowDepthCm: Math.round((j.current.snow_depth ?? 0) * 100),
-          days: j.daily.time.map((date: string, i: number) => ({
-            date,
-            code: j.daily.weather_code[i],
-            max: j.daily.temperature_2m_max[i],
-            min: j.daily.temperature_2m_min[i],
-            rain: j.daily.precipitation_probability_max[i],
-          })),
-        });
-      })
+    loadWeather()
+      .then((d) => alive && setData(d))
       .catch(() => alive && setFailed(true));
     return () => {
       alive = false;

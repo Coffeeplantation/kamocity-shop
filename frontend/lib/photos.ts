@@ -1,9 +1,10 @@
-// 使用写真の一覧。すべて Unsplash License（無料・商用可・クレジット任意）の写真。
-// 人物の顔・実在の店舗名やロゴが写っていないものを選んでいる。クレジットは店舗ページ下部に掲載。
+// 使用写真の一覧。Unsplash License / Pexels License（どちらも無料・商用可・クレジット任意）の写真。
+// 人物の顔・実在の店舗名やロゴ・特定できる他所の名所が写っていないものを選んでいる。クレジットは店舗ページ下部に掲載。
 
 export type PhotoInfo = {
-  id: string; // images.unsplash.com/photo-<id>
-  slug: string; // unsplash.com/photos/<slug>
+  id: string; // Unsplash: images.unsplash.com/photo-<id> / Pexels: 写真番号
+  slug: string; // Unsplash: unsplash.com/photos/<slug> / Pexels: 写真番号
+  host?: 'pexels'; // 省略時は Unsplash
   by: string;
   alt: string;
   position?: string; // object-position
@@ -38,6 +39,19 @@ export const PHOTOS = {
   sweetPotato: { id: '1744659749700-c4213f840355', slug: 'eB2X4DnIk4c', by: 'Yen Vu', alt: 'かごに盛ったさつまいも' },
   bicycle: { id: '1774215915872-ec0fb0b2e021', slug: '0iCvoubJAug', by: 'Jimmy Phillips', alt: '灯台へ続く堤防と自転車' },
   bread: { id: '1705680827676-ea4a49bc6ecb', slug: 'q-_KXOY9JG8', by: 'Franck Tourneret', alt: '焼きたてのパン' },
+  // 加茂ローカル用（季節のイメージ写真。加茂市内で撮影されたものではない）
+  koinobori: { host: 'pexels', id: '1343755', slug: '1343755', by: 'Pexels', alt: '青空に泳ぐ鯉のぼり', position: '50% 40%' },
+  fireworksWater: { host: 'pexels', id: '790916', slug: '790916', by: 'Pexels', alt: '水面に映る夏の花火' },
+  autumnHouse: { host: 'pexels', id: '4679119', slug: '4679119', by: 'Pexels', alt: '紅葉と古い日本家屋' },
+  mapleLeaves: { host: 'pexels', id: '10635405', slug: '10635405', by: 'Pexels', alt: '赤く色づいたモミジ' },
+  snowRoad: { host: 'pexels', id: '31676535', slug: '31676535', by: 'Pexels', alt: '雪に覆われた冬の道と家' },
+  camellia: { host: 'pexels', id: '16847814', slug: '16847814', by: 'Pexels', alt: '赤い椿の花' },
+  chipmunk: { host: 'pexels', id: '8978125', slug: '8978125', by: 'Pexels', alt: '立ち上がるシマリス', position: '50% 35%' },
 } satisfies Record<string, PhotoInfo>;
 
 export type PhotoKey = keyof typeof PHOTOS;
+
+// 画像の配信 URL と、撮影者のページ
+export const photoSrc = (p: PhotoInfo) =>
+  p.host === 'pexels' ? `https://images.pexels.com/photos/${p.id}/pexels-photo-${p.id}.jpeg` : `https://images.unsplash.com/photo-${p.id}`;
+export const photoPage = (p: PhotoInfo) => (p.host === 'pexels' ? `https://www.pexels.com/photo/${p.slug}/` : `https://unsplash.com/photos/${p.slug}`);

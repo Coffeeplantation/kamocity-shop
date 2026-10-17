@@ -42,7 +42,7 @@ export default function KamoNow({ base = '' }: { base?: string }) {
         <span className={label}>あしたとあさって</span>
         {w ? (
           <ul className="mt-2 space-y-1.5 text-[15px] text-ink">
-            {w.days.slice(1).map((d) => (
+            {w.days.slice(1, 3).map((d) => (
               <li key={d.date} className="flex items-center justify-between gap-2">
                 <span className="tabular-nums text-ink-secondary">
                   {+d.date.slice(5, 7)}/{+d.date.slice(8)}
