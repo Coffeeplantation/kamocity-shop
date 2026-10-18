@@ -2,12 +2,12 @@
 
 import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
-import { LogoMark } from '@/components/Devices';
+import AccountMenu from '@/components/AccountMenu';
 
 type Item = { id: string; label: string };
 
 // ページ内ナビ。いま読んでいるセクションを強調し、横スクロールの位置も追従させる。
-// 道の駅のページではサイトのヘッダーの代わりに一番上に置き、左端のロゴからストアへ戻れるようにする。
+// 道の駅のページではサイトのヘッダーの代わりに一番上に置き、左端の「ストア」から戻れるようにする。右端はアカウントのメニュー。
 export default function SectionNav({ title, items, home }: { title: string; items: Item[]; home?: { href: string; label: string } }) {
   const [active, setActive] = useState<string>('');
   const listRef = useRef<HTMLUListElement>(null);
@@ -53,12 +53,15 @@ export default function SectionNav({ title, items, home }: { title: string; item
     >
       <div className="mx-auto flex h-[52px] max-w-content items-center gap-4 px-4 md:gap-6 md:px-10 xl:px-16">
         {home && (
-          <Link href={home.href} aria-label={home.label} className="-ml-2 flex h-11 w-9 shrink-0 items-center justify-center text-ink/80 transition-colors hover:text-ink">
-            <LogoMark className="h-[18px] w-[18px]" />
+          <Link href={home.href} className="flex h-11 shrink-0 items-center text-[13px] font-semibold text-ink/80 transition-colors hover:text-ink">
+            {home.label}
           </Link>
         )}
         <span className={`shrink-0 font-semibold text-ink ${home ? 'text-[15px] md:text-[17px]' : 'hidden text-[17px] md:inline'}`}>{title}</span>
-        <ul ref={listRef} className="no-scrollbar flex h-full flex-1 items-center gap-5 overflow-x-auto text-[13px] md:justify-end md:gap-6">
+        <ul
+          ref={listRef}
+          className={`no-scrollbar flex h-full min-w-0 flex-1 items-center gap-5 overflow-x-auto text-[13px] md:gap-6 ${home ? 'lg:justify-center' : 'md:justify-end'}`}
+        >
           {items.map((i) => {
             const on = active === i.id;
             return (
@@ -76,6 +79,7 @@ export default function SectionNav({ title, items, home }: { title: string; item
             );
           })}
         </ul>
+        {home && <AccountMenu className="-mr-2 shrink-0" />}
       </div>
     </nav>
   );

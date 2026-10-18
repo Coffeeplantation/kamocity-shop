@@ -1,9 +1,9 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
-import { useAuth } from '@/contexts/AuthContext';
+import AccountMenu, { useAccount } from '@/components/AccountMenu';
 import { LogoMark } from '@/components/Devices';
 import ThemeSwitch from '@/components/ThemeSwitch';
 
@@ -36,28 +36,16 @@ function BagIcon() {
   );
 }
 
-function PersonIcon() {
-  return (
-    <svg viewBox="0 0 24 24" className="h-[17px] w-[17px]" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden>
-      <circle cx="12" cy="8.5" r="3.5" />
-      <path d="M5 20c.8-3.6 3.6-5.5 7-5.5s6.2 1.9 7 5.5" strokeLinecap="round" />
-    </svg>
-  );
-}
-
 export default function Header() {
-  const { user, logout } = useAuth();
+  const { user, links: accountLinks, signOut } = useAccount();
   const router = useRouter();
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
-  const [accountOpen, setAccountOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [query, setQuery] = useState('');
-  const accountRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setMenuOpen(false);
-    setAccountOpen(false);
     setSearchOpen(false);
   }, [pathname]);
 
@@ -68,36 +56,10 @@ export default function Header() {
     };
   }, [menuOpen]);
 
-  useEffect(() => {
-    if (!accountOpen) return;
-    const onClick = (e: MouseEvent) => {
-      if (accountRef.current && !accountRef.current.contains(e.target as Node)) setAccountOpen(false);
-    };
-    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && setAccountOpen(false);
-    document.addEventListener('mousedown', onClick);
-    document.addEventListener('keydown', onKey);
-    return () => {
-      document.removeEventListener('mousedown', onClick);
-      document.removeEventListener('keydown', onKey);
-    };
-  }, [accountOpen]);
-
   const handleLogout = async () => {
-    await logout();
-    setAccountOpen(false);
     setMenuOpen(false);
-    router.push('/');
+    await signOut();
   };
-
-  const accountLinks = user
-    ? [
-        { label: `${user.nickname} さんのページ`, href: `/users/${user.id}` },
-        { label: '出品する', href: '/furimas/new' },
-      ]
-    : [
-        { label: 'サインイン', href: '/auth/login' },
-        { label: 'アカウントを作成', href: '/auth/signup' },
-      ];
 
   const iconBtn = 'flex h-11 w-9 items-center justify-center text-ink/80 transition-colors hover:text-ink';
 
@@ -130,38 +92,7 @@ export default function Header() {
             <Link href="/store" className={iconBtn} aria-label="ストア">
               <BagIcon />
             </Link>
-            <div className="relative hidden md:block" ref={accountRef}>
-              <button
-                type="button"
-                className={iconBtn}
-                aria-label="アカウント"
-                aria-expanded={accountOpen}
-                onClick={() => setAccountOpen((v) => !v)}
-              >
-                <PersonIcon />
-              </button>
-              {accountOpen && (
-                <div className="absolute right-0 top-11 w-60 rounded-chip bg-surface/95 p-5 shadow-[0_10px_40px_rgba(0,0,0,0.14)] backdrop-blur-xl">
-                  <p className="mb-3 text-[12px] text-ink-secondary">{user ? 'アカウント' : 'ようこそ'}</p>
-                  <ul className="space-y-2.5 text-[14px] font-semibold">
-                    {accountLinks.map((l) => (
-                      <li key={l.href}>
-                        <Link href={l.href} className="text-ink hover:text-accent-link">
-                          {l.label}
-                        </Link>
-                      </li>
-                    ))}
-                    {user && (
-                      <li>
-                        <button type="button" onClick={handleLogout} className="text-ink hover:text-accent-link">
-                          サインアウト
-                        </button>
-                      </li>
-                    )}
-                  </ul>
-                </div>
-              )}
-            </div>
+            <AccountMenu className="hidden md:block" />
             <button
               type="button"
               className={`${iconBtn} md:hidden`}

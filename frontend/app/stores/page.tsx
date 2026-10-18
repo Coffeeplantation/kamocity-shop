@@ -91,8 +91,8 @@ export default async function StoresPage() {
   return (
     <PostedEventsProvider events={posted}>
       <div className="bg-canvas-gray">
-        {/* ページの先頭のナビ（サイトのヘッダーの代わり）。左端のロゴでストアへ */}
-        <SectionNav title={STORE.name} items={NAV} home={{ href: '/store', label: 'ストアへ' }} />
+        {/* ページの先頭のナビ（サイトのヘッダーの代わり）。左端の「ストア」でストアへ、右端はアカウント */}
+        <SectionNav title={STORE.name} items={NAV} home={{ href: '/store', label: 'ストア' }} />
 
         {/* ヒーロー：季節ごとの加茂 */}
         <section className="relative isolate flex min-h-[min(92svh,880px)] items-end overflow-hidden bg-black text-white">
