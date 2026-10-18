@@ -30,3 +30,5 @@
 yarn-debug.log*
 .yarn-integrity
 .Ds_Store
+# ブラウザ自動操作ツールの一時ファイル
+.playwright-mcp/

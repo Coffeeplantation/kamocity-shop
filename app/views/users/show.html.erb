@@ -1,0 +1,32 @@
+<%= render "shared/header" %>
+<div class="user-show">
+  <div class="user-info">
+    <h2 class="user-nickname"><%= @nickname %></h2>
+  </div>
+  <div class="user-items">
+    <h3>出品中の商品</h3>
+    <ul class="item-lists">
+      <% @furimas.each do |furima| %>
+      <li class="list">
+        <%= link_to furima_path(furima.id) do %>
+        <div class="item-img-content">
+          <%= image_tag furima.image, class: "item-img" %>
+          <% if furima.order.present? %>
+          <div class="sold-out">
+            <span>Sold Out!!</span>
+          </div>
+          <% end %>
+        </div>
+        <div class="item-info">
+          <h3 class="item-name"><%= furima.item %></h3>
+          <div class="item-price">
+            <span><%= furima.price %>円</span>
+          </div>
+        </div>
+        <% end %>
+      </li>
+      <% end %>
+    </ul>
+  </div>
+</div>
+<%= render "shared/footer" %>
