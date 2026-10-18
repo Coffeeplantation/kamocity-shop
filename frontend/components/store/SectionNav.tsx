@@ -57,7 +57,7 @@ export default function SectionNav({ title, items, home }: { title: string; item
             <LogoMark className="h-[18px] w-[18px]" />
           </Link>
         )}
-        <span className="hidden shrink-0 text-[17px] font-semibold text-ink md:inline">{title}</span>
+        <span className={`shrink-0 font-semibold text-ink ${home ? 'text-[15px] md:text-[17px]' : 'hidden text-[17px] md:inline'}`}>{title}</span>
         <ul ref={listRef} className="no-scrollbar flex h-full flex-1 items-center gap-5 overflow-x-auto text-[13px] md:justify-end md:gap-6">
           {items.map((i) => {
             const on = active === i.id;
