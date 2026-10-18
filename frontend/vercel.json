@@ -1,0 +1,8 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "crons": [
+    { "path": "/api/cron/kamo?slot=morning", "schedule": "0 22 * * *" },
+    { "path": "/api/cron/kamo?slot=noon", "schedule": "0 3 * * *" },
+    { "path": "/api/cron/kamo?slot=evening", "schedule": "0 9 * * *" }
+  ]
+}

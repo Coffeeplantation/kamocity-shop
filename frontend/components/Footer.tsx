@@ -23,41 +23,10 @@ const DIRECTORY = [
     ],
   },
   {
-    title: 'Lumina 湊町（道の駅）',
-    links: [
-      { label: '本日の入荷状況', href: '/stores#arrivals' },
-      { label: '旬カレンダー', href: '/stores#season' },
-      { label: '買う・食べる・遊ぶ', href: '/stores#shops' },
-      { label: '営業時間', href: '/stores#hours' },
-      { label: '園内マップ', href: '/stores#map' },
-      { label: '混雑予想・シャトルバス', href: '/stores#crowd' },
-      { label: 'イベントカレンダー', href: '/stores#events' },
-      { label: 'アクセス', href: '/stores#access' },
-    ],
-  },
-  {
-    title: '加茂ローカル（新潟県加茂市）',
-    links: [
-      { label: 'いまの加茂（天気）', href: '/kamo#now' },
-      { label: '美人の湯行きバス', href: '/kamo#bus' },
-      { label: '今月の行事', href: '/kamo#events' },
-      { label: '見どころ', href: '/kamo#spots' },
-      { label: '名物・おみやげ', href: '/kamo#meibutsu' },
-    ],
-  },
-  {
     title: 'アカウント',
     links: [
       { label: 'サインイン', href: '/auth/login' },
       { label: 'Lumina IDを作成', href: '/auth/signup' },
-    ],
-  },
-  {
-    title: 'サポート',
-    links: [
-      { label: 'よくある質問', href: '/stores#faq' },
-      { label: 'お問い合わせ', href: '/stores#contact' },
-      { label: '修理・点検（Lumina Care）', href: '/stores#service' },
     ],
   },
 ];
@@ -76,7 +45,7 @@ export default function Footer() {
 
         <nav aria-label="サイトディレクトリ" className="border-b border-line/10 py-5">
           {/* デスクトップ */}
-          <div className="hidden grid-cols-6 gap-5 md:grid">
+          <div className="hidden grid-cols-3 gap-5 md:grid">
             {DIRECTORY.map((col) => (
               <div key={col.title}>
                 <h3 className="mb-2 font-semibold text-ink">{col.title}</h3>
@@ -118,11 +87,7 @@ export default function Footer() {
             <Link href="/store" className="text-accent-link hover:underline">
               オンラインストア
             </Link>
-            をご利用いただくか、
-            <Link href="/stores" className="text-accent-link hover:underline">
-              Lumina 湊町
-            </Link>
-            にお越しください。
+            をご利用ください。
           </p>
           <div className="flex flex-col gap-2 border-t border-line/10 pt-3 lg:flex-row lg:items-center lg:justify-between">
             <p>Copyright © 2026 Lumina Inc.（架空） All rights reserved.</p>

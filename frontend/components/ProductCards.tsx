@@ -5,10 +5,10 @@ import { ReactNode } from 'react';
 import { Buds, Card, Headset, Laptop, PhonePair, Tablet, Watch } from '@/components/Devices';
 import { useHScroll } from '@/components/useHScroll';
 
-type Product = { id: string; badge?: string; name: string; lead: string; price: string; href: string; dark?: boolean; art: ReactNode };
+export type LuminaProduct = { id: string; badge?: string; name: string; lead: string; price: string; href: string; dark?: boolean; art: ReactNode };
 
 // 価格はすべて架空のもの
-const PRODUCTS: Product[] = [
+export const LUMINA_PRODUCTS: LuminaProduct[] = [
   { id: 'pro', badge: 'New', name: 'Lumina Phone 17 Pro', lead: 'プロの、その先へ。', price: '¥159,800（税込）から', href: '/#phone', art: <PhonePair id="card-pro" className="h-[250px]" /> },
   {
     id: '17',
@@ -33,6 +33,24 @@ function Arrow({ dir }: { dir: 'left' | 'right' }) {
     <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden>
       <path d={dir === 'left' ? 'M15 5l-7 7 7 7' : 'M9 5l7 7-7 7'} strokeLinecap="round" strokeLinejoin="round" />
     </svg>
+  );
+}
+
+// 製品カード 1 枚（トップの横スクロールと、ストアの一覧で共用）
+export function ProductCard({ p }: { p: LuminaProduct }) {
+  return (
+    <Link
+      href={p.href}
+      className={`group flex h-[500px] flex-col overflow-hidden rounded-card p-7 shadow-[2px_4px_12px_rgba(0,0,0,0.08)] transition-all duration-300 hover:scale-[1.01] hover:shadow-[2px_4px_16px_rgba(0,0,0,0.16)] ${
+        p.dark ? 'bg-studio-dark text-[#f5f5f7]' : 'bg-surface text-ink'
+      }`}
+    >
+      <span className={`text-[12px] font-semibold text-[#bf4800] ${p.badge ? '' : 'invisible'}`}>{p.badge ?? '—'}</span>
+      <span className="mt-1 text-[24px] font-semibold leading-[1.17] md:text-[28px]">{p.name}</span>
+      <span className={`mt-1.5 text-[15px] leading-[1.45] ${p.dark ? 'text-white/75' : 'text-ink-secondary'}`}>{p.lead}</span>
+      <span className={`mt-2 text-[14px] ${p.dark ? 'text-white/60' : 'text-ink-secondary'}`}>{p.price}</span>
+      <span className="mt-auto flex items-end justify-center pt-4 transition-transform duration-500 group-hover:-translate-y-1">{p.art}</span>
+    </Link>
   );
 }
 
@@ -61,20 +79,9 @@ export default function ProductCards() {
         onScroll={update}
         className="no-scrollbar flex snap-x snap-mandatory scroll-px-4 gap-5 overflow-x-auto px-4 pb-6 pt-1 md:scroll-px-10 md:px-10 xl:scroll-px-16 xl:px-16"
       >
-        {PRODUCTS.map((p) => (
+        {LUMINA_PRODUCTS.map((p) => (
           <li key={p.id} className="w-[min(82vw,400px)] shrink-0 snap-start">
-            <Link
-              href={p.href}
-              className={`group flex h-[500px] flex-col overflow-hidden rounded-card p-7 shadow-[2px_4px_12px_rgba(0,0,0,0.08)] transition-all duration-300 hover:scale-[1.01] hover:shadow-[2px_4px_16px_rgba(0,0,0,0.16)] ${
-                p.dark ? 'bg-studio-dark text-[#f5f5f7]' : 'bg-surface text-ink'
-              }`}
-            >
-              <span className={`text-[12px] font-semibold text-[#bf4800] ${p.badge ? '' : 'invisible'}`}>{p.badge ?? '—'}</span>
-              <span className="mt-1 text-[24px] font-semibold leading-[1.17] md:text-[28px]">{p.name}</span>
-              <span className={`mt-1.5 text-[15px] leading-[1.45] ${p.dark ? 'text-white/75' : 'text-ink-secondary'}`}>{p.lead}</span>
-              <span className={`mt-2 text-[14px] ${p.dark ? 'text-white/60' : 'text-ink-secondary'}`}>{p.price}</span>
-              <span className="mt-auto flex items-end justify-center pt-4 transition-transform duration-500 group-hover:-translate-y-1">{p.art}</span>
-            </Link>
+            <ProductCard p={p} />
           </li>
         ))}
       </ul>

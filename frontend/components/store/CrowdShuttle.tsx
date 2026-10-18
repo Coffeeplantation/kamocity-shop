@@ -149,7 +149,7 @@ export default function CrowdShuttle() {
 
       {/* シャトルバス */}
       <div id="shuttle" className="scroll-mt-32 rounded-card bg-surface p-5 sm:p-7">
-        <h3 className="text-[21px] font-semibold text-ink">無料シャトルバス</h3>
+        <h3 className="text-[21px] font-semibold text-ink">無料シャトルバス<span className="ml-2 align-middle text-[12px] font-normal text-ink-secondary">（架空）</span></h3>
         <p className="mt-1 text-[13px] text-ink-secondary">
           {date.m}月{date.d}日（{WEEKDAYS[weekday(date)]}）の時刻・{dayType(date) === 'holiday' ? '土日祝' : '平日'}ダイヤ
         </p>
@@ -209,7 +209,7 @@ export default function CrowdShuttle() {
         ) : (
           <p className="mt-5 text-[15px] text-ink-secondary">{route.weekday ? 'この日は運休です。' : 'この便は土日祝のみ運行します。'}</p>
         )}
-        <p className="mt-4 text-[12px] leading-[1.6] text-ink-secondary">乗車無料・予約不要。湊町駅 ⇄ 道の駅は約 9 分です。道路状況により遅れることがあります。</p>
+        <p className="mt-4 text-[12px] leading-[1.6] text-ink-secondary">乗車無料・予約不要。加茂駅前 ⇄ 道の駅は約 8 分です（架空の路線です。市内の移動には加茂市の「かもんバス」をご利用ください）。道路状況により遅れることがあります。</p>
       </div>
     </div>
   );

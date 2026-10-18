@@ -6,9 +6,9 @@ import type { PhotoKey } from '@/lib/photos';
 import {
   CRAFT_STAPLES,
   FLOWERS_BY_MONTH,
+  MOUNTAIN_STAPLES,
   PRODUCE_STAPLES,
   PRODUCTS,
-  SEAFOOD_STAPLES,
   STORE,
   type ProductCategory,
 } from '@/lib/storeInfo';
@@ -17,7 +17,7 @@ export const ARRIVAL_UPDATE = '08:30';
 
 export type ArrivalTag = 'おすすめ' | '初入荷' | '数量限定' | '入荷少';
 export type ArrivalItem = { name: string; tag?: ArrivalTag };
-export type ArrivalGroup = { id: 'sea' | 'farm' | 'craft'; title: string; photo: PhotoKey; items: ArrivalItem[]; note?: string };
+export type ArrivalGroup = { id: 'fruit' | 'farm' | 'craft'; title: string; photo: PhotoKey; items: ArrivalItem[]; note?: string };
 
 function rng(seed: number) {
   let a = seed >>> 0;
@@ -66,28 +66,32 @@ function pick(seasonalItems: ArrivalItem[], staples: string[], count: number, ra
 export function arrivalsFor(date: YMD): ArrivalGroup[] | null {
   if (STORE.closedDates.includes(ymd(date))) return null;
   const rand = rng(date.y * 10000 + date.m * 100 + date.d);
-  // 7日に1日ほどは海がしけて入荷が少ない
+  // 7日に1日ほどは雨や雪で収穫が少ない
   const rough = rand() < 0.14;
 
-  const sea = pick(seasonal(['水産'], date), SEAFOOD_STAPLES, rough ? 4 : 8, rand);
+  // 果物の季節（7〜12月）は果物の売場、それ以外は山の幸の売場を先頭にする
+  const fruitSeason = PRODUCTS.some((p) => p.category === '果物' && p.months.includes(date.m));
+  const first = fruitSeason
+    ? pick(seasonal(['果物'], date), [], 6, rand)
+    : pick(seasonal(['山の幸'], date), MOUNTAIN_STAPLES, 6, rand);
   if (rough) {
-    for (const i of sea.slice(1)) i.tag = '入荷少';
+    for (const i of first.slice(1)) i.tag = '入荷少';
   }
 
-  const farm = pick(seasonal(['野菜・米', '果物'], date), PRODUCE_STAPLES, 9, rand);
+  const farm = pick(seasonal(fruitSeason ? ['野菜・米', '山の幸'] : ['野菜・米'], date), [...PRODUCE_STAPLES, ...(fruitSeason ? MOUNTAIN_STAPLES : [])], 9, rand);
 
   const flowers = (FLOWERS_BY_MONTH[date.m] ?? []).map((name) => ({ name: `${name}（切り花）` }) as ArrivalItem);
   const craft = pick([...seasonal(['加工品'], date), ...flowers], CRAFT_STAPLES, 7, rand);
 
   return [
     {
-      id: 'sea',
-      title: '鮮魚・水産物',
-      photo: 'freshFish',
-      items: sea,
-      note: rough ? '海がしけたため、本日は入荷が少なめです。' : '湊町漁港の朝の競りから直送。',
+      id: 'fruit',
+      title: fruitSeason ? '加茂の果物' : '山の幸',
+      photo: 'vegetableStand',
+      items: first,
+      note: rough ? '天候のため、本日は入荷が少なめです。' : fruitSeason ? '市内の果樹園から、その朝に届いたものです。' : 'きのこ・山菜は七谷の生産者から。',
     },
-    { id: 'farm', title: '野菜・果物', photo: 'mikanStand', items: farm, note: '町内の農家が今朝収穫したものです。' },
-    { id: 'craft', title: '花・加工品', photo: 'flowers', items: craft, note: '干物・つくだ煮は港の加工場の手づくり。' },
+    { id: 'farm', title: '野菜・米', photo: 'riceField', items: farm, note: '市内の農家が今朝収穫したものです。' },
+    { id: 'craft', title: '花・加工品・地酒', photo: 'flowers', items: craft, note: '地酒は市内 3 蔵、かも汁・笹団子は地元の加工品。' },
   ];
 }

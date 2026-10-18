@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { ReactNode } from 'react';
 import { useHScroll } from '@/components/useHScroll';
-import { Buds, Card, Headset, Laptop, LogoMark, PhonePair, Tablet, Watch } from '@/components/Devices';
+import { Buds, Card, Headset, Laptop, PhonePair, Tablet, Watch } from '@/components/Devices';
 import Icon from '@/components/Icons';
 
 type Item = { label: string; href: string; icon: ReactNode; badge?: string };
@@ -26,10 +26,6 @@ const ITEMS: Item[] = [
   { label: 'Buds Pro 3', href: '/#buds', icon: <Buds id="strip-buds" className="w-[64px]" /> },
   { label: 'Card', href: '/store', icon: <Card id="strip-card" className="w-[76px]" /> },
   { label: 'ストア', href: '/store', icon: <Icon name="store" className="h-11 w-11 text-ink" /> },
-  { label: 'Lumina 湊町', href: '/stores', icon: <LogoMark className="h-10 w-10 text-ink" /> },
-  { label: '加茂ローカル', href: '/kamo', badge: '地元', icon: <Icon name="leaf" className="h-11 w-11 text-ink" /> },
-  { label: 'イベント', href: '/stores#events', icon: <Icon name="megaphone" className="h-11 w-11 text-ink" /> },
-  { label: 'サポート', href: '/stores#faq', icon: <Icon name="support" className="h-11 w-11 text-ink" /> },
 ];
 
 function Arrow({ dir }: { dir: 'left' | 'right' }) {

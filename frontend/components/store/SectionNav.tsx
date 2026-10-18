@@ -1,11 +1,14 @@
 'use client';
 
+import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
+import { LogoMark } from '@/components/Devices';
 
 type Item = { id: string; label: string };
 
 // ページ内ナビ。いま読んでいるセクションを強調し、横スクロールの位置も追従させる。
-export default function SectionNav({ title, items }: { title: string; items: Item[] }) {
+// 道の駅のページではサイトのヘッダーの代わりに一番上に置き、左端のロゴからストアへ戻れるようにする。
+export default function SectionNav({ title, items, home }: { title: string; items: Item[]; home?: { href: string; label: string } }) {
   const [active, setActive] = useState<string>('');
   const listRef = useRef<HTMLUListElement>(null);
 
@@ -44,8 +47,16 @@ export default function SectionNav({ title, items }: { title: string; items: Ite
   }, [active]);
 
   return (
-    <nav aria-label="ページ内リンク" className="sticky top-11 z-30 border-b border-line/10 bg-[rgb(var(--header)/0.85)] backdrop-blur-xl backdrop-saturate-150">
-      <div className="mx-auto flex h-[52px] max-w-content items-center gap-6 px-4 md:px-10 xl:px-16">
+    <nav
+      aria-label="ページ内リンク"
+      className={`sticky z-50 border-b border-line/10 bg-[rgb(var(--header)/0.85)] backdrop-blur-xl backdrop-saturate-150 ${home ? 'top-0' : 'top-11'}`}
+    >
+      <div className="mx-auto flex h-[52px] max-w-content items-center gap-4 px-4 md:gap-6 md:px-10 xl:px-16">
+        {home && (
+          <Link href={home.href} aria-label={home.label} className="-ml-2 flex h-11 w-9 shrink-0 items-center justify-center text-ink/80 transition-colors hover:text-ink">
+            <LogoMark className="h-[18px] w-[18px]" />
+          </Link>
+        )}
         <span className="hidden shrink-0 text-[17px] font-semibold text-ink md:inline">{title}</span>
         <ul ref={listRef} className="no-scrollbar flex h-full flex-1 items-center gap-5 overflow-x-auto text-[13px] md:justify-end md:gap-6">
           {items.map((i) => {

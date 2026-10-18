@@ -6,6 +6,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import api from '@/lib/api';
 import { FurimaListItem } from '@/types';
 import FurimaCard from '@/components/FurimaCard';
+import { LUMINA_PRODUCTS, ProductCard } from '@/components/ProductCards';
 import ProductStrip from '@/components/ProductStrip';
 import { useAuth } from '@/contexts/AuthContext';
 
@@ -60,6 +61,12 @@ function StoreContent() {
     return list;
   }, [furimas, q, sort, inStock]);
 
+  // Lumina の製品は常に在庫ありとして、キーワードだけで絞り込む
+  const models = useMemo(() => {
+    const words = q.toLowerCase().split(/\s+/).filter(Boolean);
+    return LUMINA_PRODUCTS.filter((p) => words.every((w) => p.name.toLowerCase().includes(w)));
+  }, [q]);
+
   const filtered = q || inStock;
 
   return (
@@ -77,12 +84,6 @@ function StoreContent() {
               <p className="font-semibold">出品をお考えですか？</p>
               <Link href={user ? '/furimas/new' : '/auth/login'} className="link-chevron">
                 {user ? '出品する ›' : 'サインインして出品 ›'}
-              </Link>
-            </div>
-            <div>
-              <p className="font-semibold">実際に手に取ってみたい方は</p>
-              <Link href="/stores" className="link-chevron">
-                Lumina 湊町へ ›
               </Link>
             </div>
           </div>
@@ -147,7 +148,7 @@ function StoreContent() {
           <h2 className="text-[24px] font-semibold">
             {q ? (
               <>
-                「{q}」の検索結果。<span className="text-ink-secondary">{loading ? '' : `${results.length}件`}</span>
+                「{q}」の検索結果。<span className="text-ink-secondary">{loading ? '' : `${models.length + results.length}件`}</span>
               </>
             ) : (
               <>
@@ -162,6 +163,19 @@ function StoreContent() {
           )}
         </div>
 
+        {models.length > 0 && (
+          <ul className="mb-14 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            {models.map((p) => (
+              <li key={p.id}>
+                <ProductCard p={p} />
+              </li>
+            ))}
+          </ul>
+        )}
+
+        <h3 className="mb-5 text-[21px] font-semibold text-ink">
+          出品されたアイテム。<span className="text-ink-secondary">ユーザーが出品した商品。</span>
+        </h3>
         {loading ? (
           <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
             {Array.from({ length: 8 }).map((_, i) => (
@@ -171,7 +185,7 @@ function StoreContent() {
         ) : results.length === 0 ? (
           <div className="rounded-tile bg-surface px-6 py-16 text-center">
             <p className="text-[21px] font-semibold text-ink">
-              {filtered ? '条件に合う商品が見つかりませんでした。' : '現在、ストアに並んでいる商品はありません。'}
+              {filtered ? '条件に合う出品が見つかりませんでした。' : '現在、出品されているアイテムはありません。'}
             </p>
             <p className="mt-2 text-[17px] text-ink-secondary">
               {filtered ? 'キーワードを変えるか、条件をクリアしてください。' : '新しい商品が出品されるまで、しばらくお待ちください。'}

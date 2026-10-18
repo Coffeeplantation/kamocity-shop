@@ -1,72 +1,95 @@
-// 店舗周辺の案内図（イメージ）。架空の地名なので実在の地図ではなくイラストで表現する。
+// 店舗周辺の案内図（イメージ）。道の駅は架空の施設なので、実在の地図ではなくイラストで表現する。
+// 加茂駅・加茂川・加茂山公園・青海神社の並びはおおまかな目安で、距離や向きは正確ではない。
 export default function StoreMap() {
   return (
     <figure className="overflow-hidden rounded-tile bg-[#eef3ee]">
       <svg viewBox="0 0 800 520" className="h-auto w-full" role="img" aria-labelledby="map-title map-desc">
-        <title id="map-title">Lumina 湊町 周辺案内図</title>
-        <desc id="map-desc">湊町駅から港通りを海方向へ進み、灯台交差点の先に店舗と駐車場があります。</desc>
+        <title id="map-title">Lumina 加茂 周辺案内図（イメージ）</title>
+        <desc id="map-desc">JR加茂駅の東に加茂山公園と青海神社があり、まちの中を加茂川が流れています。道の駅（架空）は加茂川沿いにある想定です。</desc>
         <defs>
-          <linearGradient id="sea" x1="0" y1="0" x2="1" y2="0">
+          <linearGradient id="river" x1="0" y1="0" x2="1" y2="0">
             <stop offset="0" stopColor="#bfe3f5" />
-            <stop offset="1" stopColor="#8fcbeb" />
+            <stop offset="1" stopColor="#9fd3ee" />
           </linearGradient>
-          <pattern id="wave" width="40" height="16" patternUnits="userSpaceOnUse">
-            <path d="M0 8c10-6 10 6 20 0s10 6 20 0" fill="none" stroke="#fff" strokeOpacity="0.5" strokeWidth="1.5" />
-          </pattern>
           <filter id="pin-shadow" x="-50%" y="-50%" width="200%" height="200%">
             <feDropShadow dx="0" dy="3" stdDeviation="3" floodOpacity="0.25" />
           </filter>
         </defs>
 
-        {/* 海 */}
-        <path d="M560 0H800V520H500C540 420 520 330 560 250 600 170 540 80 560 0Z" fill="url(#sea)" />
-        <path d="M560 0H800V520H500C540 420 520 330 560 250 600 170 540 80 560 0Z" fill="url(#wave)" />
-        <text x="680" y="270" textAnchor="middle" fill="#3a8fbf" fontSize="16" fontWeight="600" letterSpacing="4">湊町港</text>
+        {/* 遠くの山（粟ヶ岳方面） */}
+        <path d="M520 0H800V70L760 34L716 62L668 18L620 58L580 30L520 64Z" fill="#d6e2d2" />
+        <text x="690" y="88" textAnchor="middle" fill="#5b7a5b" fontSize="12">粟ヶ岳 方面 →</text>
 
-        {/* 公園・ブロック */}
-        <rect x="60" y="40" width="170" height="110" rx="14" fill="#dbe8db" />
-        <rect x="260" y="40" width="190" height="110" rx="14" fill="#e3e8e3" />
-        <rect x="60" y="210" width="170" height="130" rx="14" fill="#e3e8e3" />
-        <rect x="60" y="390" width="170" height="100" rx="14" fill="#dbe8db" />
-        <rect x="260" y="390" width="200" height="100" rx="14" fill="#e3e8e3" />
+        {/* 加茂山公園（森） */}
+        <path d="M330 40C390 20 470 30 500 80C520 120 490 170 430 176C370 182 320 150 312 110C306 80 310 50 330 40Z" fill="#cfe3c9" />
+        {[
+          [350, 70],
+          [390, 56],
+          [430, 72],
+          [460, 104],
+          [372, 112],
+          [414, 128],
+          [448, 146],
+        ].map(([x, y]) => (
+          <circle key={`${x}-${y}`} cx={x} cy={y} r="11" fill="#9fc89a" />
+        ))}
+        <text x="410" y="200" textAnchor="middle" fill="#3a6b45" fontSize="13" fontWeight="600">
+          加茂山公園
+        </text>
+        <text x="410" y="216" textAnchor="middle" fill="#5b7a5b" fontSize="11">
+          雪椿・リス園
+        </text>
 
-        {/* 道路 */}
-        <g stroke="#fff" strokeLinecap="round">
-          <path d="M0 180H560" strokeWidth="26" />
-          <path d="M245 0V520" strokeWidth="22" />
-          <path d="M0 365H520" strokeWidth="18" />
-          <path d="M475 180C500 260 480 330 500 520" strokeWidth="18" />
+        {/* 青海神社 */}
+        <g transform="translate(520 150)">
+          <path d="M-14 0H14M-11 0V22M11 0V22M-17 -6H17" stroke="#d7432f" strokeWidth="4" strokeLinecap="round" />
+          <text x="0" y="40" textAnchor="middle" fill="#6e6e73" fontSize="12">
+            青海神社
+          </text>
         </g>
-        <g stroke="#d9d9de" strokeWidth="2" strokeDasharray="10 10" fill="none">
-          <path d="M0 180H560" />
+
+        {/* 加茂川 */}
+        <path d="M0 330C120 300 220 360 340 340C460 320 560 270 680 290C740 300 780 280 800 270V330C780 340 740 360 680 350C560 330 460 380 340 400C220 420 120 360 0 390Z" fill="url(#river)" />
+        <text x="250" y="380" fill="#3a8fbf" fontSize="15" fontWeight="600" letterSpacing="4">
+          加茂川
+        </text>
+
+        {/* 道路と橋 */}
+        <g stroke="#fff" strokeLinecap="round" fill="none">
+          <path d="M0 250H800" strokeWidth="20" />
+          <path d="M600 250V520" strokeWidth="16" />
+          <path d="M200 250V520" strokeWidth="14" />
         </g>
-        <text x="120" y="174" fill="#86868b" fontSize="13">港通り</text>
-        <text x="253" y="300" fill="#86868b" fontSize="13" transform="rotate(90 253 300)">駅前通り</text>
+        <text x="20" y="242" fill="#86868b" fontSize="12">
+          駅前通り
+        </text>
 
-        {/* 鉄道・駅 */}
-        <path d="M0 110H60" stroke="#6e6e73" strokeWidth="6" />
-        <path d="M0 110H60" stroke="#fff" strokeWidth="2" strokeDasharray="8 8" />
-        <rect x="60" y="92" width="96" height="36" rx="10" fill="#1d1d1f" />
-        <text x="108" y="115" textAnchor="middle" fill="#fff" fontSize="14" fontWeight="600">湊町駅</text>
-
-        {/* 灯台公園 */}
-        <circle cx="145" cy="440" r="6" fill="#34c759" />
-        <text x="160" y="445" fill="#3a6b45" fontSize="13">灯台公園</text>
-        <text x="110" y="70" fill="#3a6b45" fontSize="13">中央公園</text>
-
-        {/* 交差点 */}
-        <circle cx="475" cy="180" r="8" fill="#fff" stroke="#d2d2d7" strokeWidth="2" />
-        <text x="420" y="214" fill="#6e6e73" fontSize="12">灯台交差点</text>
+        {/* JR信越本線・加茂駅 */}
+        <path d="M150 0V520" stroke="#6e6e73" strokeWidth="6" />
+        <path d="M150 0V520" stroke="#fff" strokeWidth="2" strokeDasharray="8 8" />
+        <text x="140" y="500" textAnchor="end" fill="#6e6e73" fontSize="11">
+          JR信越本線
+        </text>
+        <rect x="104" y="196" width="92" height="36" rx="10" fill="#1d1d1f" />
+        <text x="150" y="219" textAnchor="middle" fill="#fff" fontSize="14" fontWeight="600">
+          加茂駅
+        </text>
 
         {/* 駐車場 */}
-        <rect x="330" y="230" width="120" height="90" rx="12" fill="#fff" stroke="#d2d2d7" />
-        <rect x="345" y="248" width="30" height="30" rx="7" fill="#0071e3" />
-        <text x="360" y="270" textAnchor="middle" fill="#fff" fontSize="19" fontWeight="700">P</text>
-        <text x="385" y="268" fill="#1d1d1f" fontSize="13" fontWeight="600">128台</text>
-        <text x="345" y="303" fill="#6e6e73" fontSize="11">EV充電 6基</text>
+        <rect x="630" y="400" width="120" height="84" rx="12" fill="#fff" stroke="#d2d2d7" />
+        <rect x="645" y="416" width="30" height="30" rx="7" fill="#0071e3" />
+        <text x="660" y="438" textAnchor="middle" fill="#fff" fontSize="19" fontWeight="700">
+          P
+        </text>
+        <text x="685" y="436" fill="#1d1d1f" fontSize="13" fontWeight="600">
+          140台
+        </text>
+        <text x="645" y="470" fill="#6e6e73" fontSize="11">
+          EV充電 4基
+        </text>
 
-        {/* 店舗ピン */}
-        <g filter="url(#pin-shadow)" transform="translate(520 120)">
+        {/* 店舗ピン（架空） */}
+        <g filter="url(#pin-shadow)" transform="translate(690 300)">
           <path d="M0 0c-22 0-38 16-38 37 0 28 38 61 38 61s38-33 38-61C38 16 22 0 0 0Z" fill="#1d1d1f" />
           <path
             transform="translate(-13 23) scale(1.1)"
@@ -74,10 +97,14 @@ export default function StoreMap() {
             d="M12 1.5c.9 5.6 3.9 8.6 9.5 9.5v2c-5.6.9-8.6 3.9-9.5 9.5h-2C9.6 16.9 6.6 13.9 1 13v-2c5.6-.9 8.6-3.9 9.5-9.5h1.5Z"
           />
         </g>
-        <rect x="455" y="64" width="130" height="34" rx="17" fill="#fff" />
-        <text x="520" y="86" textAnchor="middle" fill="#1d1d1f" fontSize="14" fontWeight="600">Lumina 湊町</text>
+        <rect x="610" y="258" width="160" height="32" rx="16" fill="#fff" />
+        <text x="690" y="279" textAnchor="middle" fill="#1d1d1f" fontSize="13" fontWeight="600">
+          Lumina 加茂（架空）
+        </text>
       </svg>
-      <figcaption className="px-5 pb-4 text-[12px] text-ink-secondary">※ 案内図はイメージです。</figcaption>
+      <figcaption className="px-5 pb-4 text-[12px] text-ink-secondary">
+        ※ 案内図はイメージです。道の駅は架空の施設で、距離や向きは実際とは異なります。加茂駅・加茂山公園・青海神社・加茂川は実在します。
+      </figcaption>
     </figure>
   );
 }

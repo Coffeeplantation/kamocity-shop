@@ -3,7 +3,8 @@
 import { nthOfMonth, weekday, ymd, type YMD } from '@/lib/jpCalendar';
 import { EVENT_RULES, SPECIAL_EVENTS, STORE, type StoreEvent } from '@/lib/storeInfo';
 
-export function eventsOn(date: YMD): StoreEvent[] {
+// posted … Slack に投稿されたイベント（components/store/PostedEvents の usePostedEvents から渡す）
+export function eventsOn(date: YMD, posted: (StoreEvent & { date: string })[] = []): StoreEvent[] {
   const key = ymd(date);
   if (STORE.closedDates.includes(key)) return [];
   const wd = weekday(date);
@@ -11,7 +12,7 @@ export function eventsOn(date: YMD): StoreEvent[] {
   const list: StoreEvent[] = EVENT_RULES.filter(
     (r) => r.weekdays?.includes(wd) || (r.nthWeekday && r.nthWeekday.weekday === wd && r.nthWeekday.n === nth),
   );
-  for (const s of SPECIAL_EVENTS) if (s.date === key) list.push(s);
+  for (const s of [...SPECIAL_EVENTS, ...posted]) if (s.date === key) list.push(s);
   return list.sort((a, b) => a.start.localeCompare(b.start));
 }
 

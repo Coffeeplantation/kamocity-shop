@@ -7,67 +7,7 @@ import PhoneHighlights from '@/components/PhoneHighlights';
 import StoreRow from '@/components/StoreRow';
 import ProductStrip from '@/components/ProductStrip';
 import ProductCards from '@/components/ProductCards';
-import TodayAtStore from '@/components/store/TodayAtStore';
 import { Buds, Card, Headset, Laptop, LogoMark, PhonePair, Tablet, Watch } from '@/components/Devices';
-import Photo from '@/components/Photo';
-import Phrases from '@/components/Phrases';
-import Icon from '@/components/Icons';
-import LiveChips from '@/components/store/LiveChips';
-import Arrivals from '@/components/store/Arrivals';
-import NewsList from '@/components/store/NewsList';
-import QuickMenu from '@/components/home/QuickMenu';
-import ShopMosaic from '@/components/home/ShopMosaic';
-import SeasonPicks from '@/components/home/SeasonPicks';
-import WeekEvents from '@/components/home/WeekEvents';
-import KamoNow from '@/components/kamo/KamoNow';
-import BackgroundVideo from '@/components/BackgroundVideo';
-import type { PhotoKey } from '@/lib/photos';
-import type { VideoKey } from '@/lib/videos';
-import { ACCESS, NEARBY, NEWS, STORE } from '@/lib/storeInfo';
-
-const wrap = 'mx-auto max-w-content px-4 md:px-10 xl:px-16';
-
-function SectionTitle({ eyebrow, title, sub, href, cta }: { eyebrow: string; title: string; sub?: string; href?: string; cta?: string }) {
-  return (
-    <Reveal className="mb-8 flex flex-col items-start justify-between gap-2 md:mb-12 md:flex-row md:items-end">
-      <div>
-        <p className="eyebrow mb-2 text-[14px] font-semibold md:text-[17px]">{eyebrow}</p>
-        <h2 className="text-[32px] font-semibold leading-[1.125] text-ink md:text-[48px] md:leading-[1.08]">
-          <Phrases text={title} />
-          {sub && (
-            <span className="text-ink-secondary">
-              <Phrases text={sub} />
-            </span>
-          )}
-        </h2>
-      </div>
-      {href && (
-        <Link href={href} className="link-chevron shrink-0 text-[17px]">
-          {cta} ›
-        </Link>
-      )}
-    </Reveal>
-  );
-}
-
-// 全幅の写真で区切る、Apple の製品ページのような見せ場
-function PhotoBand({ photo, video, eyebrow, title, href, cta }: { photo?: PhotoKey; video?: VideoKey; eyebrow: string; title: string; href: string; cta: string }) {
-  return (
-    <section className="relative isolate flex min-h-[min(80svh,760px)] items-end overflow-hidden bg-black">
-      {video ? <BackgroundVideo name={video} className="-z-10" /> : photo && <Photo name={photo} sizes="100vw" className="!absolute inset-0 -z-10" />}
-      <div className="absolute inset-0 -z-10 bg-gradient-to-t from-black/70 via-black/10 to-transparent" aria-hidden />
-      <Reveal className={`${wrap} w-full pb-14 text-white md:pb-20`}>
-        <p className="text-[17px] font-semibold text-white/80 md:text-[21px]">{eyebrow}</p>
-        <p className="mt-2 max-w-[1100px] text-[36px] font-semibold leading-[1.1] md:text-[64px] 2xl:text-[80px]">
-          <Phrases text={title} />
-        </p>
-        <Link href={href} className="btn-primary mt-6">
-          {cta}
-        </Link>
-      </Reveal>
-    </section>
-  );
-}
 
 type Theme = 'light' | 'gray' | 'dark';
 
@@ -183,16 +123,6 @@ export default function HomePage() {
         </Link>
       </div>
 
-      {/* 重要なお知らせ（道の駅サイトの告知バー） */}
-      {NEWS.filter((n) => n.important)
-        .slice(0, 1)
-        .map((n) => (
-          <Link key={n.title} href="/stores#news" className="block border-y border-[#d70015]/15 bg-[#fff5f5] px-4 py-3 text-center text-[14px] leading-[1.43] text-ink hover:underline">
-            <span className="mr-2 rounded-full border border-[#d70015] px-2 py-px text-[11px] font-semibold text-[#d70015]">重要</span>
-            {n.title}
-          </Link>
-        ))}
-
       <Hero
         id="phone"
         theme="light"
@@ -207,21 +137,6 @@ export default function HomePage() {
           fallback={<PhonePair id="hero-pro" className="h-full w-full" />}
         />
       </Hero>
-
-      {/* 目的から探す */}
-      <section className="mb-3 bg-canvas-gray py-10 md:py-14">
-        <div className={wrap}>
-          <Reveal className="mb-6 flex items-end justify-between gap-4">
-            <h2 className="text-[24px] font-semibold text-ink md:text-[32px]">
-              {STORE.name}を、<span className="text-ink-secondary">目的から探す。</span>
-            </h2>
-            <Link href="/stores" className="link-chevron hidden shrink-0 text-[17px] md:inline">
-              店舗情報 ›
-            </Link>
-          </Reveal>
-          <QuickMenu />
-        </div>
-      </section>
 
       <PhoneHighlights />
 
@@ -286,166 +201,6 @@ export default function HomePage() {
           </div>
         </Tile>
       </div>
-
-      {/* 道の駅の顔：全幅写真 + いまの情報 */}
-      <section className="relative isolate flex min-h-[min(94svh,900px)] items-end overflow-hidden bg-black text-white">
-        <BackgroundVideo name="lighthouseDrone" className="-z-10" controlClassName="right-4 top-4 md:right-10 md:top-6 xl:right-16" />
-        <div className="absolute inset-0 -z-10 bg-gradient-to-t from-black/80 via-black/30 to-black/5" aria-hidden />
-        <div className={`${wrap} w-full pb-10 pt-32 md:pb-14`}>
-          <Reveal>
-            <p className="text-[17px] font-semibold text-white/80 md:text-[21px]">道の駅・Lumina Store 併設</p>
-            <h2 className="mt-2 text-[56px] font-semibold leading-[1] md:text-[96px] 2xl:text-[120px]">{STORE.name}</h2>
-            <p className="mt-4 max-w-[760px] text-[21px] leading-[1.3] text-white/90 md:text-[28px]">
-              <Phrases text={STORE.catchcopy} />
-            </p>
-          </Reveal>
-          <Reveal delay={1} className="mt-8 md:mt-10">
-            <LiveChips base="/stores" />
-          </Reveal>
-          <div className="mt-6 flex flex-wrap gap-3.5">
-            <Link href="/stores" className="btn-primary">
-              店舗情報を見る
-            </Link>
-            <Link href="/stores#map" className="btn-secondary !border-white/70 !text-white hover:!bg-white hover:!text-ink">
-              園内マップ
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* 店舗の今日 */}
-      <section className="bg-canvas-gray pt-16 md:pt-24">
-        <div className="mx-auto max-w-content px-4 md:px-10 xl:px-16">
-          <Reveal className="mb-8 flex flex-col items-start justify-between gap-2 md:flex-row md:items-end">
-            <h2 className="text-[32px] font-semibold leading-[1.125] md:text-[48px] md:leading-[1.08]">
-              店舗で、会いましょう。<span className="text-ink-secondary">今日の Lumina 湊町。</span>
-            </h2>
-            <Link href="/stores" className="link-chevron shrink-0 text-[17px]">
-              店舗情報 ›
-            </Link>
-          </Reveal>
-          <TodayAtStore />
-        </div>
-      </section>
-
-      {/* 本日の入荷 */}
-      <section className="bg-canvas-gray py-16 md:py-24">
-        <div className={wrap}>
-          <SectionTitle eyebrow="本日の入荷状況" title="今朝、届いたもの。" sub="海から、畑から。" href="/stores#arrivals" cta="入荷情報" />
-          <Arrivals />
-        </div>
-      </section>
-
-      <PhotoBand video="produce" eyebrow="買う" title="畑から、その朝のうちに。" href="/stores#buy" cta="直売所を見る" />
-
-      {/* 買う・食べる・遊ぶ */}
-      <section className="bg-canvas-gray py-16 md:py-24">
-        <div className={wrap}>
-          <SectionTitle eyebrow="買う・食べる・遊ぶ" title="14 の店と施設。" sub="一日いても、飽きない。" href="/stores#shops" cta="すべての店舗" />
-          <ShopMosaic />
-        </div>
-      </section>
-
-      <PhotoBand video="fishIce" eyebrow="食べる" title="港の朝獲れを、丼いっぱいに。" href="/stores#eat" cta="お食事を見る" />
-
-      {/* 旬 */}
-      <section className="overflow-hidden bg-canvas-gray py-16 md:py-24">
-        <div className={wrap}>
-          <SectionTitle eyebrow="今月の旬" title="いちばんおいしい時に、" sub="いちばん近くで。" />
-          <SeasonPicks />
-        </div>
-      </section>
-
-      {/* イベント・お知らせ */}
-      <section className="bg-canvas-gray pb-16 md:pb-24">
-        <div className={`${wrap} grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)] lg:gap-10`}>
-          <div>
-            <SectionTitle eyebrow="今週のイベント" title="毎日、" sub="なにかが起きている。" />
-            <WeekEvents />
-          </div>
-          <div>
-            <SectionTitle eyebrow="お知らせ" title="最新の情報。" />
-            <NewsList limit={5} />
-          </div>
-        </div>
-      </section>
-
-      <PhotoBand video="wavesAerial" eyebrow="遊ぶ・体験" title="海を見ながら、ひと休み。" href="/stores#play" cta="遊ぶ・体験を見る" />
-
-      {/* 地元・加茂市のローカル情報 */}
-      <section className="bg-canvas-gray py-16 md:py-24">
-        <div className={wrap}>
-          <SectionTitle eyebrow="地元・新潟県加茂市" title="加茂のいまを、" sub="ひと目で。" href="/kamo" cta="加茂ローカルを見る" />
-          <KamoNow base="/kamo" />
-        </div>
-      </section>
-
-      {/* 周辺情報 */}
-      <section className="bg-canvas-gray py-16 md:py-24">
-        <div className={wrap}>
-          <SectionTitle eyebrow="周辺情報" title="寄り道の、" sub="その先へ。" href="/stores#nearby" cta="周辺情報" />
-          <ul className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4">
-            {NEARBY.map((n) => (
-              <li key={n.name} className="group overflow-hidden rounded-card bg-surface">
-                <div className="overflow-hidden">
-                  <Photo name={n.photo} sizes="(min-width: 1280px) 25vw, (min-width: 640px) 50vw, 100vw" className="aspect-[4/3]" imgClassName="transition-transform duration-700 group-hover:scale-105" />
-                </div>
-                <div className="p-5">
-                  <p className="text-[12px] text-ink-secondary">
-                    {n.kind}・{n.distance}
-                  </p>
-                  <h3 className="mt-1 text-[19px] font-semibold text-ink">{n.name}</h3>
-                  <p className="mt-1.5 text-[14px] leading-[1.55] text-ink-secondary">{n.desc}</p>
-                </div>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </section>
-
-      {/* アクセス・基本情報 */}
-      <section className="bg-studio-dark py-16 text-[#f5f5f7] md:py-24">
-        <div className={`${wrap} grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)]`}>
-          <Reveal>
-            <p className="eyebrow mb-2 text-[14px] font-semibold text-white/60 md:text-[17px]">アクセス・基本情報</p>
-            <h2 className="text-[32px] font-semibold leading-[1.125] md:text-[48px] md:leading-[1.08]">
-              <Phrases text="車でも、" />
-              <span className="text-white/50">
-                <Phrases text="電車でも。" />
-              </span>
-            </h2>
-            <p className="mt-6 text-[17px] font-semibold">{STORE.name}</p>
-            <p className="mt-1 text-[14px] text-white/70">{STORE.address}</p>
-            <p className="mt-1 text-[14px] text-white/70">
-              TEL {STORE.tel}（{STORE.telNote}）
-            </p>
-            <p className="mt-1 text-[14px] text-white/70">
-              駐車場 普通車 {STORE.parking.cars} 台・大型車 {STORE.parking.large} 台・EV 充電 {STORE.parking.ev} 基（{STORE.parking.fee}）
-            </p>
-            <div className="mt-6 flex flex-wrap gap-3.5">
-              <Link href="/stores#access" className="btn-primary">
-                地図とアクセス
-              </Link>
-              <Link href="/stores#contact" className="btn-secondary !border-white/70 !text-white hover:!bg-white hover:!text-ink">
-                お問い合わせ
-              </Link>
-            </div>
-          </Reveal>
-          <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            {ACCESS.map((a) => (
-              <li key={a.mode} className="rounded-card border border-white/10 bg-white/[0.06] p-6 backdrop-blur sm:[&:last-child:nth-child(odd)]:col-span-2">
-                <Icon name={a.icon} className="h-7 w-7 text-white" />
-                <p className="mt-4 text-[19px] font-semibold">{a.mode}</p>
-                {a.lines.map((l) => (
-                  <p key={l} className="mt-1 text-[14px] leading-[1.55] text-white/70">
-                    {l}
-                  </p>
-                ))}
-              </li>
-            ))}
-          </ul>
-        </div>
-      </section>
 
       {/* ストア新着: 既存のフリマ出品データ */}
       <section className="bg-canvas-gray py-16 md:py-24">

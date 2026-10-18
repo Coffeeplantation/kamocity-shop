@@ -107,17 +107,17 @@ export default function SiteMap() {
             </filter>
           </defs>
 
-          {/* 地面・海 */}
+          {/* 地面・加茂川 */}
           <rect width="1000" height="640" fill="#edf1e8" />
           <path d="M826 0H1000V640H770C800 560 778 480 806 420C834 360 806 300 826 240C846 180 816 90 826 0Z" fill="url(#map-sea)" />
           <path d="M826 0H1000V640H770C800 560 778 480 806 420C834 360 806 300 826 240C846 180 816 90 826 0Z" fill="url(#map-wave)" />
-          <text x="930" y="560" textAnchor="middle" fontSize="15" fontWeight="600" letterSpacing="6" fill="#3d8dbf">湊町港</text>
+          <text x="930" y="560" textAnchor="middle" fontSize="15" fontWeight="600" letterSpacing="6" fill="#3d8dbf">加茂川</text>
 
-          {/* 防波堤と灯台 */}
-          <path d="M900 300L975 110" stroke="#d9d9de" strokeWidth="14" strokeLinecap="round" />
-          <g transform="translate(975 96)">
-            <rect x="-7" y="-26" width="14" height="30" rx="3" fill="#fff" stroke="#c7c7cc" />
-            <rect x="-9" y="-34" width="18" height="10" rx="3" fill="#ff453a" />
+          {/* 川の向こうの粟ヶ岳（遠景） */}
+          <g aria-hidden>
+            <path d="M846 120L900 52L934 88L968 40L1000 78V120Z" fill="#c9d8c5" />
+            <path d="M956 54L968 40L980 56Z" fill="#fff" opacity="0.8" />
+            <text x="924" y="138" textAnchor="middle" fontSize="12" fill="#5b7a5b">粟ヶ岳 方面</text>
           </g>
 
           {/* 道路 */}
@@ -126,7 +126,7 @@ export default function SiteMap() {
           <rect x="0" y="616" width="790" height="24" fill="#ffffff" />
           <path d="M40 628H780" stroke="#d2d2d7" strokeWidth="2" strokeDasharray="12 12" />
           <rect x="372" y="478" width="44" height="140" fill="#ffffff" />
-          <text x="470" y="633" fontSize="12" fill="#86868b">港通り</text>
+          <text x="470" y="633" fontSize="12" fill="#86868b">道の駅通り</text>
 
           {/* 歩道・広場 */}
           <rect x="230" y="370" width="510" height="110" rx="20" fill="#f6f2ea" />

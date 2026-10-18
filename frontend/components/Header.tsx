@@ -7,19 +7,15 @@ import { useAuth } from '@/contexts/AuthContext';
 import { LogoMark } from '@/components/Devices';
 import ThemeSwitch from '@/components/ThemeSwitch';
 
+// メニューは商品だけ。道の駅（/stores）へは左上のロゴから移動する
 export const NAV_ITEMS = [
   { label: 'ストア', href: '/store' },
-  { label: '店舗', href: '/stores' },
-  { label: '加茂', href: '/kamo' },
   { label: 'Phone', href: '/#phone' },
   { label: 'Book', href: '/#book' },
   { label: 'Pad', href: '/#pad' },
   { label: 'Watch', href: '/#watch' },
   { label: 'Vision', href: '/#vision' },
   { label: 'Buds', href: '/#buds' },
-  { label: 'イベント', href: '/stores#events' },
-  { label: 'アクセス', href: '/stores#access' },
-  { label: 'サポート', href: '/stores#faq' },
 ];
 
 function SearchIcon() {
@@ -105,11 +101,14 @@ export default function Header() {
 
   const iconBtn = 'flex h-11 w-9 items-center justify-center text-ink/80 transition-colors hover:text-ink';
 
+  // 道の駅のページは、ページ内ナビ（SectionNav）がヘッダーを兼ねる
+  if (pathname === '/stores') return null;
+
   return (
     <>
       <header className="sticky top-0 z-50 h-11 bg-[rgb(var(--header)/0.8)] backdrop-blur-xl backdrop-saturate-[1.8]">
         <nav className="mx-auto flex h-full max-w-content items-center justify-between px-4 text-[12px] md:px-5 lg:px-10 xl:px-16">
-          <Link href="/" className={iconBtn} aria-label="Lumina ホーム">
+          <Link href="/stores" className={iconBtn} aria-label="道の駅 Lumina 加茂へ">
             <LogoMark className="h-[18px] w-[18px]" />
           </Link>
 

@@ -7,10 +7,12 @@ import { fmt, stationStatus } from '@/lib/hours';
 import { nextDepartures, routeById } from '@/lib/shuttle';
 import { StatusText } from '@/components/store/OpenBadge';
 import { useTokyoNow } from '@/components/store/useTokyoNow';
+import { usePostedEvents } from '@/components/store/PostedEvents';
 
 // ヒーロー上の「いま」の情報（営業状況・混雑予想・次のシャトル・今日のイベント）
 export default function LiveChips({ base = '' }: { base?: string }) {
   const now = useTokyoNow();
+  const posted = usePostedEvents();
   const chip =
     'group flex min-h-[76px] flex-col justify-between rounded-chip border border-white/15 bg-white/10 px-4 py-3 text-left backdrop-blur-xl transition-colors hover:bg-white/20';
   const label = 'text-[12px] font-semibold text-white/70';
@@ -29,7 +31,7 @@ export default function LiveChips({ base = '' }: { base?: string }) {
   const crowd = crowdAt(now);
   const level = crowd && status.open ? crowdLevel(crowd.value) : null;
   const bus = nextDepartures(routeById('from-station'), now, 1)[0];
-  const events = eventsOn(now.date);
+  const events = eventsOn(now.date, posted);
   const upcoming = events.find((e) => toMinutes(e.end) > now.minutes);
 
   return (
@@ -50,7 +52,7 @@ export default function LiveChips({ base = '' }: { base?: string }) {
         )}
       </a>
       <a href={`${base}#crowd`} className={chip}>
-        <span className={label}>次のシャトル（湊町駅発）</span>
+        <span className={label}>次のシャトル（加茂駅前発）</span>
         {bus ? (
           <span className="text-[14px] text-white">
             <span className="font-semibold tabular-nums">{bus.time}</span>

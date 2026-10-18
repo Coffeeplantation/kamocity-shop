@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import { useTokyoNow } from '@/components/store/useTokyoNow';
+import { usePostedEvents } from '@/components/store/PostedEvents';
 import { eventIcs, eventsOn } from '@/lib/events';
 import { fmt } from '@/lib/hours';
 import { formatMD, holidayName, sameDay, weekday, WEEKDAYS, ymd, type YMD } from '@/lib/jpCalendar';
@@ -21,6 +22,7 @@ function downloadIcs(e: StoreEvent, date: YMD) {
 
 export default function EventCalendar() {
   const now = useTokyoNow(60_000);
+  const posted = usePostedEvents();
   const [month, setMonth] = useState<{ y: number; m: number } | null>(null);
   const [selected, setSelected] = useState<YMD | null>(null);
   const [filter, setFilter] = useState<EventCategory | 'all'>('all');
@@ -50,7 +52,7 @@ export default function EventCalendar() {
   };
   const match = (c: EventCategory) => filter === 'all' || filter === c;
   const isPast = (c: YMD) => ymd(c) < ymd(today);
-  const selectedEvents = eventsOn(selected).filter((e) => match(e.category));
+  const selectedEvents = eventsOn(selected, posted).filter((e) => match(e.category));
   const selectedClosed = STORE.closedDates.includes(ymd(selected));
   const atCurrentMonth = month.y === today.y && month.m === today.m;
   const selectedHoliday = holidayName(selected);
@@ -124,7 +126,7 @@ export default function EventCalendar() {
         <div className="grid grid-cols-7 gap-0.5 sm:gap-1">
           {cells.map((c, i) => {
             if (!c) return <div key={`e${i}`} />;
-            const evs = eventsOn(c).filter((e) => match(e.category));
+            const evs = eventsOn(c, posted).filter((e) => match(e.category));
             const closed = STORE.closedDates.includes(ymd(c));
             const isSel = sameDay(c, selected);
             const isToday = sameDay(c, today);
@@ -172,18 +174,19 @@ export default function EventCalendar() {
         {selectedClosed && <p className="mt-3 text-[14px] text-ink-secondary">トイレ・EV 充電・駐車場は 24 時間ご利用いただけます。</p>}
         <ul className="mt-5 space-y-3">
           {selectedEvents.map((e) => (
-            <li key={e.title} className="rounded-chip bg-canvas-gray p-4">
+            <li key={`${e.start}${e.title}`} className="rounded-chip bg-canvas-gray p-4">
               <div className="flex flex-wrap items-center gap-2 text-[12px] font-semibold" style={{ color: EVENT_CATEGORIES[e.category].color }}>
                 <span className="h-2 w-2 rounded-full" style={{ background: EVENT_CATEGORIES[e.category].color }} />
                 {EVENT_CATEGORIES[e.category].label}
                 {e.reservation && <span className="rounded-full border border-current px-2 py-px text-[11px]">要予約</span>}
                 {e.fee && <span className="text-ink-secondary">参加費 {e.fee}</span>}
+                {e.posted && <span className="rounded-full bg-ink/[0.06] px-2 py-px text-[11px] text-ink-secondary">新着</span>}
               </div>
               <p className="mt-1.5 text-[17px] font-semibold leading-[1.3] text-ink">{e.title}</p>
               <p className="mt-1 text-[14px] text-ink-secondary">
                 {fmt(e.start)}〜{fmt(e.end)}・{e.place}
               </p>
-              <p className="mt-2 text-[14px] leading-[1.5] text-ink">{e.desc}</p>
+              {e.desc && <p className="mt-2 text-[14px] leading-[1.5] text-ink">{e.desc}</p>}
               {!isPast(selected) && (
                 <button type="button" onClick={() => downloadIcs(e, selected)} className="link-chevron mt-3 text-[13px]">
                   カレンダーに追加 ›

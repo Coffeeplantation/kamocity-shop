@@ -5,11 +5,11 @@ import Photo from '@/components/Photo';
 import { useTokyoNow } from '@/components/store/useTokyoNow';
 import { PRODUCTS, type ProductCategory } from '@/lib/storeInfo';
 
-const CATS: (ProductCategory | 'すべて')[] = ['すべて', '野菜・米', '果物', '水産', '加工品'];
+const CATS: (ProductCategory | 'すべて')[] = ['すべて', '果物', '野菜・米', '山の幸', '加工品'];
 const CAT_COLOR: Record<ProductCategory, { strong: string; soft: string }> = {
   '野菜・米': { strong: '#28a745', soft: '#d6f0dc' },
   果物: { strong: '#f08c00', soft: '#ffe8c7' },
-  水産: { strong: '#0a84ff', soft: '#d5e9ff' },
+  山の幸: { strong: '#8a6a2f', soft: '#efe3c8' },
   加工品: { strong: '#a2845e', soft: '#eee5d8' },
 };
 const MONTHS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];

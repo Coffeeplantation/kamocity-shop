@@ -93,7 +93,7 @@ export default function TodayAtStore() {
           </p>
         </Link>
         <Link href="/stores#shuttle" className="rounded-card bg-surface p-7 transition-colors hover:bg-surface/80">
-          <p className="text-[14px] font-semibold text-ink-secondary">次のシャトル（湊町駅発）</p>
+          <p className="text-[14px] font-semibold text-ink-secondary">次のシャトル（加茂駅前発）</p>
           <p className="mt-3 text-[24px] font-semibold tabular-nums text-ink">
             {now ? (bus ? bus.time : '本日の運行終了') : '—'}
             {bus && <span className="ml-2 text-[15px] font-normal text-ink-secondary">{bus.inMinutes === 0 ? 'まもなく発車' : `あと${bus.inMinutes}分`}</span>}
