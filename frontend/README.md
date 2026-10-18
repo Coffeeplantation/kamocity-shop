@@ -7,8 +7,8 @@
 必要なもの：Git、Node.js 20 以上（npm 同梱）
 
 ```bash
-git clone https://github.com/Coffeeplantation/furima-38654.git
-cd furima-38654/frontend
+git clone https://github.com/Coffeeplantation/furima-38654.git kamocity-shop
+cd kamocity-shop/frontend
 npm install
 npm run dev
 ```
@@ -18,7 +18,7 @@ npm run dev
 すでにクローン済みの PC では、最新を取り込んでから起動します。
 
 ```bash
-cd furima-38654
+cd kamocity-shop
 git pull
 cd frontend
 npm install   # 依存関係が増えていることがあるため
