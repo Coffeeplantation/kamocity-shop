@@ -36,21 +36,53 @@ function Arrow({ dir }: { dir: 'left' | 'right' }) {
   );
 }
 
-// 製品カード 1 枚（トップの横スクロールと、ストアの一覧で共用）
-export function ProductCard({ p }: { p: LuminaProduct }) {
+// 製品カード 1 枚（トップの横スクロールと、ストアの縮小版の横スクロールで共用）
+export function ProductCard({ p, compact = false }: { p: LuminaProduct; compact?: boolean }) {
   return (
     <Link
       href={p.href}
-      className={`group flex h-[500px] flex-col overflow-hidden rounded-card p-7 shadow-[2px_4px_12px_rgba(0,0,0,0.08)] transition-all duration-300 hover:scale-[1.01] hover:shadow-[2px_4px_16px_rgba(0,0,0,0.16)] ${
-        p.dark ? 'bg-studio-dark text-[#f5f5f7]' : 'bg-surface text-ink'
-      }`}
+      className={`group flex flex-col overflow-hidden rounded-card shadow-[2px_4px_12px_rgba(0,0,0,0.08)] transition-all duration-300 hover:scale-[1.01] hover:shadow-[2px_4px_16px_rgba(0,0,0,0.16)] ${
+        compact ? 'h-[340px] p-5' : 'h-[500px] p-7'
+      } ${p.dark ? 'bg-studio-dark text-[#f5f5f7]' : 'bg-surface text-ink'}`}
     >
       <span className={`text-[12px] font-semibold text-[#bf4800] ${p.badge ? '' : 'invisible'}`}>{p.badge ?? '—'}</span>
-      <span className="mt-1 text-[24px] font-semibold leading-[1.17] md:text-[28px]">{p.name}</span>
-      <span className={`mt-1.5 text-[15px] leading-[1.45] ${p.dark ? 'text-white/75' : 'text-ink-secondary'}`}>{p.lead}</span>
-      <span className={`mt-2 text-[14px] ${p.dark ? 'text-white/60' : 'text-ink-secondary'}`}>{p.price}</span>
-      <span className="mt-auto flex items-end justify-center pt-4 transition-transform duration-500 group-hover:-translate-y-1">{p.art}</span>
+      <span className={`mt-1 font-semibold leading-[1.17] ${compact ? 'text-[19px]' : 'text-[24px] md:text-[28px]'}`}>{p.name}</span>
+      <span className={`mt-1.5 leading-[1.45] ${compact ? 'line-clamp-2 text-[13px]' : 'text-[15px]'} ${p.dark ? 'text-white/75' : 'text-ink-secondary'}`}>{p.lead}</span>
+      <span className={`mt-2 ${compact ? 'text-[12px]' : 'text-[14px]'} ${p.dark ? 'text-white/60' : 'text-ink-secondary'}`}>{p.price}</span>
+      <span className="mt-auto flex items-end justify-center pt-4 transition-transform duration-500 group-hover:-translate-y-1">
+        {/* 縮小版は絵を 6 割の大きさに（レイアウト上の高さも合わせて縮める） */}
+        {compact ? <span className="-mt-[40%] origin-bottom scale-[0.6]">{p.art}</span> : p.art}
+      </span>
     </Link>
+  );
+}
+
+// 縮小版のカードを左右にスクロールして見る列（ストアのページ）。広い画面では矢印でも送れる
+export function CompactProductRow({ products }: { products: LuminaProduct[] }) {
+  const { ref, edge, update, scrollBy } = useHScroll<HTMLUListElement>();
+  const btn = 'flex h-8 w-8 items-center justify-center rounded-full bg-ink/10 text-ink transition-opacity hover:bg-ink/15 disabled:opacity-30';
+  return (
+    <div className="relative">
+      <div className="absolute -top-12 right-0 hidden gap-2 md:flex">
+        <button type="button" aria-label="前の製品" className={btn} disabled={edge.start} onClick={() => scrollBy(-1)}>
+          <Arrow dir="left" />
+        </button>
+        <button type="button" aria-label="次の製品" className={btn} disabled={edge.end} onClick={() => scrollBy(1)}>
+          <Arrow dir="right" />
+        </button>
+      </div>
+      <ul
+        ref={ref}
+        onScroll={update}
+        className="no-scrollbar -mx-4 flex snap-x snap-mandatory scroll-px-4 gap-4 overflow-x-auto px-4 pb-4 pt-1 md:-mx-10 md:scroll-px-10 md:px-10 xl:-mx-16 xl:scroll-px-16 xl:px-16"
+      >
+        {products.map((p) => (
+          <li key={p.id} className="w-[240px] shrink-0 snap-start">
+            <ProductCard p={p} compact />
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 }
 

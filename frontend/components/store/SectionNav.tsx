@@ -57,7 +57,8 @@ export default function SectionNav({ title, items, home }: { title: string; item
             {home.label}
           </Link>
         )}
-        <span className={`shrink-0 font-semibold text-ink ${home ? 'text-[15px] md:text-[17px]' : 'hidden text-[17px] md:inline'}`}>{title}</span>
+        {/* 道の駅のヘッダーとして使うときは施設名を出さない */}
+        {!home && <span className="hidden shrink-0 text-[17px] font-semibold text-ink md:inline">{title}</span>}
         <ul
           ref={listRef}
           className={`no-scrollbar flex h-full min-w-0 flex-1 items-center gap-5 overflow-x-auto text-[13px] md:gap-6 ${home ? 'lg:justify-center' : 'md:justify-end'}`}

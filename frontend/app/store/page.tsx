@@ -6,7 +6,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import api from '@/lib/api';
 import { FurimaListItem } from '@/types';
 import FurimaCard from '@/components/FurimaCard';
-import { LUMINA_PRODUCTS, ProductCard } from '@/components/ProductCards';
+import { CompactProductRow, LUMINA_PRODUCTS } from '@/components/ProductCards';
 import ProductStrip from '@/components/ProductStrip';
 import { useAuth } from '@/contexts/AuthContext';
 
@@ -163,14 +163,11 @@ function StoreContent() {
           )}
         </div>
 
+        {/* Lumina の製品は、縮小版のカードを左右にスクロールして見る */}
         {models.length > 0 && (
-          <ul className="mb-14 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {models.map((p) => (
-              <li key={p.id}>
-                <ProductCard p={p} />
-              </li>
-            ))}
-          </ul>
+          <div className="mb-14">
+            <CompactProductRow products={models} />
+          </div>
         )}
 
         <h3 className="mb-5 text-[21px] font-semibold text-ink">
