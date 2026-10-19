@@ -1,0 +1,64 @@
+{
+  "updatedAt": "2026-10-19T09:25:00+09:00",
+  "slot": "朝",
+  "items": [
+    {
+      "title": "加茂山公園の紅葉、見頃は 10月下旬〜11月上旬の見込み",
+      "summary": "モミジ谷が赤く染まる加茂の秋の名所。加茂駅から徒歩 5 分で、散策は 1 時間ほど。",
+      "category": "季節",
+      "area": "加茂市",
+      "source": "にいがた観光ナビ",
+      "url": "https://niigata-kankou.or.jp/blog/detail_324.html"
+    },
+    {
+      "title": "加茂桐箪笥まつり（例年 10月中旬）",
+      "summary": "伝統的工芸品・加茂桐箪笥の展示と販売。2026 年の日程は市の行事予定でご確認ください。",
+      "category": "イベント",
+      "area": "加茂市",
+      "source": "加茂市 年間行事予定",
+      "url": "https://www.city.kamo.niigata.jp/docs/30199.html"
+    },
+    {
+      "title": "七谷の炭焼き体験（10月中旬〜11月中旬）",
+      "summary": "毎年 5 回ほど開かれる秋の体験。七谷地区の里山で炭焼きを体験できます。",
+      "category": "体験",
+      "area": "加茂市",
+      "source": "加茂市 年間行事予定",
+      "url": "https://www.city.kamo.niigata.jp/docs/30199.html"
+    },
+    {
+      "title": "第49回 加茂市民音楽祭は 11月1日（日）",
+      "summary": "加茂文化会館で開かれる、市民による音楽祭。",
+      "category": "イベント",
+      "area": "加茂市",
+      "date": "2026-11-01",
+      "source": "加茂文化会館",
+      "url": "https://www.niigata-kamo-bunka.jp/event/"
+    },
+    {
+      "title": "越路もみじまつり（長岡市）は 10月31日から",
+      "summary": "10月31日（土）〜11月23日（月・祝）、もみじのライトアップ。加茂から車で行ける県央の秋の名所。",
+      "category": "季節",
+      "area": "新潟県",
+      "date": "2026-10-31",
+      "source": "まっぷるウェブ",
+      "url": "https://www.mapple.net/sp/koyo/koyo_niigata/"
+    },
+    {
+      "title": "清津峡（十日町市）の紅葉は 10月中旬〜11月上旬",
+      "summary": "10月10日〜11月3日は清津峡渓谷トンネルの入坑に事前予約が必要です。",
+      "category": "季節",
+      "area": "新潟県",
+      "source": "まっぷるウェブ",
+      "url": "https://www.mapple.net/sp/koyo/koyo_niigata/"
+    },
+    {
+      "title": "新潟県の「クマ出没警戒注意報」が継続中",
+      "summary": "県は 9月18日に注意報の継続を発表。秋はクマが人里に出やすい時期です。山や川沿いでは鈴を鳴らし、早朝・夕方の外出に注意を。",
+      "category": "防災",
+      "area": "新潟県",
+      "source": "新潟県",
+      "url": "https://www.pref.niigata.lg.jp/site/tyoujyutaisakusienn/260918kumakyokakikan.html"
+    }
+  ]
+}

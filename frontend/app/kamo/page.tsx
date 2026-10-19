@@ -9,6 +9,8 @@ import KamoHero from '@/components/kamo/KamoHero';
 import KamoWeek from '@/components/kamo/KamoWeek';
 import KamoTimeline from '@/components/kamo/KamoTimeline';
 import BijinStatus from '@/components/kamo/BijinStatus';
+import LocalNews from '@/components/kamo/LocalNews';
+import JmaWarnings from '@/components/kamo/JmaWarnings';
 import Photo from '@/components/Photo';
 import { KAMO, KAMO_MEIBUTSU, KAMO_SPOTS, KAMO_TRIVIA, mapUrl, SOURCES } from '@/lib/kamo';
 
@@ -19,6 +21,7 @@ export const metadata: Metadata = {
 
 const NAV = [
   { id: 'now', label: 'いまの加茂' },
+  { id: 'news', label: '地域の話題' },
   { id: 'bus', label: '美人の湯バス' },
   { id: 'season', label: 'これからの加茂' },
   { id: 'events', label: '行事カレンダー' },
@@ -58,10 +61,20 @@ export default function KamoPage() {
       <section id="now" className="scroll-mt-28 py-14 md:py-20">
         <div className={wrap}>
           <SectionTitle eyebrow="いまの加茂" title="今日の加茂市。" sub="天気も、バスも、行事も。" />
+          <div className="mb-4">
+            <JmaWarnings />
+          </div>
           <KamoNow />
           <h3 className="mb-4 mt-10 text-[21px] font-semibold text-ink md:text-[24px]">7日間の天気（加茂市）</h3>
           <KamoWeek />
           <p className="mt-3 text-[12px] text-ink-secondary">予報：Open-Meteo（気象モデルによる自動予報）。</p>
+        </div>
+      </section>
+
+      <section id="news" className="scroll-mt-28 pb-14 md:pb-20">
+        <div className={wrap}>
+          <SectionTitle eyebrow="今日の新潟・加茂" title="楽しいこと、季節のこと、" sub="気をつけたいこと。" />
+          <LocalNews />
         </div>
       </section>
 

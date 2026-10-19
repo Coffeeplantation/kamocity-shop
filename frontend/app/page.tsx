@@ -20,6 +20,8 @@ import ShopMosaic from '@/components/home/ShopMosaic';
 import SeasonPicks from '@/components/home/SeasonPicks';
 import WeekEvents from '@/components/home/WeekEvents';
 import KamoNow from '@/components/kamo/KamoNow';
+import LocalNews from '@/components/kamo/LocalNews';
+import JmaWarnings from '@/components/kamo/JmaWarnings';
 import BackgroundVideo from '@/components/BackgroundVideo';
 import type { PhotoKey } from '@/lib/photos';
 import type { VideoKey } from '@/lib/videos';
@@ -376,7 +378,15 @@ export default function HomePage() {
       <section className="bg-canvas-gray py-16 md:py-24">
         <div className={wrap}>
           <SectionTitle eyebrow="地元・新潟県加茂市" title="加茂のいまを、" sub="ひと目で。" href="/kamo" cta="加茂ローカルを見る" />
+          <div className="mb-4">
+            <JmaWarnings />
+          </div>
           <KamoNow base="/kamo" />
+          <h3 className="mb-4 mt-10 text-[21px] font-semibold text-ink md:text-[24px]">今日の新潟・加茂</h3>
+          <LocalNews limit={3} />
+          <Link href="/kamo#news" className="link-chevron mt-4 text-[17px]">
+            地域の話題をすべて見る ›
+          </Link>
         </div>
       </section>
 
