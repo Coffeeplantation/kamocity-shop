@@ -4,10 +4,9 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import AccountMenu, { useAccount } from '@/components/AccountMenu';
-import { LogoMark } from '@/components/Devices';
 import ThemeSwitch from '@/components/ThemeSwitch';
 
-// メニューは商品だけ。道の駅（/stores）へは左上のロゴから移動する
+// メニューは商品だけ。メインページ（道の駅 /stores）へは左上の「メインページへ」から戻る
 export const NAV_ITEMS = [
   { label: 'ストア', href: '/store' },
   { label: 'Phone', href: '/#phone' },
@@ -70,8 +69,8 @@ export default function Header() {
     <>
       <header className="sticky top-0 z-50 h-11 bg-[rgb(var(--header)/0.8)] backdrop-blur-xl backdrop-saturate-[1.8]">
         <nav className="mx-auto flex h-full max-w-content items-center justify-between px-4 text-[12px] md:px-5 lg:px-10 xl:px-16">
-          <Link href="/stores" className={iconBtn} aria-label="道の駅 Lumina 加茂へ">
-            <LogoMark className="h-[18px] w-[18px]" />
+          <Link href="/stores" className="flex h-11 shrink-0 items-center whitespace-nowrap text-[12px] font-semibold text-ink/80 transition-colors hover:text-ink">
+            メインページへ
           </Link>
 
           <ul className="hidden min-w-0 flex-1 items-center justify-center gap-1 px-2 md:flex lg:gap-3 lg:px-4 xl:gap-6 2xl:gap-10">
