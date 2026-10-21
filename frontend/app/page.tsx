@@ -5,6 +5,8 @@ import PlayScene from '@/components/PlayScene';
 import Phone3DLazy from '@/components/Phone3DLazy';
 import PhoneHighlights from '@/components/PhoneHighlights';
 import StoreRow from '@/components/StoreRow';
+import Marquee from '@/components/Marquee';
+import VideoStatement from '@/components/VideoStatement';
 import ProductStrip from '@/components/ProductStrip';
 import ProductCards from '@/components/ProductCards';
 import { Buds, Card, Headset, Laptop, LogoMark, PhonePair, Tablet, Watch } from '@/components/Devices';
@@ -123,6 +125,12 @@ export default function HomePage() {
         </Link>
       </div>
 
+      {/* 製品名が流れる帯 */}
+      <Marquee
+        items={['Lumina Phone 17 Pro', 'Lumina Phone 17', 'Lumina Book Air', 'Lumina Pad Pro', 'WATCH', 'Lumina Vision', 'Lumina Buds Pro 3', 'Card']}
+        className="mb-3 bg-studio-dark py-5 text-[19px] font-semibold tracking-[-0.01em] text-[#f5f5f7] md:py-7 md:text-[28px]"
+      />
+
       <Hero
         id="phone"
         theme="light"
@@ -201,6 +209,13 @@ export default function HomePage() {
           </div>
         </Tile>
       </div>
+
+      {/* 道の駅への入り口：動画が画面いっぱいに広がる */}
+      <VideoStatement video="produce" eyebrow="道の駅 Lumina 加茂" statement="朝どれの果物と新米を、加茂の道の駅で。">
+        <Link href="/stores" className="btn-primary">
+          道の駅を見る
+        </Link>
+      </VideoStatement>
 
       {/* ストア新着: 既存のフリマ出品データ */}
       <section className="bg-canvas-gray py-16 md:py-24">

@@ -15,6 +15,10 @@ export const VIDEOS = {
   fishIce: { file: 'fish-ice', pexelsId: '10039851', alt: '氷の上に並ぶ鮮魚' },
   wavesAerial: { file: 'waves-aerial', pexelsId: '2833843', alt: '上空から見た、岩礁に打ち寄せる波' },
   produce: { file: 'produce', pexelsId: '15645011', alt: '市場の店先に並ぶ野菜と果物' },
+  riceMist: { file: 'rice-mist', pexelsId: '5153190', alt: '朝霧の中、水を張った田んぼの上を進む空撮' },
+  riceWind: { file: 'rice-wind', pexelsId: '2876087', alt: '風に揺れる青い稲' },
+  maple: { file: 'maple', pexelsId: '1494284', alt: '風に揺れる赤いモミジ' },
+  snowForest: { file: 'snow-forest', pexelsId: '6904288', alt: '雪をかぶった林' },
 } satisfies Record<string, VideoInfo>;
 
 export type VideoKey = keyof typeof VIDEOS;

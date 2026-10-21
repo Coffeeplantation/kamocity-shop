@@ -302,8 +302,72 @@ h1, h2, h3 {
   animation: float 6s ease-in-out infinite;
 }
 
+/* 横に流れ続ける文字の帯（中身を2回並べ、半分ずらしてつなぎ目なくループ） */
+@keyframes marquee {
+  to { transform: translate3d(-50%, 0, 0); }
+}
+.animate-marquee {
+  animation: marquee 40s linear infinite;
+}
+.marquee-pause:hover .animate-marquee { animation-play-state: paused; }
+
+/* スクロール連動のアニメーション（対応ブラウザだけ。未対応では動かない完成状態のまま） */
+@supports (animation-timeline: view()) {
+  /* 写真・動画を背景より少し遅く動かす視差 */
+  @keyframes sd-parallax {
+    from { transform: translate3d(0, -7%, 0) scale(1.14); }
+    to { transform: translate3d(0, 7%, 0) scale(1.14); }
+  }
+  .sd-parallax {
+    animation: sd-parallax linear both;
+    animation-timeline: view();
+  }
+
+  /* 角丸の小さな枠から、画面いっぱいへ広がる（Apple の製品ページの動画のような見せ方） */
+  @keyframes sd-expand {
+    from { clip-path: inset(9% 7% round 36px); }
+    to { clip-path: inset(0 0 round 0); }
+  }
+  .sd-expand {
+    animation: sd-expand linear both;
+    animation-timeline: view();
+    animation-range: entry 0% cover 45%;
+  }
+
+  /* 大きな一文が、スクロールに合わせて薄い色から順に明るくなる */
+  @keyframes sd-fill {
+    from { background-position: 100% 0; }
+    to { background-position: 0 0; }
+  }
+  .sd-fill {
+    color: transparent;
+    background: linear-gradient(90deg, var(--fill-on, #f5f5f7) 50%, var(--fill-off, rgba(245, 245, 247, 0.22)) 50%) 100% 0 / 200% 100% no-repeat;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+    animation: sd-fill linear both;
+    animation-timeline: view();
+    animation-range: cover 12% cover 45%;
+  }
+
+  /* 見出しが下から少し大きくなりながら現れる */
+  @keyframes sd-rise {
+    from { opacity: 0; transform: translate3d(0, 60px, 0) scale(0.96); }
+    to { opacity: 1; transform: none; }
+  }
+  .sd-rise {
+    animation: sd-rise linear both;
+    animation-timeline: view();
+    animation-range: entry 0% entry 100%;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
+  .animate-marquee { animation: none; }
+  .sd-parallax, .sd-expand, .sd-rise { animation: none; }
+  .sd-fill { animation: none; color: inherit; background: none; }
   .reveal { opacity: 1; transform: none; transition: none; }
   .reveal-zoom { transform: none; transition: none; }
   .animate-float { animation: none; }

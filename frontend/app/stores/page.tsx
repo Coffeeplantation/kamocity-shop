@@ -3,6 +3,9 @@ import Link from 'next/link';
 import Reveal from '@/components/Reveal';
 import Phrases from '@/components/Phrases';
 import Photo from '@/components/Photo';
+import BackgroundVideo from '@/components/BackgroundVideo';
+import Marquee from '@/components/Marquee';
+import VideoStatement from '@/components/VideoStatement';
 import Icon from '@/components/Icons';
 import LiveChips from '@/components/store/LiveChips';
 import SectionNav from '@/components/store/SectionNav';
@@ -22,6 +25,7 @@ import KamoNow from '@/components/kamo/KamoNow';
 import { tokyoNow } from '@/lib/jpCalendar';
 import { seasonOf, SOURCES } from '@/lib/kamo';
 import { PHOTOS, photoPage, type PhotoKey } from '@/lib/photos';
+import { VIDEOS, type VideoKey } from '@/lib/videos';
 import { fetchPostedEvents } from '@/lib/slack/postedEvents';
 import { ACCESS, AMENITIES, DRIVE_TIMES, FAQ, KAMO_CRAFTS, NEARBY, STATION_FUNCTIONS, STORE } from '@/lib/storeInfo';
 
@@ -46,6 +50,8 @@ const NAV = [
   { id: 'faq', label: 'よくある質問' },
 ];
 
+const MARQUEE = ['桐たんす', '加茂紙', 'ル レクチエ', '和梨', '七谷の新米', 'のっぺ', '雪椿', '加茂山公園', '加茂川', '美人の湯'];
+
 const wrap = 'mx-auto max-w-content px-4 md:px-10 xl:px-16';
 
 function SectionTitle({ eyebrow, title, sub }: { eyebrow?: string; title: string; sub?: string }) {
@@ -64,11 +70,18 @@ function SectionTitle({ eyebrow, title, sub }: { eyebrow?: string; title: string
   );
 }
 
-function Interlude({ photo, eyebrow, title, href, cta }: { photo: PhotoKey; eyebrow: string; title: string; href: string; cta: string }) {
+// 写真か動画を背景にした区切り。スクロールで角丸の枠から画面いっぱいに広がり、背景は視差で少し遅れて動く
+function Interlude({ photo, video, eyebrow, title, href, cta }: { photo: PhotoKey; video?: VideoKey; eyebrow: string; title: string; href: string; cta: string }) {
   return (
-    <section className="relative isolate flex min-h-[min(80svh,760px)] items-end overflow-hidden bg-black">
-      <Photo name={photo} sizes="100vw" className="!absolute inset-0 -z-10" />
-      <div className="absolute inset-0 -z-10 bg-gradient-to-t from-black/70 via-black/10 to-transparent" aria-hidden />
+    <section className="sd-expand relative isolate flex min-h-[min(88svh,820px)] items-end overflow-hidden bg-black">
+      <div className="absolute inset-0 -z-10">
+        {video ? (
+          <BackgroundVideo name={video} className="sd-parallax" controlClassName="top-[68px] right-5 md:right-8" />
+        ) : (
+          <Photo name={photo} sizes="100vw" className="!absolute inset-0" imgClassName="sd-parallax" />
+        )}
+      </div>
+      <div className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-t from-black/70 via-black/10 to-transparent" aria-hidden />
       <Reveal className={`${wrap} w-full pb-14 text-white md:pb-20`}>
         <p className="text-[17px] font-semibold text-white/80 md:text-[21px]">{eyebrow}</p>
         <p className="mt-2 max-w-[1100px] text-[36px] font-semibold leading-[1.1] md:text-[64px] 2xl:text-[80px]">
@@ -87,6 +100,9 @@ export default async function StoresPage() {
   const now = tokyoNow();
   const season = seasonOf(now.date.m);
   const posted = await fetchPostedEvents();
+  // ヒーローの季節の動画と、下の区切りの動画が同じにならないようにする
+  const morningVideo: VideoKey = season.video === 'riceMist' ? 'produce' : 'riceMist';
+  const riceVideo: VideoKey = season.video === 'riceWind' ? 'riceMist' : 'riceWind';
 
   return (
     <PostedEventsProvider events={posted}>
@@ -96,8 +112,12 @@ export default async function StoresPage() {
 
         {/* ヒーロー：季節ごとの加茂 */}
         <section className="relative isolate flex min-h-[min(92svh,880px)] items-end overflow-hidden bg-black text-white">
-          <Photo name={season.photo} sizes="100vw" priority className="!absolute inset-0 -z-10" />
-          <div className="absolute inset-0 -z-10 bg-gradient-to-t from-black/85 via-black/35 to-black/10" aria-hidden />
+          {/* 季節の背景動画（読み込むまでは季節の写真） */}
+          <div className="absolute inset-0 -z-10">
+            <Photo name={season.photo} sizes="100vw" priority className="!absolute inset-0" />
+            <BackgroundVideo name={season.video} className="animate-hero-zoom" controlClassName="top-5 right-4 md:right-8" />
+          </div>
+          <div className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-t from-black/85 via-black/35 to-black/10" aria-hidden />
           <div className={`${wrap} w-full pb-10 pt-28 md:pb-14`}>
             <Reveal>
               <p className="text-[17px] font-semibold text-white/80 md:text-[21px]">
@@ -123,6 +143,9 @@ export default async function StoresPage() {
           </div>
         </section>
 
+        {/* 加茂の名物が流れる帯 */}
+        <Marquee items={MARQUEE} className="bg-studio-dark py-5 text-[19px] font-semibold text-[#f5f5f7] md:py-7 md:text-[28px]" />
+
         {/* 本日の入荷 */}
         <section id="arrivals" className="scroll-mt-16 py-16 md:py-28">
           <div className={wrap}>
@@ -131,15 +154,21 @@ export default async function StoresPage() {
           </div>
         </section>
 
+        <VideoStatement video={morningVideo} eyebrow="加茂の朝" statement="朝霧の田んぼと果樹園から、その日のうちに店先へ。">
+          <a href="#arrivals" className="btn-primary">
+            今日の入荷を見る
+          </a>
+        </VideoStatement>
+
         {/* 旬 */}
-        <section id="season" className="scroll-mt-16 pb-16 md:pb-28">
+        <section id="season" className="scroll-mt-16 py-16 md:py-28">
           <div className={wrap}>
             <SectionTitle eyebrow="旬カレンダー" title="夏は桃、秋は和梨、" sub="冬はル レクチエ。" />
             <SeasonCalendar />
           </div>
         </section>
 
-        <Interlude photo="riceField" eyebrow="食べる" title="七谷の新米を、のっぺと一緒に。" href="#eat" cta="お食事を見る" />
+        <Interlude photo="riceField" video={riceVideo} eyebrow="食べる" title="七谷の新米を、のっぺと一緒に。" href="#eat" cta="お食事を見る" />
 
         {/* 買う・食べる・遊ぶ */}
         <section id="shops" className="scroll-mt-16 py-16 md:py-28">
@@ -408,16 +437,24 @@ export default async function StoresPage() {
             <a href={SOURCES.city} target="_blank" rel="noopener noreferrer" className="mx-0.5 underline hover:text-ink">
               加茂市の公式サイト
             </a>
-            で最新の情報をご確認ください。写真は季節のイメージで、加茂市内で撮影されたものではありません。
+            で最新の情報をご確認ください。写真と動画は季節のイメージで、加茂市内で撮影されたものではありません。
           </p>
           <details className="mt-3">
-            <summary className="cursor-pointer">写真クレジット（Unsplash・Pexels）</summary>
+            <summary className="cursor-pointer">写真・動画クレジット（Unsplash・Pexels）</summary>
             <p className="mt-2">
               {Object.values(PHOTOS).map((p, i) => (
                 <span key={p.id}>
                   {i > 0 && '、'}
                   <a href={photoPage(p)} target="_blank" rel="noopener noreferrer" className="hover:underline">
                     {p.alt}（{p.by}）
+                  </a>
+                </span>
+              ))}
+              {(['riceMist', 'riceWind', 'maple', 'snowForest', 'produce'] as const).map((k) => VIDEOS[k]).map((v) => (
+                <span key={v.file}>
+                  、
+                  <a href={`https://www.pexels.com/video/${v.pexelsId}/`} target="_blank" rel="noopener noreferrer" className="hover:underline">
+                    {v.alt}（Pexels の動画）
                   </a>
                 </span>
               ))}

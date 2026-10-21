@@ -3,6 +3,7 @@
 
 import { holidayName, nthOfMonth, weekday, ymd, type YMD } from '@/lib/jpCalendar';
 import type { PhotoKey } from '@/lib/photos';
+import type { VideoKey } from '@/lib/videos';
 
 export const KAMO = {
   name: '加茂市',
@@ -272,11 +273,11 @@ export const mapUrl = (query: string) => `https://www.google.com/maps/search/?ap
 export const isBijinClosed = (date: YMD) => weekday(date) === 3 && [2, 4].includes(nthOfMonth(date));
 
 // ---------- 季節ごとのヒーロー ----------
-export type Season = { id: 'spring' | 'summer' | 'autumn' | 'winter'; label: string; photo: PhotoKey; lead: string };
+export type Season = { id: 'spring' | 'summer' | 'autumn' | 'winter'; label: string; photo: PhotoKey; video: VideoKey; lead: string };
 
 export function seasonOf(month: number): Season {
-  if (month >= 3 && month <= 5) return { id: 'spring', label: '春の加茂', photo: 'koinobori', lead: '雪椿が咲き、加茂川の空を鯉のぼりが泳ぐ季節。' };
-  if (month >= 6 && month <= 8) return { id: 'summer', label: '夏の加茂', photo: 'fireworksWater', lead: '加茂川の夜空に、二尺玉と大ナイアガラ。' };
-  if (month >= 9 && month <= 11) return { id: 'autumn', label: '秋の加茂', photo: 'autumnHouse', lead: '加茂山公園のモミジ谷が、赤く染まる季節。' };
-  return { id: 'winter', label: '冬の加茂', photo: 'snowRoad', lead: '雪の冬鳥越でそり遊び。あたたまるなら美人の湯へ。' };
+  if (month >= 3 && month <= 5) return { id: 'spring', label: '春の加茂', photo: 'koinobori', video: 'riceMist', lead: '雪椿が咲き、加茂川の空を鯉のぼりが泳ぐ季節。' };
+  if (month >= 6 && month <= 8) return { id: 'summer', label: '夏の加茂', photo: 'fireworksWater', video: 'riceWind', lead: '加茂川の夜空に、二尺玉と大ナイアガラ。' };
+  if (month >= 9 && month <= 11) return { id: 'autumn', label: '秋の加茂', photo: 'autumnHouse', video: 'maple', lead: '加茂山公園のモミジ谷が、赤く染まる季節。' };
+  return { id: 'winter', label: '冬の加茂', photo: 'snowRoad', video: 'snowForest', lead: '雪の冬鳥越でそり遊び。あたたまるなら美人の湯へ。' };
 }
