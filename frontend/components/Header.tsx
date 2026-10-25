@@ -63,7 +63,8 @@ export default function Header() {
   const iconBtn = 'flex h-11 w-9 items-center justify-center text-ink/80 transition-colors hover:text-ink';
 
   // 道の駅のページは、ページ内ナビ（SectionNav）がヘッダーを兼ねる
-  if (pathname === '/stores') return null;
+  // Starlink 風のストアは、専用の黒いヘッダー（StarlinkHeader）を使う
+  if (pathname === '/stores' || pathname === '/starlink') return null;
 
   return (
     <>

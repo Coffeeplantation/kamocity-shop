@@ -1,4 +1,7 @@
+'use client';
+
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import ThemeSwitch from '@/components/ThemeSwitch';
 
 // フッターのリンクは、サイト内に実在するページ・セクションだけを並べる
@@ -32,6 +35,10 @@ const DIRECTORY = [
 ];
 
 export default function Footer() {
+  // Starlink 風のストアは、ページの中に黒い専用のフッターを持つ
+  const pathname = usePathname();
+  if (pathname === '/starlink') return null;
+
   return (
     <footer id="support" className="bg-canvas-gray text-[12px] leading-[1.33] text-ink-secondary">
       <div className="mx-auto max-w-content px-4 md:px-10 xl:px-16">

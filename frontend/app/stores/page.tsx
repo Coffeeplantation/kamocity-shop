@@ -107,8 +107,15 @@ export default async function StoresPage() {
   return (
     <PostedEventsProvider events={posted}>
       <div className="bg-canvas-gray">
-        {/* ページの先頭のナビ（サイトのヘッダーの代わり）。左端の「ストアへ」でストアへ、右端はアカウント */}
-        <SectionNav title={STORE.name} items={NAV} home={{ href: '/store', label: 'ストアへ' }} />
+        {/* ページの先頭のナビ（サイトのヘッダーの代わり）。左端はストアの 2 つの案（いつもの / Starlink 風）、右端はアカウント */}
+        <SectionNav
+          title={STORE.name}
+          items={NAV}
+          home={[
+            { href: '/store', label: 'ストアへ' },
+            { href: '/starlink', label: 'Starlink版へ' },
+          ]}
+        />
 
         {/* ヒーロー：季節ごとの加茂 */}
         <section className="relative isolate flex min-h-[min(92svh,880px)] items-end overflow-hidden bg-black text-white">

@@ -7,8 +7,8 @@ import AccountMenu from '@/components/AccountMenu';
 type Item = { id: string; label: string };
 
 // ページ内ナビ。いま読んでいるセクションを強調し、横スクロールの位置も追従させる。
-// 道の駅のページではサイトのヘッダーの代わりに一番上に置き、左端の「ストアへ」からストアへ移れるようにする。右端はアカウントのメニュー。
-export default function SectionNav({ title, items, home }: { title: string; items: Item[]; home?: { href: string; label: string } }) {
+// 道の駅のページではサイトのヘッダーの代わりに一番上に置き、左端のリンク（ストア / Starlink 風ストア）から移れるようにする。右端はアカウントのメニュー。
+export default function SectionNav({ title, items, home }: { title: string; items: Item[]; home?: { href: string; label: string }[] }) {
   const [active, setActive] = useState<string>('');
   const listRef = useRef<HTMLUListElement>(null);
 
@@ -53,9 +53,13 @@ export default function SectionNav({ title, items, home }: { title: string; item
     >
       <div className="mx-auto flex h-[52px] max-w-content items-center gap-4 px-4 md:gap-6 md:px-10 xl:px-16">
         {home && (
-          <Link href={home.href} className="flex h-11 shrink-0 items-center text-[13px] font-semibold text-ink/80 transition-colors hover:text-ink">
-            {home.label}
-          </Link>
+          <div className="flex shrink-0 items-center gap-3 md:gap-4">
+            {home.map((h) => (
+              <Link key={h.href} href={h.href} className="flex h-11 items-center whitespace-nowrap text-[13px] font-semibold text-ink/80 transition-colors hover:text-ink">
+                {h.label}
+              </Link>
+            ))}
+          </div>
         )}
         {/* 道の駅のヘッダーとして使うときは施設名を出さない */}
         {!home && <span className="hidden shrink-0 text-[17px] font-semibold text-ink md:inline">{title}</span>}
