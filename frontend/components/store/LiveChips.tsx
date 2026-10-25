@@ -48,7 +48,8 @@ export default function LiveChips({ base = '' }: { base?: string }) {
             {level.label}
           </span>
         ) : (
-          <span className="text-[14px] text-white/80">営業時間外</span>
+          // 営業していないことは隣の「営業状況」に出ているので、ここでは繰り返さない
+          <span className="text-[14px] text-white/80">開館中に表示</span>
         )}
       </a>
       <a href={`${base}#access`} className={chip}>

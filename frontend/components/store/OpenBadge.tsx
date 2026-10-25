@@ -38,11 +38,24 @@ export function StatusSkeleton({ tone = 'light' }: { tone?: 'light' | 'dark' }) 
   return <span className={`inline-block h-4 w-32 animate-pulse rounded-full ${tone === 'dark' ? 'bg-white/15' : 'bg-black/[0.06]'}`} />;
 }
 
-// shop を省略すると道の駅全体の営業状況
-export default function OpenBadge({ shop, tone = 'light', size = 'md', showDetail = true }: { shop?: string; tone?: 'light' | 'dark'; size?: 'sm' | 'md'; showDetail?: boolean }) {
+// shop を省略すると道の駅全体の営業状況。onlyIfDifferent なら、道の駅全体と同じ状況の店では何も出さない
+export default function OpenBadge({
+  shop,
+  tone = 'light',
+  size = 'md',
+  showDetail = true,
+  onlyIfDifferent = false,
+}: {
+  shop?: string;
+  tone?: 'light' | 'dark';
+  size?: 'sm' | 'md';
+  showDetail?: boolean;
+  onlyIfDifferent?: boolean;
+}) {
   const now = useTokyoNow();
-  if (!now) return <StatusSkeleton tone={tone} />;
+  if (!now) return onlyIfDifferent ? null : <StatusSkeleton tone={tone} />;
   const target = shop ? SHOPS.find((s) => s.id === shop) : undefined;
   const status = target ? shopStatus(target, now) : stationStatus(now);
+  if (onlyIfDifferent && status.label === stationStatus(now).label) return null;
   return <StatusText status={status} tone={tone} size={size} showDetail={showDetail} />;
 }

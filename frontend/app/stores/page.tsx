@@ -85,14 +85,14 @@ export default async function StoresPage() {
         {/* 2 画面目：今日の入荷・旬・イベント・お知らせ */}
         <section id="today" className="bg-aurora relative isolate scroll-mt-14 py-14 md:py-20">
           <div className={wrap}>
-            <Reveal className="mb-6 flex flex-wrap items-end justify-between gap-3 md:mb-8">
+            {/* 道の駅全体の営業状況はヒーローに出しているので、ここには重ねない */}
+            <Reveal className="mb-6 md:mb-8">
               <h2 className="display text-[clamp(2rem,4.4vw,3.5rem)] text-ink">
                 <Phrases text="今日の、" />
                 <span className="text-ink-secondary">
                   <Phrases text="Lumina 加茂。" />
                 </span>
               </h2>
-              <OpenBadge />
             </Reveal>
             <Reveal delay={1}>
               <TodayBento />
@@ -128,8 +128,9 @@ export default async function StoresPage() {
                   </span>
                   <p className="text-[21px] font-semibold leading-[1.2]">{s.name}</p>
                   <p className="mt-1 text-[14px] leading-[1.5] text-white/80">{s.lead}</p>
-                  <div className="mt-2">
-                    <OpenBadge shop={s.id} tone="dark" size="sm" showDetail={false} />
+                  {/* 道の駅全体と同じ状況（ヒーローに出ている）なら出さず、定休日などの違いだけ出す */}
+                  <div className="mt-2 empty:hidden">
+                    <OpenBadge shop={s.id} tone="dark" size="sm" showDetail={false} onlyIfDifferent />
                   </div>
                 </div>
               </li>
