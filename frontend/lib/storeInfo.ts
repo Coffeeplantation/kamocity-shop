@@ -383,9 +383,11 @@ export const FLOWERS_BY_MONTH: Record<number, string[]> = {
 
 // ---------- イベント ----------
 
-export type EventCategory = 'session' | 'kids' | 'market' | 'support' | 'special';
+export type EventCategory = 'flower' | 'session' | 'kids' | 'market' | 'support' | 'special';
 
 export const EVENT_CATEGORIES: Record<EventCategory, { label: string; color: string }> = {
+  // サイトの中心になる教室。Slack・LINE に「種類：アメリカンフラワー」（またはタイトルにアメリカンフラワー）で投稿すると、この分類になる
+  flower: { label: 'アメリカンフラワー', color: '#d6336c' },
   session: { label: 'セッション', color: '#0071e3' },
   kids: { label: '体験・キッズ', color: '#a838d8' },
   market: { label: 'マルシェ', color: '#1a7f37' },
@@ -402,7 +404,11 @@ export type StoreEvent = {
   desc: string;
   reservation?: boolean;
   fee?: string;
-  posted?: boolean; // Slack に投稿されたイベント
+  apply?: string; // 申し込み方法（URL・電話・「当日受付」など）
+  capacity?: string; // 定員
+  bring?: string; // 持ち物
+  posted?: boolean; // Slack・LINE に投稿されたイベント
+  postedAt?: string; // 投稿された日時（ISO）。更新履歴の並びに使う
 };
 
 export type EventRule = StoreEvent & { weekdays?: number[]; nthWeekday?: { n: number; weekday: number } };

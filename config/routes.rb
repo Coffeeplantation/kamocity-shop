@@ -13,9 +13,8 @@ Rails.application.routes.draw do
                    registration: 'sign_up'
                  }
 
-      resources :furimas, only: [:index, :show, :create, :update, :destroy] do
-        resources :orders, only: [:create]
-      end
+      # カード決済（PAY.JP）による購入は廃止した
+      resources :furimas, only: [:index, :show, :create, :update, :destroy]
 
       get 'users/me', to: 'users#me'
       get 'master_data', to: 'users#master_data'

@@ -11,15 +11,19 @@
 //   種類：マルシェ        … セッション / 体験 / マルシェ / サポート / 特別（省略すると「特別イベント」）
 //   予約：要              … 「要」または「必要」で要予約
 //   料金：500円
+//   申込：LINE でお名前と人数を  … URL・電話番号・「当日受付」など（省略可）
+//   定員：8 名
+//   持ち物：エプロン
 
 import { ymd, type YMD } from '@/lib/jpCalendar';
 import type { EventCategory, StoreEvent } from '@/lib/storeInfo';
 
 export type PostedEvent = StoreEvent & { date: string; posted: true };
 
-export const EVENT_POST_TEMPLATE = ['【イベント】タイトル', '日付：10/24', '時間：9:00〜16:00', '場所：屋外広場', '内容：説明（省略可）', '種類：マルシェ（省略可）', '予約：要（省略可）', '料金：無料（省略可）'].join('\n');
+export const EVENT_POST_TEMPLATE = ['【イベント】タイトル', '日付：10/24', '時間：9:00〜16:00', '場所：屋外広場', '内容：説明（省略可）', '種類：アメリカンフラワー（省略可）', '予約：要（省略可）', '料金：無料（省略可）', '申込：LINE でお名前と人数を（省略可）', '定員：8名（省略可）', '持ち物：エプロン（省略可）'].join('\n');
 
 const CATEGORY_WORDS: [RegExp, EventCategory][] = [
+  [/アメリカンフラワー|ディップアート|フラワー/, 'flower'],
   [/セッション|講座|教室/, 'session'],
   [/体験|キッズ|子ども|こども|ワークショップ/, 'kids'],
   [/マルシェ|市|即売/, 'market'],
@@ -85,7 +89,11 @@ export function parseEventPost(text: string, postedAt: YMD): PostedEvent | null 
   if (!date || !times || !place) return null;
 
   const kind = field(lines, '種類', '分類');
-  const category = kind.includes('特別') ? 'special' : (CATEGORY_WORDS.find(([re]) => re.test(kind))?.[1] ?? 'special');
+  // 種類を省略しても、タイトルにアメリカンフラワーとあれば教室として扱う
+  const flowerTitle = CATEGORY_WORDS[0][0].test(head[1]);
+  const category: EventCategory = kind.includes('特別')
+    ? 'special'
+    : (CATEGORY_WORDS.find(([re]) => re.test(kind))?.[1] ?? (flowerTitle ? 'flower' : 'special'));
   const r = field(lines, '予約');
   const reservation = /^(要|必要|あり)/.test(r) && !/不要|なし/.test(r);
   const fee = field(lines, '料金', '参加費') || undefined;
@@ -99,6 +107,9 @@ export function parseEventPost(text: string, postedAt: YMD): PostedEvent | null 
     category,
     reservation,
     fee,
+    apply: field(lines, '申込', '申し込み', '予約方法').slice(0, 120) || undefined,
+    capacity: field(lines, '定員').slice(0, 20) || undefined,
+    bring: field(lines, '持ち物', '持ちもの').slice(0, 80) || undefined,
     posted: true,
   };
 }

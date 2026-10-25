@@ -8,7 +8,7 @@
 //           Yahoo!ニュースの RSS も、サイト掲載の条件を確認できていないため Slack のみ。
 
 export type NewsItem = { title: string; link: string; publisher: string; date: string | null };
-export type FeedId = 'city' | 'googleKamo' | 'googleNiigata' | 'yahooNiigata' | 'bingKamo';
+export type FeedId = 'city' | 'googleKamo' | 'googleNiigata' | 'googleFruit' | 'googleRice' | 'yahooNiigata' | 'bingKamo';
 export type Feed = {
   id: FeedId;
   label: string;
@@ -16,6 +16,7 @@ export type Feed = {
   home: string; // 出典のリンク先
   url: string;
   use: 'site' | 'slack';
+  group?: 'local' | 'season'; // サイトでの見せ方：地域のニュース（省略時）か、季節のニュース（果物・米）か
   keep?: RegExp; // この語を含む見出しだけ残す
   drop?: RegExp; // この語を含む見出しは除く（同名の他地域など）
 };
@@ -24,6 +25,13 @@ const google = (q: string) => `https://news.google.com/rss/search?q=${encodeURIC
 
 // 岐阜県の「美濃加茂市」が「加茂市」の検索に混ざるので除く
 const OTHER_KAMO = /美濃加茂|岐阜/;
+
+// 地域の人が日々の暮らしで見るニュースに絞るため、事件・事故・訃報などの物騒な見出しは除く（加茂市の公式のお知らせには使わない）
+const ROUGH =
+  /殺|事件|逮捕|容疑|被告|死亡|死去|遺体|刺され|刺し|暴行|強盗|詐欺|窃盗|盗|放火|不審者|わいせつ|性的|虐待|行方不明|自殺|死傷|殴|脅迫|トラブル|摘発|送検|判決|懲役|起訴|銃|爆発|襲わ|死者|重傷|けが人|ひき逃げ|飲酒運転|交通事故|事故死|火災/;
+
+// 新潟県全体は、おでかけ・祭り・開業・暮らしなど、地域の話題が出やすい語で探す
+const NIIGATA_LOCAL = '新潟県 (地域 OR 祭り OR イベント OR オープン OR 開業 OR 観光 OR 暮らし OR 子育て OR 学校 OR 農業 OR 特産)';
 
 export const FEEDS: Feed[] = [
   {
@@ -46,10 +54,28 @@ export const FEEDS: Feed[] = [
   {
     id: 'googleNiigata',
     label: '新潟県のニュース',
-    credit: 'Google ニュース「新潟県」',
-    home: google('新潟県').replace('/rss/', '/'),
-    url: google('新潟県'),
+    credit: 'Google ニュース「新潟県 地域の話題」',
+    home: google(NIIGATA_LOCAL).replace('/rss/', '/'),
+    url: google(NIIGATA_LOCAL),
     use: 'site',
+  },
+  {
+    id: 'googleFruit',
+    label: '果物のたより',
+    credit: 'Google ニュース「新潟 果物」',
+    home: google('新潟 (梨 OR ル・レクチエ OR 果物 OR いちご OR 桃 OR ぶどう)').replace('/rss/', '/'),
+    url: google('新潟 (梨 OR ル・レクチエ OR 果物 OR いちご OR 桃 OR ぶどう)'),
+    use: 'site',
+    group: 'season',
+  },
+  {
+    id: 'googleRice',
+    label: 'お米のたより',
+    credit: 'Google ニュース「新潟 米」',
+    home: google('新潟 (新米 OR コシヒカリ OR 新之助 OR 稲刈り OR コメ)').replace('/rss/', '/'),
+    url: google('新潟 (新米 OR コシヒカリ OR 新之助 OR 稲刈り OR コメ)'),
+    use: 'site',
+    group: 'season',
   },
   {
     id: 'yahooNiigata',
@@ -136,6 +162,7 @@ export async function fetchFeed(feed: Feed, limit = 6): Promise<NewsItem[]> {
     if (!item || seen.has(item.title)) continue;
     if (feed.keep && !feed.keep.test(item.title)) continue;
     if (feed.drop && feed.drop.test(item.title)) continue;
+    if (feed.id !== 'city' && ROUGH.test(item.title)) continue;
     seen.add(item.title);
     items.push(item);
   }
@@ -145,8 +172,8 @@ export async function fetchFeed(feed: Feed, limit = 6): Promise<NewsItem[]> {
 export type FeedResult = { feed: Feed; items: NewsItem[]; ok: boolean };
 
 // 1 つの配信元が落ちていても、ほかは表示する
-export async function fetchNews(use: 'site' | 'all', limit = 6): Promise<FeedResult[]> {
-  const feeds = FEEDS.filter((f) => use === 'all' || f.use === 'site');
+export async function fetchNews(use: 'site' | 'all', limit = 6, group?: 'local' | 'season'): Promise<FeedResult[]> {
+  const feeds = FEEDS.filter((f) => (use === 'all' || f.use === 'site') && (!group || (f.group ?? 'local') === group));
   return Promise.all(
     feeds.map((feed) =>
       fetchFeed(feed, limit)

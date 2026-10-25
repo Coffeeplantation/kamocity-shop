@@ -19,6 +19,8 @@ const barlow = Barlow({ subsets: ['latin'], weight: ['400', '500', '600', '700']
 const themeScript = `try{var t=localStorage.getItem('${THEME_KEY}');document.documentElement.dataset.theme=t==='apple'?'apple':'${DEFAULT_THEME}'}catch(e){}`;
 
 export const metadata: Metadata = {
+  // シェアしたときの画像・URL を絶対 URL にするための基準（Vercel では SITE_URL に公開 URL を入れる）
+  metadataBase: new URL(process.env.SITE_URL || 'http://localhost:3000'),
   title: { default: 'Lumina（日本）', template: '%s - Lumina（日本）' },
   description: 'Lumina Phone、Lumina Book、Lumina Pad、Lumina Watch などの架空製品を紹介するデザインデモ。',
 };

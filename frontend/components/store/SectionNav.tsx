@@ -7,7 +7,7 @@ import AccountMenu from '@/components/AccountMenu';
 type Item = { id: string; label: string };
 
 // ページ内ナビ。いま読んでいるセクションを強調し、横スクロールの位置も追従させる。
-// 道の駅のページではサイトのヘッダーの代わりに一番上に置き、左端のリンク（ストア / Starlink 風ストア）から移れるようにする。右端はアカウントのメニュー。
+// 道の駅のページではサイトのヘッダーの代わりに一番上に置き、左端のリンク（「ストア →」）からストアへ移れるようにする。右端はアカウントのメニュー。
 export default function SectionNav({ title, items, home }: { title: string; items: Item[]; home?: { href: string; label: string }[] }) {
   const [active, setActive] = useState<string>('');
   const listRef = useRef<HTMLUListElement>(null);

@@ -45,21 +45,13 @@ export default function FurimaShowPage() {
       <div className="sticky top-11 z-30 border-b border-line/10 bg-surface/80 backdrop-blur-xl">
         <div className="mx-auto flex h-[52px] max-w-content items-center justify-between px-4 md:px-10 xl:px-16">
           <p className="truncate pr-4 text-[17px] font-semibold text-ink md:text-[21px]">{furima.item}</p>
-          {!furima.sold_out && !isOwner && (
-            <Link
-              href={user ? `/furimas/${id}/orders` : '/auth/login'}
-              className="shrink-0 rounded-full bg-accent px-3 py-1 text-[12px] text-white hover:bg-accent-hover"
-            >
-              購入
-            </Link>
-          )}
         </div>
       </div>
 
       <div className="mx-auto max-w-content px-4 md:px-10 xl:px-16 pb-24 pt-10 md:pt-14">
         <p className="text-[14px] font-semibold text-[#b64400]">{furima.sold_out ? '売り切れ' : '新着'}</p>
         <h1 className="mt-1 text-[32px] font-semibold leading-[1.125] tracking-[-0.01em] text-ink md:text-[48px] md:leading-[1.08]">
-          {furima.item}を購入
+          {furima.item}
         </h1>
         <p className="mt-3 text-[17px] text-ink">¥{furima.price.toLocaleString()}（税込）</p>
 
@@ -99,11 +91,8 @@ export default function FurimaShowPage() {
               </p>
 
               <div className="mt-6 space-y-3">
-                {!user ? (
-                  <Link href="/auth/login" className="btn-block">
-                    サインインして購入
-                  </Link>
-                ) : isOwner && !furima.sold_out ? (
+                {/* カード決済（PAY.JP）は廃止したため、購入の手続きはない。出品者だけが編集・削除できる */}
+                {user && isOwner && !furima.sold_out ? (
                   <>
                     <Link href={`/furimas/${id}/edit`} className="btn-block">
                       商品を編集
@@ -117,9 +106,7 @@ export default function FurimaShowPage() {
                     売り切れました
                   </button>
                 ) : (
-                  <Link href={`/furimas/${id}/orders`} className="btn-block">
-                    購入手続きへ
-                  </Link>
+                  <p className="text-[14px] text-ink-secondary">オンラインでの購入は受け付けていません。</p>
                 )}
               </div>
             </div>

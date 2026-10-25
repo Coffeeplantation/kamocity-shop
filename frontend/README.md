@@ -110,10 +110,13 @@ npm run slack:kamo -- --send  # .env.local の設定で Slack に送る
 
 ## API・環境変数（任意）
 
-ストア・ログイン・購入は Rails 側の API を使います。フロントの見た目だけ確認する場合は不要です。
-使う場合は `frontend/.env.local` を作り、次の 2 つを設定します（鍵を含むため Git には入れていません。元の PC の値をコピーしてください）。
+ストアの出品一覧は Rails 側の API を使います（カード決済は廃止しました）。会員登録・サインイン・管理者の承認画面・LINE の写真とイベントは、このフロントの中（`/api/*`）で動きます。
+使う場合は `frontend/.env.example` を `frontend/.env.local` にコピーして値を入れます（鍵を含むため Git には入れていません）。主な設定：
 
 ```
 NEXT_PUBLIC_API_URL=Rails API の URL（例：http://localhost:3001/api/v1）
-NEXT_PUBLIC_PAYJP_KEY=PAY.JP の公開鍵
+AUTH_SECRET=セッションの署名用のランダムな文字列
+ADMIN_EMAILS=管理者のメールアドレス
+BLOB_READ_WRITE_TOKEN=Vercel Blob（写真・イベントの保存先）
+LINE_CHANNEL_SECRET / LINE_CHANNEL_ACCESS_TOKEN / LINE_ALLOWED_IDS=LINE 公式アカウント
 ```

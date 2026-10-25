@@ -63,7 +63,7 @@ export default function LiveChips({ base = '' }: { base?: string }) {
           <span className="text-[14px] text-white/80">本日の運行は終了</span>
         )}
       </a>
-      <a href={`${base}#today`} className={chip}>
+      <a href={`${base}#events`} className={chip}>
         <span className={label}>今日のイベント</span>
         <span className="line-clamp-1 text-[14px] text-white">
           {events.length === 0 ? (

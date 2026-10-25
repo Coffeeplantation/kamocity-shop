@@ -2,26 +2,17 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import { useTokyoNow } from '@/components/store/useTokyoNow';
+import EventGuide from '@/components/store/EventGuide';
 import { usePostedEvents } from '@/components/store/PostedEvents';
-import { eventIcs, eventsOn } from '@/lib/events';
+import { eventsOn } from '@/lib/events';
 import { fmt } from '@/lib/hours';
 import { formatMD, holidayName, sameDay, weekday, WEEKDAYS, ymd, type YMD } from '@/lib/jpCalendar';
 import { EVENT_CATEGORIES, STORE, type EventCategory, type StoreEvent } from '@/lib/storeInfo';
 
-function downloadIcs(e: StoreEvent, date: YMD) {
-  const blob = new Blob([eventIcs(e, date)], { type: 'text/calendar;charset=utf-8' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = `lumina-${ymd(date)}-${e.start.replace(':', '')}.ics`;
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  setTimeout(() => URL.revokeObjectURL(url), 1000);
-}
-
-export default function EventCalendar() {
+// compact … メインページの右側に置く細い版（カレンダーの下に選んだ日のイベント）。イベントを押すと参加の案内（EventGuide）を出す
+export default function EventCalendar({ compact = false }: { compact?: boolean }) {
   const now = useTokyoNow(60_000);
+  const [guide, setGuide] = useState<StoreEvent | null>(null);
   const posted = usePostedEvents();
   const [month, setMonth] = useState<{ y: number; m: number } | null>(null);
   const [selected, setSelected] = useState<YMD | null>(null);
@@ -58,8 +49,8 @@ export default function EventCalendar() {
   const selectedHoliday = holidayName(selected);
 
   return (
-    <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)]">
-      <div className="rounded-tile bg-surface p-4 sm:p-6">
+    <div className={compact ? 'grid grid-cols-1 gap-3' : 'grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)]'}>
+      <div className={`rounded-tile bg-surface ${compact ? 'p-4' : 'p-4 sm:p-6'}`}>
         <div className="no-scrollbar -mx-1 mb-5 flex gap-2 overflow-x-auto px-1" role="group" aria-label="カテゴリで絞り込む">
           {(['all', ...Object.keys(EVENT_CATEGORIES)] as (EventCategory | 'all')[]).map((c) => {
             const on = filter === c;
@@ -141,7 +132,7 @@ export default function EventCalendar() {
                 onClick={() => setSelected(c)}
                 aria-pressed={isSel}
                 aria-label={`${c.m}月${c.d}日${hol ? `（${hol}）` : ''} ${closed ? '休業日' : `イベント${evs.length}件`}`}
-                className={`flex min-h-[48px] flex-col items-center justify-start rounded-ctl pt-1 text-[14px] transition-colors sm:min-h-[60px] sm:pt-2 sm:text-[15px] xl:min-h-[68px] ${
+                className={`flex flex-col items-center justify-start rounded-ctl pt-1 text-[14px] transition-colors ${compact ? 'min-h-[44px]' : 'min-h-[48px] sm:min-h-[60px] sm:pt-2 sm:text-[15px] xl:min-h-[68px]'} ${
                   isSel ? 'bg-ink text-on-ink' : isPast(c) ? 'text-ink-tertiary opacity-60 hover:bg-canvas-gray' : 'text-ink hover:bg-canvas-gray'
                 }`}
               >
@@ -162,19 +153,20 @@ export default function EventCalendar() {
       </div>
 
       {/* 選択日のイベント */}
-      <div className="rounded-tile bg-surface p-6">
+      <div className={`rounded-tile bg-surface ${compact ? 'p-5' : 'p-6'}`}>
         <p className="text-[14px] text-ink-secondary">
           {sameDay(selected, today) ? '今日・' : ''}
           {formatMD(selected)}
           {selectedHoliday && <span className="text-[#d70015]">・{selectedHoliday}</span>}
         </p>
-        <h3 className="mt-1 text-[24px] font-semibold text-ink">
+        <h3 className={`mt-1 font-semibold text-ink ${compact ? 'text-[19px]' : 'text-[24px]'}`}>
           {selectedClosed ? '全館休業日' : selectedEvents.length ? `${selectedEvents.length}件のイベント` : 'イベントはありません'}
         </h3>
         {selectedClosed && <p className="mt-3 text-[14px] text-ink-secondary">トイレ・EV 充電・駐車場は 24 時間ご利用いただけます。</p>}
         <ul className="mt-5 space-y-3">
           {selectedEvents.map((e) => (
-            <li key={`${e.start}${e.title}`} className="rounded-chip bg-canvas-gray p-4">
+            <li key={`${e.start}${e.title}`}>
+              <button type="button" onClick={() => setGuide(e)} className="block w-full rounded-chip bg-canvas-gray p-4 text-left transition-colors hover:bg-ink/[0.06]">
               <div className="flex flex-wrap items-center gap-2 text-[12px] font-semibold" style={{ color: EVENT_CATEGORIES[e.category].color }}>
                 <span className="h-2 w-2 rounded-full" style={{ background: EVENT_CATEGORIES[e.category].color }} />
                 {EVENT_CATEGORIES[e.category].label}
@@ -186,16 +178,14 @@ export default function EventCalendar() {
               <p className="mt-1 text-[14px] text-ink-secondary">
                 {fmt(e.start)}〜{fmt(e.end)}・{e.place}
               </p>
-              {e.desc && <p className="mt-2 text-[14px] leading-[1.5] text-ink">{e.desc}</p>}
-              {!isPast(selected) && (
-                <button type="button" onClick={() => downloadIcs(e, selected)} className="link-chevron mt-3 text-[13px]">
-                  カレンダーに追加 ›
-                </button>
-              )}
+              {e.desc && !compact && <p className="mt-2 text-[14px] leading-[1.5] text-ink">{e.desc}</p>}
+              <span className="link-chevron mt-2 text-[13px]">{isPast(selected) ? 'くわしく見る ›' : '参加の案内を見る ›'}</span>
+              </button>
             </li>
           ))}
         </ul>
       </div>
+      {guide && <EventGuide event={guide} date={selected} onClose={() => setGuide(null)} />}
     </div>
   );
 }

@@ -2,13 +2,14 @@ import { fetchNews, newsTime } from '@/lib/news';
 
 // 加茂市・新潟のニュース（サーバー側で取得）。1日3回の cron で取り直し、間に合わなくても最大 8 時間で更新される。
 // 掲載するのはサイト掲載が認められている配信元だけ（lib/news.ts の use: 'site'）。見出しとリンクのみで本文は載せない。
-export default async function LocalNews() {
-  const results = await fetchNews('site', 6);
+// group … 'local'（加茂市・新潟県のニュース）か 'season'（果物・お米のたより）。note … 更新時刻と出典の注記を出すか
+export default async function LocalNews({ group = 'local', limit = 6, note = true }: { group?: 'local' | 'season'; limit?: number; note?: boolean }) {
+  const results = await fetchNews('site', limit, group);
   const fetchedAt = newsTime(new Date().toISOString());
 
   return (
     <div>
-      <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
+      <div className={`grid grid-cols-1 gap-4 ${results.length === 2 ? 'md:grid-cols-2' : 'lg:grid-cols-3'}`}>
         {results.map(({ feed, items, ok }) => (
           <section key={feed.id} className="flex flex-col rounded-tile bg-surface p-6">
             <h3 className="text-[19px] font-semibold text-ink">{feed.label}</h3>
@@ -35,10 +36,12 @@ export default async function LocalNews() {
           </section>
         ))}
       </div>
+      {note && (
       <p className="mt-4 text-[12px] leading-[1.6] text-ink-secondary">
         1日3回（7時・12時・18時ごろ）更新。{fetchedAt} 時点。見出しは各配信元のもので、記事は配信元のサイトでお読みください。Google ニュースの見出しは、Google
         ニュースが各社の記事から自動で集めたものです。
       </p>
+      )}
     </div>
   );
 }

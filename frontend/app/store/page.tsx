@@ -172,7 +172,7 @@ function StoreContent() {
         )}
 
         {/* LINE 公式アカウントに送られた写真（なければ出ない） */}
-        <LinePhotos />
+        <LinePhotos space="store" />
 
         <h3 className="mb-5 text-[21px] font-semibold text-ink">
           出品されたアイテム。<span className="text-ink-secondary">ユーザーが出品した商品。</span>

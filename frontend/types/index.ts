@@ -2,6 +2,7 @@ export type User = {
   id: number;
   email: string;
   nickname: string;
+  admin?: boolean; // ADMIN_EMAILS に入っている会員
 };
 
 export type FurimaListItem = {

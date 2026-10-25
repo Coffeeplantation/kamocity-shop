@@ -27,8 +27,6 @@
     <%= link_to "削除", furima_path(@furima.id), method: :delete, class:"item-destroy" %>
 <% elsif @furima.order.present? %>
      <%= link_to "売り切れました",furima_path(@furima),class:"disabled-button bold" %>
-<% else %>
-    <%= link_to "購入画面に進む", furima_orders_path(@furima.id),class:"item-red-btn"%>
 <% end %>
 <% end %>
     <div class="item-explain-box">

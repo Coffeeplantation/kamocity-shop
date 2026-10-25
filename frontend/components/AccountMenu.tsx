@@ -20,6 +20,7 @@ export function useAccount() {
   const router = useRouter();
   const links = user
     ? [
+        ...(user.admin ? [{ label: '写真の確認・承認（管理者）', href: '/admin/photos' }] : []),
         { label: `${user.nickname} さんのページ`, href: `/users/${user.id}` },
         { label: '出品する', href: '/furimas/new' },
       ]

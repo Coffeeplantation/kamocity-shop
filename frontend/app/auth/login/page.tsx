@@ -1,14 +1,28 @@
 'use client';
 
-import { useState, FormEvent } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState, FormEvent, Suspense } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
 import { LogoMark, PhonePair } from '@/components/Devices';
 
+// ?next=/admin/photos のように、サインイン後に戻る先を受け取る（サイトの中のパスだけ）
+function safeNext(v: string | null) {
+  return v && v.startsWith('/') && !v.startsWith('//') ? v : '/stores';
+}
+
 export default function LoginPage() {
+  return (
+    <Suspense>
+      <LoginForm />
+    </Suspense>
+  );
+}
+
+function LoginForm() {
   const { login } = useAuth();
   const router = useRouter();
+  const next = safeNext(useSearchParams().get('next'));
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -20,9 +34,9 @@ export default function LoginPage() {
     setSubmitting(true);
     try {
       await login(email, password);
-      router.push('/');
-    } catch {
-      setError('メールアドレスまたはパスワードが間違っています。');
+      router.push(next);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'メールアドレスまたはパスワードが間違っています。');
     } finally {
       setSubmitting(false);
     }
@@ -41,9 +55,9 @@ export default function LoginPage() {
       <div className="w-full max-w-[460px] text-center">
         <LogoMark className="mx-auto h-12 w-12 text-ink" />
         <h1 className="mt-6 text-[32px] font-semibold leading-[1.125] tracking-[-0.01em] text-ink">
-          Lumina IDでサインイン
+          会員サインイン
         </h1>
-        <p className="mt-2 text-[17px] text-ink-secondary">出品・購入にはサインインが必要です。</p>
+        <p className="mt-2 text-[17px] text-ink-secondary">会員の方・管理者の方は、こちらからサインインします。</p>
 
         <form onSubmit={handleSubmit} className="mt-10 space-y-3 text-left">
           {error && <p className="alert-error">{error}</p>}
@@ -77,9 +91,9 @@ export default function LoginPage() {
         </form>
 
         <p className="mt-8 text-[14px] text-ink-secondary">
-          Lumina IDをお持ちでない場合は{' '}
+          まだ会員でない場合は{' '}
           <Link href="/auth/signup" className="link-chevron">
-            作成 ›
+            会員登録 ›
           </Link>
         </p>
       </div>

@@ -6,7 +6,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import AccountMenu, { useAccount } from '@/components/AccountMenu';
 import ThemeSwitch from '@/components/ThemeSwitch';
 
-// メニューは商品だけ。メインページ（道の駅 /stores）へは左上の「メインページへ」から戻る
+// メニューは商品だけ。メインページ（道の駅 /stores）へは左上の「← メインページ」から戻る（メインページからは「ストア →」で来る）
 export const NAV_ITEMS = [
   { label: 'ストア', href: '/store' },
   { label: 'Phone', href: '/#phone' },
@@ -63,15 +63,14 @@ export default function Header() {
   const iconBtn = 'flex h-11 w-9 items-center justify-center text-ink/80 transition-colors hover:text-ink';
 
   // 道の駅のページは、ページ内ナビ（SectionNav）がヘッダーを兼ねる
-  // Starlink 風のストアは、専用の黒いヘッダー（StarlinkHeader）を使う
-  if (pathname === '/stores' || pathname === '/starlink') return null;
+  if (pathname === '/stores') return null;
 
   return (
     <>
       <header className="sticky top-0 z-50 h-11 bg-[rgb(var(--header)/0.8)] backdrop-blur-xl backdrop-saturate-[1.8]">
         <nav className="mx-auto flex h-full max-w-content items-center justify-between px-4 text-[12px] md:px-5 lg:px-10 xl:px-16">
           <Link href="/stores" className="flex h-11 shrink-0 items-center whitespace-nowrap text-[12px] font-semibold text-ink/80 transition-colors hover:text-ink">
-            メインページへ
+            ← メインページ
           </Link>
 
           <ul className="hidden min-w-0 flex-1 items-center justify-center gap-1 px-2 md:flex lg:gap-3 lg:px-4 xl:gap-6 2xl:gap-10">
