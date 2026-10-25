@@ -11,6 +11,11 @@ const nextConfig = {
         protocol: 'https',
         hostname: '*.amazonaws.com',
       },
+      // LINE から送られた写真（Vercel Blob）
+      {
+        protocol: 'https',
+        hostname: '*.public.blob.vercel-storage.com',
+      },
     ],
   },
 };
