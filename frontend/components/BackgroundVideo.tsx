@@ -19,6 +19,8 @@ export default function BackgroundVideo({ name, className = '', controlClassName
   const [userPaused, setUserPaused] = useState(false);
   const [reduced, setReduced] = useState(false);
   const [playing, setPlaying] = useState(false);
+  // 最初に再生が始まるまではポスター（下の写真）を見せ、始まったらふわっと動画に切り替える
+  const [ready, setReady] = useState(false);
 
   useEffect(() => {
     const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -50,9 +52,19 @@ export default function BackgroundVideo({ name, className = '', controlClassName
 
   return (
     <>
+      {/* 動画が再生されるまで見せるポスター画像（動画と同じ動きのクラスを付けて位置をそろえる） */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={`/videos/${v.file}.jpg`}
+        alt=""
+        aria-hidden
+        decoding="async"
+        className={`absolute inset-0 h-full w-full object-cover ${className}`}
+        style={v.position ? { objectPosition: v.position } : undefined}
+      />
       <video
         ref={ref}
-        className={`absolute inset-0 h-full w-full object-cover ${className}`}
+        className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-1000 ${ready || paused ? 'opacity-100' : 'opacity-0'} ${className}`}
         style={v.position ? { objectPosition: v.position } : undefined}
         poster={`/videos/${v.file}.jpg`}
         muted
@@ -60,9 +72,14 @@ export default function BackgroundVideo({ name, className = '', controlClassName
         playsInline
         preload={inView ? 'auto' : 'none'}
         aria-hidden
-        onPlaying={() => setPlaying(true)}
+        onPlaying={() => {
+          setPlaying(true);
+          setReady(true);
+        }}
         onPause={() => setPlaying(false)}
       >
+        {/* スマホでは 720p の軽い版、それ以外は 1080p の高画質版 */}
+        {v.small && <source src={`/videos/${v.file}-sm.mp4`} type="video/mp4" media="(max-width: 767px)" />}
         <source src={`/videos/${v.file}.mp4`} type="video/mp4" />
       </video>
       {!reduced && (

@@ -1,8 +1,8 @@
-// LINE 公式アカウントに送られた写真を保存し、道の駅のページに表示する（サーバー側で実行する）。
+// LINE 公式アカウントに送られた写真を保存し、ストアのページ（/store）に並べる（サーバー側で実行する）。
 // LINE には過去のメッセージを読み直す API がないので、届いた写真は Vercel Blob に保存しておく。
 // 必要な設定（.env.local / Vercel の環境変数）：
 //   BLOB_READ_WRITE_TOKEN … Vercel の Storage で Blob を作ってプロジェクトにつなぐと自動で入る
-// 設定がなければ何も読み込まない（ページに写真の欄を出さない）。
+// 設定がなければ何も読み込まない（ストアに写真の欄を出さない）。
 
 import { createHash } from 'node:crypto';
 import { del, list, put } from '@vercel/blob';

@@ -1,9 +1,8 @@
 import { createHmac, timingSafeEqual } from 'node:crypto';
-import { revalidatePath } from 'next/cache';
 import { NextResponse } from 'next/server';
 import { deleteLatestLinePhoto, saveLinePhoto, senderKey } from '@/lib/line/posts';
 
-// LINE 公式アカウント（Messaging API）の受け口。公式アカウントに写真を送ると、道の駅のページに載る。
+// LINE 公式アカウント（Messaging API）の受け口。公式アカウントに写真を送ると、ストアのページ（/store）に並ぶ。
 // LINE Developers のチャネルの「Messaging API 設定」で Webhook URL に https://<サイト>/api/line/webhook を設定し、
 // 「Webhook の利用」をオンにする。グループで使うときは、公式アカウントをグループに招待する。
 // 必要な設定：
@@ -17,7 +16,7 @@ export const dynamic = 'force-dynamic';
 function verified(req: Request, body: string) {
   const secret = process.env.LINE_CHANNEL_SECRET;
   const sig = req.headers.get('x-line-signature');
-  if (!secret || !sig) return false;
+  if (!secret || !sig) return;
   const a = Buffer.from(createHmac('sha256', secret).update(body).digest('base64'));
   const b = Buffer.from(sig);
   return a.length === b.length && timingSafeEqual(a, b);
@@ -50,10 +49,9 @@ async function reply(replyToken: string | undefined, text: string) {
   }).catch((e) => console.error('LINE への返信に失敗しました', e));
 }
 
-// 戻り値：ページを作り直す必要があれば true
-async function handle(e: LineEvent): Promise<boolean> {
+async function handle(e: LineEvent): Promise<void> {
   const m = e.message;
-  if (e.type !== 'message' || !m) return false;
+  if (e.type !== 'message' || !m) return;
   const userId = e.source.userId ?? '';
   const allowed = allowedIds();
   const ok = [userId, e.source.groupId, e.source.roomId].some((id) => id && allowed.includes(id));
@@ -62,32 +60,29 @@ async function handle(e: LineEvent): Promise<boolean> {
     if (!ok) {
       // グループでは関係ない写真もあるので、1 対 1 のトークのときだけ ID を返す
       if (e.source.type === 'user') await reply(e.replyToken, `まだサイトに載せる設定になっていません。管理者にこの ID を伝えてください：\n${userId}`);
-      return false;
+      return;
     }
     // 外部 URL の画像（LINE 以外が持っている画像）は扱わない
-    if (m.contentProvider && m.contentProvider.type !== 'line') return false;
+    if (m.contentProvider && m.contentProvider.type !== 'line') return;
     const res = await fetch(`https://api-data.line.me/v2/bot/message/${m.id}/content`, {
       headers: { Authorization: `Bearer ${token()}` },
     });
     if (!res.ok) {
       console.error(`LINE の写真のダウンロードに失敗しました：${res.status}`);
       await reply(e.replyToken, '写真を受け取れませんでした。もう一度送ってください。');
-      return false;
+      return;
     }
     await saveLinePhoto(await res.arrayBuffer(), res.headers.get('content-type') ?? 'image/jpeg', senderKey(userId), m.id, new Date(e.timestamp));
     // 複数枚まとめて送られたときは、最後の 1 枚で 1 回だけ返信する
     if (!m.imageSet || m.imageSet.index === m.imageSet.total) {
-      await reply(e.replyToken, 'サイトに掲載しました。取り消すときは「取り消し」と送ってください。');
+      await reply(e.replyToken, 'ストアのページに載せました。取り消すときは「取り消し」と送ってください。');
     }
-    return true;
   }
 
   if (m.type === 'text' && ok && m.text?.trim() === '取り消し') {
     const deleted = await deleteLatestLinePhoto(senderKey(userId));
     await reply(e.replyToken, deleted ? 'いちばん新しい写真をサイトから外しました。' : '外せる写真がありません。');
-    return deleted;
   }
-  return false;
 }
 
 export async function POST(req: Request) {
@@ -96,14 +91,12 @@ export async function POST(req: Request) {
 
   const { events = [] } = JSON.parse(body) as { events?: LineEvent[] };
   // Webhook URL の「検証」ボタンは events が空で届くので、そのまま 200 を返す
-  const results = await Promise.all(
+  await Promise.all(
     events.map((e) =>
       handle(e).catch((err) => {
         console.error('LINE のイベント処理に失敗しました', err);
-        return false;
       }),
     ),
   );
-  if (results.some(Boolean)) revalidatePath('/stores');
   return NextResponse.json({ ok: true });
 }

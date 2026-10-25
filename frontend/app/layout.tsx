@@ -8,7 +8,7 @@ import BackToTop from '@/components/BackToTop';
 import { DEFAULT_THEME, THEME_KEY } from '@/lib/theme';
 
 // SF Pro（Apple 専用で Web 利用不可）に最も近い Inter を自己ホストし、日本語はヒラギノ角ゴに近い Noto Sans JP を使う。
-// Noto Sans JP は next/font での取得に不具合があるため、Google Fonts の CSS を直接読み込む。
+// Noto Sans JP は next/font での取得に不具合があるため、Google Fonts の CSS を直接読み込む（太さを自由に変えられる可変フォント 1 本）。
 // Mac / iOS では globals.css の指定により本来のシステムフォントが優先される。
 // opsz 軸を読み込み、大きな見出しでは SF Pro Display のように字間が締まった字形に自動で切り替える。
 const inter = Inter({ subsets: ['latin'], axes: ['opsz'], variable: '--font-inter', display: 'swap' });
@@ -34,7 +34,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {/* eslint-disable-next-line @next/next/no-page-custom-font */}
         <link
           rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700;800&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&display=swap"
         />
       </head>
       <body className="min-h-screen flex flex-col bg-surface">

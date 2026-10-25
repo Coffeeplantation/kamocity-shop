@@ -20,7 +20,7 @@ export default function VideoStatement({ video, eyebrow, statement, children, id
       <div className="absolute inset-0 -z-10">
         <BackgroundVideo name={video} className="sd-parallax" controlClassName="top-[68px] right-5 md:right-8" />
       </div>
-      <div className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-t from-black/80 via-black/30 to-black/10" aria-hidden />
+      <div className="video-scrim pointer-events-none absolute inset-0 -z-10" aria-hidden />
       <div className="mx-auto w-full max-w-content px-4 pb-14 pt-32 md:px-10 md:pb-24 xl:px-16">
         {eyebrow && <p className="sd-rise text-[17px] font-semibold text-white/80 md:text-[21px]">{eyebrow}</p>}
         <p className="sd-fill mt-3 max-w-[1200px] text-[40px] font-semibold leading-[1.08] md:text-[72px] 2xl:text-[96px]">

@@ -8,6 +8,7 @@ import { FurimaListItem } from '@/types';
 import FurimaCard from '@/components/FurimaCard';
 import { CompactProductRow, LUMINA_PRODUCTS } from '@/components/ProductCards';
 import ProductStrip from '@/components/ProductStrip';
+import LinePhotos from '@/components/store/LinePhotos';
 import { useAuth } from '@/contexts/AuthContext';
 
 type Sort = 'new' | 'price-asc' | 'price-desc';
@@ -169,6 +170,9 @@ function StoreContent() {
             <CompactProductRow products={models} />
           </div>
         )}
+
+        {/* LINE 公式アカウントに送られた写真（なければ出ない） */}
+        <LinePhotos />
 
         <h3 className="mb-5 text-[21px] font-semibold text-ink">
           出品されたアイテム。<span className="text-ink-secondary">ユーザーが出品した商品。</span>

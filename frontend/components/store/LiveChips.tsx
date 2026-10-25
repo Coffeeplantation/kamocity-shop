@@ -36,11 +36,11 @@ export default function LiveChips({ base = '' }: { base?: string }) {
 
   return (
     <div className="grid grid-cols-2 gap-2.5 lg:grid-cols-4">
-      <a href={`${base}#hours`} className={chip}>
+      <a href={`${base}#shops`} className={chip}>
         <span className={label}>営業状況</span>
         <StatusText status={status} tone="dark" />
       </a>
-      <a href={`${base}#crowd`} className={chip}>
+      <a href={`${base}#today`} className={chip}>
         <span className={label}>いまの混雑（予想）</span>
         {level ? (
           <span className="flex items-center gap-1.5 text-[14px] font-semibold text-white">
@@ -51,7 +51,7 @@ export default function LiveChips({ base = '' }: { base?: string }) {
           <span className="text-[14px] text-white/80">営業時間外</span>
         )}
       </a>
-      <a href={`${base}#crowd`} className={chip}>
+      <a href={`${base}#access`} className={chip}>
         <span className={label}>次のシャトル（加茂駅前発）</span>
         {bus ? (
           <span className="text-[14px] text-white">
@@ -62,7 +62,7 @@ export default function LiveChips({ base = '' }: { base?: string }) {
           <span className="text-[14px] text-white/80">本日の運行は終了</span>
         )}
       </a>
-      <a href={`${base}#events`} className={chip}>
+      <a href={`${base}#today`} className={chip}>
         <span className={label}>今日のイベント</span>
         <span className="line-clamp-1 text-[14px] text-white">
           {events.length === 0 ? (

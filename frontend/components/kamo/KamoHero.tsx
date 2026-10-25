@@ -1,6 +1,5 @@
 'use client';
 
-import Photo from '@/components/Photo';
 import BackgroundVideo from '@/components/BackgroundVideo';
 import Phrases from '@/components/Phrases';
 import { useTokyoNow } from '@/components/store/useTokyoNow';
@@ -26,11 +25,10 @@ export default function KamoHero() {
       {/* 季節の写真の上に、同じ季節の背景動画を重ねる */}
       {season && (
         <div key={season.id} className="absolute inset-0 -z-10">
-          <Photo name={season.photo} priority sizes="100vw" className="!absolute inset-0" imgClassName="animate-hero-zoom" />
           <BackgroundVideo name={season.video} className="animate-hero-zoom" controlClassName="top-5 right-4 md:right-8" />
         </div>
       )}
-      <div className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-t from-black/85 via-black/35 to-black/10" aria-hidden />
+      <div className="video-scrim pointer-events-none absolute inset-0 -z-10" aria-hidden />
 
       <div className="mx-auto w-full max-w-content px-4 pb-10 pt-28 md:px-10 md:pb-14 xl:px-16">
         <p className="text-[17px] font-semibold text-white/85 [text-shadow:0_1px_8px_rgba(0,0,0,0.5)] md:text-[21px]">
